@@ -1,0 +1,20 @@
+name: Approve pull request
+description: Approve pull request
+author: DFINITY Stiftung
+
+inputs:
+  pull_request_number:
+    description: Pull request number to approve
+    required: true
+  auto_merge:
+    description: Automatically merge the pull request
+    required: false
+    default: false
+  token:
+    description: Access token to manage the pull request
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: node20
+  main: dist/index.js

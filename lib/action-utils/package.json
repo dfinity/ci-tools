@@ -1,0 +1,12 @@
+{
+  "name": "@dfinity/action-utils",
+  "scripts": {
+    "build": "rimraf dist && tsc -p ./tsconfig.types.json && node ./build.mjs"
+  },
+  "peerDependencies": {
+    "@actions/core": "^1.0.0",
+    "@actions/github": "^6.0.0"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts"
+}
