@@ -1,0 +1,34 @@
+name: Check Transpiled JavaScript
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  check-dist:
+    name: Check dist/
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        action_name: ['approve-pr']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: ./actions/setup-pnpm
+
+      - name: Build @dfinity/action-utils
+        run: pnpm -F @dfinity/action-utils build
+
+      - name: Check ${{ matrix.action_name }} dist folder
+        uses: ./.github/actions/check-dist
+        with:
+          action_name: ${{ matrix.action_name }}

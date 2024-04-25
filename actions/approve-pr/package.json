@@ -1,0 +1,9 @@
+{
+  "name": "@dfinity/approve-pr-action",
+  "scripts": {
+    "build": "tsc && node ./build.mjs"
+  },
+  "dependencies": {
+    "@dfinity/action-utils": "workspace:*"
+  }
+}
