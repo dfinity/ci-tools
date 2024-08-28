@@ -1,5 +1,11 @@
 # Actions
 
+Shared GitHub actions for DFINITY repositories.
+
+## Contributing
+
+Check out the [contribution guidelines](./.github/CONTRIBUTING.md).
+
 ## Setup
 
 - Install [`fnm`](https://github.com/Schniz/fnm).
