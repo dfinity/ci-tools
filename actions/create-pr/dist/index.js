@@ -18921,7 +18921,7 @@ var require_core = __commonJS({
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports2.getBooleanInput = getBooleanInput;
-    function setOutput(name, value) {
+    function setOutput2(name, value) {
       const filePath = process.env["GITHUB_OUTPUT"] || "";
       if (filePath) {
         return file_command_1.issueFileCommand("OUTPUT", file_command_1.prepareKeyValueMessage(name, value));
@@ -18929,7 +18929,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       process.stdout.write(os.EOL);
       command_1.issueCommand("set-output", { name }, utils_1.toCommandValue(value));
     }
-    exports2.setOutput = setOutput;
+    exports2.setOutput = setOutput2;
     function setCommandEcho(enabled) {
       command_1.issue("echo", enabled ? "on" : "off");
     }
@@ -23136,13 +23136,13 @@ var require_dist = __commonJS({
     var src_exports = {};
     __export2(src_exports, {
       exec: () => exec,
-      generateRandomSuffix: () => generateRandomSuffix,
+      generateRandomSuffix: () => generateRandomSuffix2,
       getInput: () => getInput22,
-      getNumberInput: () => getNumberInput2,
-      gitAdd: () => gitAdd,
-      gitCheckoutBranch: () => gitCheckoutBranch,
-      gitCommit: () => gitCommit,
-      gitHasChanges: () => gitHasChanges
+      getNumberInput: () => getNumberInput,
+      gitAdd: () => gitAdd2,
+      gitCheckoutBranch: () => gitCheckoutBranch2,
+      gitCommit: () => gitCommit2,
+      gitHasChanges: () => gitHasChanges2
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -23150,23 +23150,23 @@ var require_dist = __commonJS({
       return (0, import_child_process.execSync)(command).toString();
     }
     var ALPHANUM = "abcdefghijklmnopqrstuvwxyz0123456789";
-    function generateRandomSuffix(length) {
+    function generateRandomSuffix2(length) {
       let result = "";
       for (let i = 0; i < length; i++) {
         result += ALPHANUM.charAt(Math.floor(Math.random() * ALPHANUM.length));
       }
       return result;
     }
-    function gitAdd() {
+    function gitAdd2() {
       exec(`git add .`);
     }
-    function gitCommit(message, authorName, authorEmail) {
+    function gitCommit2(message, authorName, authorEmail) {
       exec(`git commit -m "${message}" --author="${authorName} <${authorEmail}>"`);
     }
-    function gitCheckoutBranch(branch) {
+    function gitCheckoutBranch2(branch) {
       exec(`git checkout -b ${branch}`);
     }
-    function gitHasChanges() {
+    function gitHasChanges2() {
       const output = exec("git status --porcelain");
       return output.trim().length > 0;
     }
@@ -23174,7 +23174,7 @@ var require_dist = __commonJS({
     function getInput22(name) {
       return core4.getInput(name, { required: true, trimWhitespace: true });
     }
-    function getNumberInput2(name) {
+    function getNumberInput(name) {
       const input = getInput22(name);
       const numberInput = Number(input);
       if (isNaN(numberInput)) {
@@ -23190,78 +23190,82 @@ var require_dist = __commonJS({
 // src/main.ts
 var core3 = __toESM(require_core());
 var github = __toESM(require_github());
-var import_action_utils = __toESM(require_dist());
+var import_action_utils2 = __toESM(require_dist());
 
-// src/approve-pull-request.ts
+// src/create-pull-request.ts
 var core = __toESM(require_core());
-async function approvePullRequest({
+async function createPullRequest({
   octokit,
   owner,
   repo,
-  pullRequestNumber
+  head,
+  base,
+  title,
+  body
 }) {
-  await octokit.rest.pulls.createReview({
+  const res = await octokit.rest.pulls.create({
     owner,
     repo,
-    pull_number: pullRequestNumber,
-    event: "APPROVE"
+    title,
+    head,
+    base,
+    body
   });
-  core.info(`Approved pull request #${pullRequestNumber}`);
+  core.info(`Created pull request #${res.data.number}`);
+  return {
+    number: res.data.number
+  };
 }
 
-// src/enable-auto-merge.ts
+// src/create-commit.ts
 var core2 = __toESM(require_core());
-async function enableAutoMerge({
-  octokit,
-  graphql,
-  owner,
-  repo,
-  mergeMethod,
-  pullRequestNumber
+var import_action_utils = __toESM(require_dist());
+function createCommit({
+  message,
+  head,
+  authorName,
+  authorEmail
 }) {
-  const { data: pullRequest } = await octokit.rest.pulls.get({
-    owner,
-    repo,
-    pull_number: pullRequestNumber
-  });
-  const pullRequestId = pullRequest.node_id;
-  const query = `mutation EnablePullRequestAutoMerge($pullId: ID!, $mergeMethod: PullRequestMergeMethod) {
-      enablePullRequestAutoMerge(input: {
-        pullRequestId: "$pullRequestId,
-        mergeMethod: $mergeMethod,
-      }) {
-          __typename
-      }
-  }`;
-  await graphql(query, {
-    pullRequestId,
-    mergeMethod
-  });
-  core2.info(`Automerge enabled for pull request #${pullRequestNumber}`);
+  if (!(0, import_action_utils.gitHasChanges)()) {
+    throw new Error("No changes to commit");
+  }
+  const randomSuffix = (0, import_action_utils.generateRandomSuffix)(6);
+  const branchName = `${head}-${randomSuffix}`;
+  (0, import_action_utils.gitCheckoutBranch)(branchName);
+  (0, import_action_utils.gitAdd)();
+  (0, import_action_utils.gitCommit)(message, authorName, authorEmail);
+  core2.info(`Created git commit on branch ${branchName}`);
 }
 
 // src/main.ts
 async function run() {
   try {
-    const token = (0, import_action_utils.getInput)("token");
-    const mergeMethod = (0, import_action_utils.getInput)("merge_method");
-    const pullRequestNumber = (0, import_action_utils.getNumberInput)("pull_request_number");
+    const authorName = (0, import_action_utils2.getInput)("author_name");
+    const authorEmail = (0, import_action_utils2.getInput)("author_email");
+    const head = (0, import_action_utils2.getInput)("branch_name");
+    const base = (0, import_action_utils2.getInput)("base_branch_name");
+    const message = (0, import_action_utils2.getInput)("commit_message");
+    const title = (0, import_action_utils2.getInput)("pull_request_title");
+    const body = (0, import_action_utils2.getInput)("pull_request_body");
+    const token = (0, import_action_utils2.getInput)("token");
     const octokit = github.getOctokit(token);
-    const graphql = octokit.graphql.defaults({
-      headers: {
-        authorization: `token ${token}`
-      }
-    });
     const { owner, repo } = github.context.repo;
-    await approvePullRequest({ octokit, owner, repo, pullRequestNumber });
-    await enableAutoMerge({
+    createCommit({
+      authorEmail,
+      authorName,
+      head,
+      message
+    });
+    const res = await createPullRequest({
       octokit,
-      graphql,
       owner,
       repo,
-      mergeMethod,
-      pullRequestNumber
+      head,
+      base,
+      title,
+      body
     });
+    core3.setOutput("pull_request_number", res.number);
   } catch (error) {
     if (error instanceof Error) {
       core3.setFailed(error.message);

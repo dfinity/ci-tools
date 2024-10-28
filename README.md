@@ -1,6 +1,10 @@
-# Actions
+# DFINITY GitHub Actions
 
 Shared GitHub actions for DFINITY repositories.
+
+## Actions
+
+- [Create Pull Request](./actions/create-pr/README.md)
 
 ## Contributing
 
