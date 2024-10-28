@@ -1,13 +1,7 @@
 import * as core from '@actions/core';
 
 export function getInput(name: string): string {
-  const input = core.getInput(name);
-
-  if (input.length === 0) {
-    throw new Error(`The ${name} input is required but was not supplied`);
-  }
-
-  return input;
+  return core.getInput(name, { required: true, trimWhitespace: true });
 }
 
 export function getNumberInput(name: string): number {

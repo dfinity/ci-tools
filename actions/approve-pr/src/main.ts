@@ -20,10 +20,6 @@ export async function run(): Promise<void> {
 
     const { owner, repo } = github.context.repo;
 
-    if (!pullRequestNumber) {
-      throw new Error('No pull request number found.');
-    }
-
     await approvePullRequest({ octokit, owner, repo, pullRequestNumber });
     await enableAutoMerge({
       octokit,
