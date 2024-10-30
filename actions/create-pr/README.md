@@ -2,6 +2,8 @@
 
 This action creates a pull request from a branch to a target branch.
 
+Any pull requests created as a result of actions that use the default token (`${{ GITHUB_TOKEN }}`) will not trigger any pipeline events. To ensure that any pipelines are triggered, a different token must be used.
+
 ## Action inputs
 
 | Input                | Description                                                   | Default                                                               |
