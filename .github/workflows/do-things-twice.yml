@@ -1,0 +1,47 @@
+name: Do things twice
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  do_things_twice:
+    name: Do things twice
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: ./actions/setup-pnpm
+
+      - name: Setup pnpm AGAIN
+        uses: ./actions/setup-pnpm
+
+      - name: 'Install Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: 'Install PIP'
+        shell: bash
+        run: python -m pip install --upgrade pip
+
+      - name: 'Install Python AGAIN'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: 'Install PIP AGAIN'
+        shell: bash
+        run: python -m pip install --upgrade pip
+
+      - name: Install Commitzen
+        run: pip install -U Commitizen
+
+      - name: Install Commitzen AGAIN
+        run: pip install -U Commitizen
