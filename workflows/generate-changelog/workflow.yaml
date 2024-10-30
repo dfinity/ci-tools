@@ -1,0 +1,93 @@
+name: 'Generate changelog workflow'
+description: 'This workflow generates a changelog and creates a pull request to update the repository.'
+
+on:
+  workflow_call:
+    inputs:
+      file_name:
+        description: 'The name of the file to write the changelog to.'
+        required: false
+        default: 'CHANGELOG.md'
+      auto_merge:
+        description: 'Whether to automatically merge the pull request.'
+        required: false
+        default: true
+
+      branch_name:
+        description: 'The name of the branch to create the pull request from.'
+        required: false
+        default: 'chore/update-changelog'
+      base_branch_name:
+        description: 'The name of the base branch to create the pull request against.'
+        required: false
+        default: 'main'
+
+      pull_request_title:
+        description: 'The title of the pull request.'
+        required: false
+        default: 'chore: update changelog'
+      pull_request_body:
+        description: 'The body of the pull request.'
+        default: 'This pull request was automatically created by a GitHub Action to update changelogs.'
+        required: false
+
+      author_name:
+        description: 'The name of the author of the pull request and commit.'
+        required: false
+        default: '${{ github.actor }}'
+      author_email:
+        description: 'The email of the author of the pull request and commit.'
+        required: false
+        default: '${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com'
+
+      commit_message:
+        description: 'The message of the commit.'
+        required: false
+        default: 'chore: update changelog'
+
+    secrets:
+      token:
+        description: 'Access token to manage the pull request.'
+        required: false
+        default: '${{ github.token }}'
+
+jobs:
+  generate_changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Setup Python'
+        uses: dfinity/actions/actions/setup-python@main
+
+      - name: 'Setup Commitizen'
+        uses: dfinity/actions/actions/setup-commitizen@main
+
+      - name: 'Generate changelog'
+        uses: dfinity/actions/actions/generate-changelog@main
+        with:
+          file_name: ${{ inputs.file_name }}
+
+      - name: 'Create pull request'
+        id: create_pr
+        uses: dfinity/actions/actions/create-pr@main
+        with:
+          branch_name: ${{ inputs.branch_name }}
+          base_branch_name: ${{ inputs.base_branch_name }}
+          pull_request_title: ${{ inputs.pull_request_title }}
+          pull_request_body: ${{ inputs.pull_request_body }}
+          author_name: ${{ inputs.author_name }}
+          author_email: ${{ inputs.author_email }}
+          commit_message: ${{ inputs.commit_message }}
+          token: ${{ secrets.token }}
+
+      - name: 'Approve pull request'
+        uses: dfinity/actions/actions/approve-pr@main
+        if: ${{ steps.create_pr.outputs.pull_request_created }}
+        with:
+          pull_request_number: ${{ steps.create_pr.outputs.pull_request_number }}
+          auto_merge: ${{ inputs.auto_merge }}
+          token: ${{ secrets.token }}

@@ -5,12 +5,18 @@ Shared GitHub actions for DFINITY repositories.
 ## Actions
 
 - [Approve pull request](./actions/approve-pr/README.md)
+- [Bump version](./actions//bump-version/README.md)
 - [Check commit messages](./actions/check-commit-messages/README.md)
 - [Check pull request title](./actions/check-pr-title/README.md)
 - [Create pull request](./actions/create-pr/README.md)
+- [Generate changelog](./actions/generate-changelog/README.md)
 - [Setup Commitizen](./actions/setup-commitizen/README.md)
 - [Setup pnpm](./actions/setup-pnpm/README.md)
 - [Setup Python](./actions/setup-python/README.md)
+
+## Workflows
+
+- [Generate changelog](./workflows/generate-changelog/README.md)
 
 ## Conventions
 
