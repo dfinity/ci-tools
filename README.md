@@ -4,8 +4,10 @@ Shared GitHub actions for DFINITY repositories.
 
 ## Actions
 
-- [Approve Pull Request](./actions/approve-pr/README.md)
-- [Create Pull Request](./actions/create-pr/README.md)
+- [Approve pull request](./actions/approve-pr/README.md)
+- [Check commit messages](./actions/check-commit-messages/README.md)
+- [Check pull request title](./actions/check-pr-title/README.md)
+- [Create pull request](./actions/create-pr/README.md)
 - [Setup Commitizen](./actions/setup-commitizen/README.md)
 - [Setup pnpm](./actions/setup-pnpm/README.md)
 - [Setup Python](./actions/setup-python/README.md)
