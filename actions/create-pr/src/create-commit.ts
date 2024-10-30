@@ -20,10 +20,6 @@ export function createCommit({
   authorName,
   authorEmail,
 }: CreateCommitOptions): void {
-  if (!gitHasChanges()) {
-    throw new Error('No changes to commit');
-  }
-
   const randomSuffix = generateRandomSuffix(6);
   const branchName = `${head}-${randomSuffix}`;
 

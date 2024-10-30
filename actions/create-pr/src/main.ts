@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { getInput } from '@dfinity/action-utils';
+import { getInput, gitHasChanges } from '@dfinity/action-utils';
 import { createPullRequest } from './create-pull-request';
 import { createCommit } from './create-commit';
 
@@ -17,6 +17,14 @@ export async function run(): Promise<void> {
 
     const octokit = github.getOctokit(token);
     const { owner, repo } = github.context.repo;
+
+    if (!gitHasChanges()) {
+      core.info(
+        'No changes detected, skipping commit and pull request creation',
+      );
+      core.setOutput('pull_request_created', false);
+      return;
+    }
 
     createCommit({
       authorEmail,
@@ -36,6 +44,7 @@ export async function run(): Promise<void> {
     });
 
     core.setOutput('pull_request_number', res.number);
+    core.setOutput('pull_request_created', true);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);
