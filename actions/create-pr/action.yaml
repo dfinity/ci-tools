@@ -1,6 +1,6 @@
-name: Create pull request
-description: Create pull request
-author: DFINITY Stiftung
+name: 'Create pull request'
+description: 'This action creates a pull request from a branch to a target branch.'
+author: 'DFINITY Stiftung'
 
 inputs:
   branch_name:
