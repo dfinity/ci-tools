@@ -2,6 +2,8 @@
 
 This action approves a pull request and optionally enables automerge. See the [create pull request action](../create-pr/README.md) for a ready to use action that can create a pull request.
 
+Any pull requests created as a result of actions that use the default token (`${{ GITHUB_TOKEN }}`) will not trigger any pipeline events. To ensure that any pipelines are triggered, a different token must be used.
+
 ## Action inputs
 
 | Input                 | Description                                | Default               |
@@ -39,6 +41,7 @@ jobs:
 
       - name: 'Approve pull request'
         uses: dfinity/actions/actions/approve-pr@main
+        if: ${{ steps.create_pr.outputs.pull_request_created }}
         with:
           pull_request_number: ${{ steps.create_pr.outputs.pull_request_number }}
           auto_merge: true
