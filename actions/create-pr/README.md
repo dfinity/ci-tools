@@ -18,6 +18,7 @@ This action creates a pull request from a branch to a target branch.
 ## Action outputs
 
 - `pull_request_number`: The number of the created pull request.
+- `pull_request_created`: A boolean indicating whether the pull request was created. This will be `false` is there are no changes to commit.
 
 ## Example usage
 

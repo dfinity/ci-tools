@@ -35,6 +35,8 @@ inputs:
 outputs:
   pull_request_number:
     description: 'The number of the created pull request.'
+  pull_request_created:
+    description: 'Whether the pull request was created.'
 
 runs:
   using: node20
