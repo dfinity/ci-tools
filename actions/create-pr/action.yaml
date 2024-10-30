@@ -18,7 +18,7 @@ inputs:
     default: 'chore: automated by GitHub actions'
   pull_request_body:
     description: 'The body of the pull request.'
-    default: 'This pull request was automatically created by a GitHub Action'
+    default: 'This pull request was automatically created by a GitHub Action.'
     required: false
 
   author_name:
