@@ -1,6 +1,6 @@
 # Approve pull request action
 
-This action approves a pull request and optionally enables automerge.
+This action approves a pull request and optionally enables automerge. See the [create pull request action](../create-pr/README.md) for a ready to use action that can create a pull request.
 
 ## Action inputs
 
