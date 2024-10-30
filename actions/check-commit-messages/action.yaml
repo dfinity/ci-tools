@@ -11,4 +11,5 @@ runs:
   using: 'composite'
   steps:
     - name: 'Check commit messages'
+      shell: bash
       run: cz check --rev-range ${{ inputs.starting_commit }}..HEAD

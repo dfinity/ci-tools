@@ -5,4 +5,5 @@ runs:
   using: 'composite'
   steps:
     - name: Install Commitzen
+      shell: bash
       run: pip install -U Commitizen
