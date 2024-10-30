@@ -22,7 +22,7 @@ This action creates a pull request from a branch to a target branch.
 ## Example usage
 
 ```yaml
-name: Create pull request
+name: 'Create pull request'
 
 on:
   push:
@@ -33,12 +33,11 @@ jobs:
   create_pr:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
 
-      - name: Create pull request
-        id: create_pr
-        uses: dfinity/actions/actions/create-pr
+      - name: 'Create pull request'
+        uses: dfinity/actions/actions/create-pr@main
         with:
           branch_name: 'chore/update-changelog'
           base_branch_name: 'main'
