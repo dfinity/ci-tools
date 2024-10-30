@@ -19,9 +19,9 @@ jobs:
       - name: 'Checkout repository'
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: 'Setup Python'
         uses: dfinity/actions/actions/setup-python@main
 
-      - name: Setup Commitizen
+      - name: 'Setup Commitizen'
         uses: dfinity/actions/actions/setup-commitizen@main
 ```
