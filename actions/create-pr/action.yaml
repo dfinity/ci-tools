@@ -5,31 +5,39 @@ author: 'DFINITY Stiftung'
 inputs:
   branch_name:
     description: 'The name of the branch to create a pull request from.'
+    required: false
     default: 'patch'
   base_branch_name:
     description: 'The name of the base branch to create a pull request against.'
+    required: false
     default: 'main'
 
   pull_request_title:
     description: 'The title of the pull request.'
+    required: false
     default: 'chore: automated by GitHub actions'
   pull_request_body:
     description: 'The body of the pull request.'
     default: 'This pull request was automatically created by a GitHub Action'
+    required: false
 
   author_name:
     description: 'The name of the author of the pull request and commit.'
+    required: false
     default: '${{ github.actor }}'
   author_email:
     description: 'The email of the author of the pull request and commit.'
+    required: false
     default: '${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com'
 
   commit_message:
     description: 'The message of the commit.'
+    required: false
     default: 'chore: automated by GitHub actions'
 
   token:
     description: 'Access token to manage the pull request.'
+    required: false
     default: '${{ github.token }}'
 
 outputs:
