@@ -31,7 +31,7 @@ jobs:
 
       - name: 'Create pull request'
         id: create_pr
-        uses: dfinity/actions/actions/create-pr@main
+        uses: dfinity/ci-tools/actions/create-pr@main
         with:
           branch_name: 'chore/update-changelog'
           base_branch_name: 'main'
@@ -40,7 +40,7 @@ jobs:
           commit_message: 'chore: update changelog'
 
       - name: 'Approve pull request'
-        uses: dfinity/actions/actions/approve-pr@main
+        uses: dfinity/ci-tools/actions/approve-pr@main
         if: ${{ steps.create_pr.outputs.pull_request_created }}
         with:
           pull_request_number: ${{ steps.create_pr.outputs.pull_request_number }}

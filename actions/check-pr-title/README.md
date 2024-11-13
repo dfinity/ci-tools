@@ -20,11 +20,11 @@ jobs:
           fetch-depth: 0
 
       - name: 'Setup Python'
-        uses: dfinity/actions/actions/setup-python@main
+        uses: dfinity/ci-tools/actions/setup-python@main
 
       - name: 'Setup Commitizen'
-        uses: dfinity/actions/actions/setup-commitizen@main
+        uses: dfinity/ci-tools/actions/setup-commitizen@main
 
       - name: 'Check pull request title'
-        uses: dfinity/actions/actions/check-pr-title@main
+        uses: dfinity/ci-tools/actions/check-pr-title@main
 ```

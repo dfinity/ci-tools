@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 'Create pull request'
-        uses: dfinity/actions/actions/create-pr@main
+        uses: dfinity/ci-tools/actions/create-pr@main
         with:
           branch_name: 'chore/update-changelog'
           base_branch_name: 'main'

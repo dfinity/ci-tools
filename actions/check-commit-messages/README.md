@@ -28,13 +28,13 @@ jobs:
           fetch-depth: 0
 
       - name: 'Setup Python'
-        uses: dfinity/actions/actions/setup-python@main
+        uses: dfinity/ci-tools/actions/setup-python@main
 
       - name: 'Setup Commitizen'
-        uses: dfinity/actions/actions/setup-commitizen@main
+        uses: dfinity/ci-tools/actions/setup-commitizen@main
 
       - name: 'Check commit messages'
-        uses: dfinity/actions/actions/check-commit-messages@main
+        uses: dfinity/ci-tools/actions/check-commit-messages@main
         with:
           starting_commit: 'c8ecbc19b8c4a482e55907d37554d66f2f2f9a8f'
 ```

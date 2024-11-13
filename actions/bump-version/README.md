@@ -22,11 +22,11 @@ jobs:
           fetch-depth: 0
 
       - name: 'Setup Python'
-        uses: dfinity/actions/actions/setup-python@main
+        uses: dfinity/ci-tools/actions/setup-python@main
 
       - name: 'Setup Commitizen'
-        uses: dfinity/actions/actions/setup-commitizen@main
+        uses: dfinity/ci-tools/actions/setup-commitizen@main
 
       - name: 'Bump version'
-        uses: dfinity/actions/actions/bump-version@main
+        uses: dfinity/ci-tools/actions/bump-version@main
 ```

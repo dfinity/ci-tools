@@ -20,5 +20,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: dfinity/actions/actions/setup-python@main
+        uses: dfinity/ci-tools/actions/setup-python@main
 ```

@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 'Setup PNPM'
-        uses: dfinity/actions/actions/setup-pnpm@main
+        uses: dfinity/ci-tools/actions/setup-pnpm@main
         with:
           node_version_file: '.nvmrc'
 ```

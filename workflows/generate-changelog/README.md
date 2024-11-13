@@ -33,7 +33,7 @@ on:
 
 jobs:
   generate_changelog:
-    uses: dfinity/actions/workflows/generate-changelog/workflow.yaml@main
+    uses: dfinity/ci-tools/workflows/generate-changelog/workflow.yaml@main
       with:
         auto_merge: true
       secrets:
