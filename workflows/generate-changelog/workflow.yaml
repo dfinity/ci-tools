@@ -61,19 +61,19 @@ jobs:
           fetch-depth: 0
 
       - name: 'Setup Python'
-        uses: dfinity/actions/actions/setup-python@main
+        uses: dfinity/ci-tools/actions/setup-python@main
 
       - name: 'Setup Commitizen'
-        uses: dfinity/actions/actions/setup-commitizen@main
+        uses: dfinity/ci-tools/actions/setup-commitizen@main
 
       - name: 'Generate changelog'
-        uses: dfinity/actions/actions/generate-changelog@main
+        uses: dfinity/ci-tools/actions/generate-changelog@main
         with:
           file_name: ${{ inputs.file_name }}
 
       - name: 'Create pull request'
         id: create_pr
-        uses: dfinity/actions/actions/create-pr@main
+        uses: dfinity/ci-tools/actions/create-pr@main
         with:
           branch_name: ${{ inputs.branch_name }}
           base_branch_name: ${{ inputs.base_branch_name }}
@@ -85,7 +85,7 @@ jobs:
           token: ${{ secrets.token }}
 
       - name: 'Approve pull request'
-        uses: dfinity/actions/actions/approve-pr@main
+        uses: dfinity/ci-tools/actions/approve-pr@main
         if: ${{ steps.create_pr.outputs.pull_request_created }}
         with:
           pull_request_number: ${{ steps.create_pr.outputs.pull_request_number }}

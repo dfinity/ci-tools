@@ -1,5 +1,5 @@
 {
-  "name": "@dfinity/actions",
+  "name": "@dfinity/ci-tools",
   "private": true,
   "engines": {
     "node": "^20",

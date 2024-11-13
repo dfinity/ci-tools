@@ -1,6 +1,6 @@
-# DFINITY GitHub Actions
+# DFINITY GitHub CI Tools
 
-Shared GitHub actions for DFINITY repositories.
+Shared GitHub actions and workflows for DFINITY repositories.
 
 ## Actions
 
