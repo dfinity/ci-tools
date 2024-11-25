@@ -16,6 +16,7 @@ Shared GitHub workflows and actions for DFINITY repositories.
 - [Check pull request title](./actions/check-pr-title/README.md)
 - [Create pull request](./actions/create-pr/README.md)
 - [Generate changelog](./actions/generate-changelog/README.md)
+- [Generate release notes](./actions/generate-release-notes/README.md)
 - [Setup Commitizen](./actions/setup-commitizen/README.md)
 - [Setup pnpm](./actions/setup-pnpm/README.md)
 - [Setup Python](./actions/setup-python/README.md)
