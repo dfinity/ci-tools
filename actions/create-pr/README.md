@@ -42,9 +42,9 @@ jobs:
       - name: 'Create pull request'
         uses: dfinity/ci-tools/actions/create-pr@main
         with:
-          branch_name: 'chore/update-changelog'
+          branch_name: 'chore/generate-changelog'
           base_branch_name: 'main'
-          pull_request_title: 'chore: update changelog'
-          pull_request_body: 'This pull request was automatically created by a GitHub Action to update changelogs.'
-          commit_message: 'chore: update changelog'
+          pull_request_title: 'chore: generate changelog'
+          pull_request_body: 'This pull request was automatically created by a GitHub Action to generate changelogs.'
+          commit_message: 'chore: generate changelog'
 ```

@@ -1,6 +1,12 @@
 # DFINITY GitHub CI Tools
 
-Shared GitHub actions and workflows for DFINITY repositories.
+Shared GitHub workflows and actions for DFINITY repositories.
+
+## Workflows
+
+- [Check commit messages](./workflows//check-commit-messages/README.md)
+- [Generate changelog](./workflows/generate-changelog/README.md)
+
 
 ## Actions
 
@@ -13,10 +19,6 @@ Shared GitHub actions and workflows for DFINITY repositories.
 - [Setup Commitizen](./actions/setup-commitizen/README.md)
 - [Setup pnpm](./actions/setup-pnpm/README.md)
 - [Setup Python](./actions/setup-python/README.md)
-
-## Workflows
-
-- [Generate changelog](./workflows/generate-changelog/README.md)
 
 ## Conventions
 
