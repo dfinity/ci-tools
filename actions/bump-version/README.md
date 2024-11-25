@@ -2,6 +2,10 @@
 
 This action bumps package versions based on the repository's commit messages written according to the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/). It assumes [Python](https://www.python.org/), [pip](https://pip.pypa.io/en/stable/) and [Commitizen](https://commitizen-tools.github.io/commitizen/) are already setup, see the [setup Python action](../setup-python/README.md) and [setup Commitizen action](../setup-commitizen/README.md) for ready to use actions to do this.
 
+## Action outputs
+
+- `version`: The new version that packages were bumped to.
+
 ## Example usage
 
 ```yaml
@@ -28,5 +32,10 @@ jobs:
         uses: dfinity/ci-tools/actions/setup-commitizen@main
 
       - name: 'Bump version'
+        id: bump_version
         uses: dfinity/ci-tools/actions/bump-version@main
+
+      - name: 'Print version'
+        run: |
+          echo "New version: ${{ steps.bump_version.outputs.version }}"
 ```
