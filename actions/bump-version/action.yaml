@@ -1,9 +1,17 @@
 name: 'Bump version'
 description: 'This action bumps package versions based on the repository's commit messages written according to the Conventional Commits specification.'
 
+outputs:
+  version:
+    description: 'The new version that packages were bumped to.'
+
 runs:
   using: 'composite'
   steps:
+    - name: 'Get next version'
+      shell: bash
+      run: echo "next_version=$(cz bump --get-next)" >> $GITHUB_ENV
+
     - name: 'Generate changelog'
       shell: bash
-      run: cz bump --files-only --yes
+      run: cz bump --files-only --changelog
