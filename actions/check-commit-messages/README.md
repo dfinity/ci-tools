@@ -1,6 +1,8 @@
 # Check commit messages
 
-This action checks the commit messages on a branch to ensure they follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. It assumes [Python](https://www.python.org/), [pip](https://pip.pypa.io/en/stable/) and [Commitizen](https://commitizen-tools.github.io/commitizen/) are already setup, see the [setup Python action](../setup-python/README.md) and [setup Commitizen action](../setup-commitizen/README.md) for ready to use actions to do this.
+This action checks the commit messages on a branch to ensure they follow the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/). It assumes [Python](https://www.python.org/), [pip](https://pip.pypa.io/en/stable/) and [Commitizen](https://commitizen-tools.github.io/commitizen/) are already setup, see the [setup Python action](../setup-python/README.md) and [setup Commitizen action](../setup-commitizen/README.md) for ready to use actions to do this.
+
+There is also a ready-to-use [workflow](../../workflows/check-commit-messages/README.md) that uses this action.
 
 ## Action inputs
 
@@ -17,6 +19,7 @@ on:
   push:
     branches:
       - main
+    pull_request:
 
 jobs:
   check_commit_messages:

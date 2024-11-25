@@ -1,5 +1,5 @@
 name: 'Generate changelog workflow'
-description: 'This workflow generates a changelog and creates a pull request to update the repository.'
+description: 'This workflow generates a changelog based on the repository's commit messages written according to the Conventional Commits specification and creates a pull request to update the repository.'
 
 on:
   workflow_call:
@@ -16,7 +16,7 @@ on:
       branch_name:
         description: 'The name of the branch to create the pull request from.'
         required: false
-        default: 'chore/update-changelog'
+        default: 'chore/generate-changelog'
       base_branch_name:
         description: 'The name of the base branch to create the pull request against.'
         required: false
@@ -25,10 +25,10 @@ on:
       pull_request_title:
         description: 'The title of the pull request.'
         required: false
-        default: 'chore: update changelog'
+        default: 'chore: generate changelog'
       pull_request_body:
         description: 'The body of the pull request.'
-        default: 'This pull request was automatically created by a GitHub Action to update changelogs.'
+        default: 'This pull request was automatically created by a GitHub Action to generate changelogs.'
         required: false
 
       author_name:
@@ -43,7 +43,7 @@ on:
       commit_message:
         description: 'The message of the commit.'
         required: false
-        default: 'chore: update changelog'
+        default: 'chore: generate changelog'
 
     secrets:
       token:

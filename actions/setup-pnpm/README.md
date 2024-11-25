@@ -17,6 +17,7 @@ on:
   push:
     branches:
       - main
+    pull_request:
 
 jobs:
   setup_pnpm:

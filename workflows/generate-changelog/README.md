@@ -1,6 +1,6 @@
 # Generate changelog
 
-This workflow generates a changelog and creates a pull request to update the repository.
+This workflow generates a changelog based on the repository's commit messages written according to the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/) and creates a pull request to update the repository.
 
 ## Workflow inputs
 
