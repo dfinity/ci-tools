@@ -1,5 +1,4 @@
 name: 'Check commit messages workflow'
-description: 'This workflow generates a changelog and creates a pull request to update the repository.'
 
 on:
   workflow_call:
@@ -8,6 +7,7 @@ on:
         description: 'The commit to start checking from.'
         required: false
         default: '${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}'
+        type: string
 
 jobs:
   check_commit_messages:
