@@ -6,4 +6,4 @@ runs:
   steps:
     - name: 'Check pull request title'
       shell: bash
-      run: cz check -m ${{ github.event.pull_request.title }}
+      run: cz check -m "${{ github.event.pull_request.title }}"
