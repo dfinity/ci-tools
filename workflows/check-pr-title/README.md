@@ -1,0 +1,16 @@
+# Check PR title
+
+This workflow checks the title of a pull request to ensure it follows the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
+
+## Example usage
+
+```yaml
+name: 'Check PR title'
+
+on:
+  pull_request:
+
+jobs:
+  check_pr_title:
+    uses: dfinity/ci-tools/workflows/check-pr-title/workflow.yaml@main
+```
