@@ -5,8 +5,8 @@ Shared GitHub workflows and actions for DFINITY repositories.
 ## Workflows
 
 - [Check commit messages](./workflows//check-commit-messages/README.md)
+- [Check pull request title](./workflows/check-pr-title/README.md)
 - [Generate changelog](./workflows/generate-changelog/README.md)
-
 
 ## Actions
 
