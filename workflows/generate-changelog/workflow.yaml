@@ -1,5 +1,4 @@
 name: 'Generate changelog workflow'
-description: 'This workflow generates a changelog based on the repository's commit messages written according to the Conventional Commits specification and creates a pull request to update the repository.'
 
 on:
   workflow_call:
@@ -8,42 +7,51 @@ on:
         description: 'The name of the file to write the changelog to.'
         required: false
         default: 'CHANGELOG.md'
+        type: string
       auto_merge:
         description: 'Whether to automatically merge the pull request.'
         required: false
         default: true
+        type: boolean
 
       branch_name:
         description: 'The name of the branch to create the pull request from.'
         required: false
         default: 'chore/generate-changelog'
+        type: string
       base_branch_name:
         description: 'The name of the base branch to create the pull request against.'
         required: false
         default: 'main'
+        type: string
 
       pull_request_title:
         description: 'The title of the pull request.'
         required: false
         default: 'chore: generate changelog'
+        type: string
       pull_request_body:
         description: 'The body of the pull request.'
         default: 'This pull request was automatically created by a GitHub Action to generate changelogs.'
         required: false
+        type: boolean
 
       author_name:
         description: 'The name of the author of the pull request and commit.'
         required: false
         default: '${{ github.actor }}'
+        type: string
       author_email:
         description: 'The email of the author of the pull request and commit.'
         required: false
         default: '${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com'
+        type: string
 
       commit_message:
         description: 'The message of the commit.'
         required: false
         default: 'chore: generate changelog'
+        type: string
 
     secrets:
       token:
