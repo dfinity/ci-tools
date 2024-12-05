@@ -32,8 +32,8 @@ on:
         type: string
       pull_request_body:
         description: 'The body of the pull request.'
-        default: 'This pull request was automatically created by a GitHub Action to generate changelogs.'
         required: false
+        default: 'This pull request was automatically created by a GitHub Action to generate changelogs.'
         type: boolean
 
       author_name:
@@ -57,7 +57,6 @@ on:
       token:
         description: 'Access token to manage the pull request.'
         required: false
-        default: '${{ github.token }}'
 
 jobs:
   generate_changelog:

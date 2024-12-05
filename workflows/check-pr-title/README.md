@@ -12,5 +12,5 @@ on:
 
 jobs:
   check_pr_title:
-    uses: dfinity/ci-tools/workflows/check-pr-title/workflow.yaml@main
+    uses: dfinity/ci-tools/.github/workflows/check-pr-title.yaml@main
 ```
