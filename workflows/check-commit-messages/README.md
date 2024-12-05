@@ -21,7 +21,7 @@ on:
 
 jobs:
   check_commit_messages:
-    uses: dfinity/ci-tools/workflows/check-commit-messages/workflow.yaml@main
+    uses: dfinity/ci-tools/.github/workflows/check-commit-messages.yaml@main
     with:
       starting_commit: 'c8ecbc19b8c4a482e55907d37554d66f2f2f9a8f'
 ```

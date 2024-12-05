@@ -33,9 +33,9 @@ on:
 
 jobs:
   generate_changelog:
-    uses: dfinity/ci-tools/workflows/generate-changelog/workflow.yaml@main
-      with:
-        auto_merge: true
-      secrets:
-        token: ${{ secrets.GITHUB_TOKEN }}
+    uses: dfinity/ci-tools/.github/workflows/generate-changelog.yaml@main
+    with:
+      auto_merge: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 ```
