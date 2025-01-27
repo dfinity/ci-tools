@@ -9,7 +9,9 @@ export function gitCommit(
   authorName: string,
   authorEmail: string,
 ): void {
-  exec(`git commit -m "${message}" --author="${authorName} <${authorEmail}>"`);
+  exec(`git config user.name "${authorName}"`);
+  exec(`git config user.email "${authorEmail}"`);
+  exec(`git commit -m "${message}"`);
 }
 
 export function gitCheckoutBranch(branch: string): void {

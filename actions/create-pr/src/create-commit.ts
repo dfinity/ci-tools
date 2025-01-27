@@ -4,7 +4,6 @@ import {
   gitAdd,
   gitCheckoutBranch,
   gitCommit,
-  gitHasChanges,
 } from '@dfinity/action-utils';
 
 export interface CreateCommitOptions {

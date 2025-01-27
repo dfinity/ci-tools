@@ -23142,7 +23142,7 @@ var require_dist = __commonJS({
       gitAdd: () => gitAdd2,
       gitCheckoutBranch: () => gitCheckoutBranch2,
       gitCommit: () => gitCommit2,
-      gitHasChanges: () => gitHasChanges3
+      gitHasChanges: () => gitHasChanges2
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -23161,12 +23161,14 @@ var require_dist = __commonJS({
       exec(`git add .`);
     }
     function gitCommit2(message, authorName, authorEmail) {
-      exec(`git commit -m "${message}" --author="${authorName} <${authorEmail}>"`);
+      exec(`git config user.name "${authorName}"`);
+      exec(`git config user.email "${authorEmail}"`);
+      exec(`git commit -m "${message}"`);
     }
     function gitCheckoutBranch2(branch) {
       exec(`git checkout -b ${branch}`);
     }
-    function gitHasChanges3() {
+    function gitHasChanges2() {
       const output = exec("git status --porcelain");
       return output.trim().length > 0;
     }
