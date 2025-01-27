@@ -23161,7 +23161,9 @@ var require_dist = __commonJS({
       exec(`git add .`);
     }
     function gitCommit(message, authorName, authorEmail) {
-      exec(`git commit -m "${message}" --author="${authorName} <${authorEmail}>"`);
+      exec(`git config user.name "${authorName}"`);
+      exec(`git config user.email "${authorEmail}"`);
+      exec(`git commit -m "${message}"`);
     }
     function gitCheckoutBranch(branch) {
       exec(`git checkout -b ${branch}`);
