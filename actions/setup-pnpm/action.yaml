@@ -8,7 +8,7 @@ inputs:
     default: .node-version
 
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: 'Install pnpm'
       uses: pnpm/action-setup@v3
@@ -18,7 +18,7 @@ runs:
       with:
         node-version-file: ${{ inputs.node_version_file }}
         registry-url: 'https://registry.npmjs.org'
-        cache: 'pnpm'
+        cache: pnpm
 
     - name: 'Install dependencies'
       shell: bash

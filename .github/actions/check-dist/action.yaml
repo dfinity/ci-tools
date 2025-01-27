@@ -1,20 +1,20 @@
-name: Check dist
-description: Builds an action and ensures the `dist/` directory is up to date
+name: 'Check dist'
+description: 'Builds an action and ensures the `dist/` directory is up to date'
 
 inputs:
   action_name:
-    description: The name of the action to build
+    description: 'The name of the action to build'
     required: true
 
 runs:
   using: 'composite'
   steps:
-    - name: Build action
+    - name: 'Build action'
       shell: bash
       working-directory: actions/${{ inputs.action_name }}
       run: pnpm build
 
-    - name: Check action `dist` directory
+    - name: 'Check action `dist` directory'
       shell: bash
       working-directory: actions/${{ inputs.action_name }}
       run: |
