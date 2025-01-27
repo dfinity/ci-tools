@@ -1,5 +1,5 @@
 name: 'Generate changelog'
-description: 'This action generates changelog based on the repository's commit messages written according to the Conventional Commits specification.'
+description: "This action generates changelog based on the repository's commit messages written according to the Conventional Commits specification."
 
 inputs:
   file_name:
@@ -8,7 +8,7 @@ inputs:
     default: 'CHANGELOG.md'
 
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: 'Generate changelog'
       shell: bash

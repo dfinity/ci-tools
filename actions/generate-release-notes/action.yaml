@@ -1,5 +1,5 @@
 name: 'Generate release notes'
-description: 'This action generates release notes based on the repository's commit messages written according to the Conventional Commits specification.'
+description: "This action generates release notes based on the repository's commit messages written according to the Conventional Commits specification."
 
 inputs:
   file_name:
@@ -13,7 +13,7 @@ inputs:
     default: ${{ github.ref_name }}
 
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: 'Generate changelog'
       shell: bash

@@ -2,7 +2,7 @@ name: 'Check pull request title'
 description: 'This action checks the title of a pull request to ensure it follows the Conventional Commits specification.'
 
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: 'Check pull request title'
       shell: bash

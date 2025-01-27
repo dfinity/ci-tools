@@ -1,12 +1,12 @@
 name: 'Bump version'
-description: 'This action bumps package versions based on the repository's commit messages written according to the Conventional Commits specification.'
+description: "This action bumps package versions based on the repository's commit messages written according to the Conventional Commits specification."
 
 outputs:
   version:
     description: 'The new version that packages were bumped to.'
 
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - name: 'Get next version'
       shell: bash
