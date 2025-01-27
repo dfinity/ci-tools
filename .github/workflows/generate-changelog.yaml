@@ -34,7 +34,7 @@ on:
         description: 'The body of the pull request.'
         required: false
         default: 'This pull request was automatically created by a GitHub Action to generate changelogs.'
-        type: boolean
+        type: string
 
       author_name:
         description: 'The name of the author of the pull request and commit.'
