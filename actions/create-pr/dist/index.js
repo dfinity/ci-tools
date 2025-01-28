@@ -23142,7 +23142,8 @@ var require_dist = __commonJS({
       gitAdd: () => gitAdd2,
       gitCheckoutBranch: () => gitCheckoutBranch2,
       gitCommit: () => gitCommit2,
-      gitHasChanges: () => gitHasChanges2
+      gitHasChanges: () => gitHasChanges2,
+      gitPushBranch: () => gitPushBranch2
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -23167,6 +23168,9 @@ var require_dist = __commonJS({
     }
     function gitCheckoutBranch2(branch) {
       exec(`git checkout -b ${branch}`);
+    }
+    function gitPushBranch2(branch) {
+      exec(`git push -u origin ${branch}`);
     }
     function gitHasChanges2() {
       const output = exec("git status --porcelain");
@@ -23233,6 +23237,7 @@ function createCommit({
   (0, import_action_utils.gitCheckoutBranch)(branchName);
   (0, import_action_utils.gitAdd)();
   (0, import_action_utils.gitCommit)(message, authorName, authorEmail);
+  (0, import_action_utils.gitPushBranch)(branchName);
   core2.info(`Created git commit on branch ${branchName}`);
 }
 
