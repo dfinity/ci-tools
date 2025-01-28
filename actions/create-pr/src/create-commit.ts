@@ -4,6 +4,7 @@ import {
   gitAdd,
   gitCheckoutBranch,
   gitCommit,
+  gitPushBranch,
 } from '@dfinity/action-utils';
 
 export interface CreateCommitOptions {
@@ -25,6 +26,7 @@ export function createCommit({
   gitCheckoutBranch(branchName);
   gitAdd();
   gitCommit(message, authorName, authorEmail);
+  gitPushBranch(branchName);
 
   core.info(`Created git commit on branch ${branchName}`);
 }

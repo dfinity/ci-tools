@@ -18,6 +18,10 @@ export function gitCheckoutBranch(branch: string): void {
   exec(`git checkout -b ${branch}`);
 }
 
+export function gitPushBranch(branch: string): void {
+  exec(`git push -u origin ${branch}`);
+}
+
 export function gitHasChanges(): boolean {
   const output = exec('git status --porcelain');
 

@@ -23142,7 +23142,8 @@ var require_dist = __commonJS({
       gitAdd: () => gitAdd,
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit,
-      gitHasChanges: () => gitHasChanges
+      gitHasChanges: () => gitHasChanges,
+      gitPushBranch: () => gitPushBranch
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -23167,6 +23168,9 @@ var require_dist = __commonJS({
     }
     function gitCheckoutBranch(branch) {
       exec(`git checkout -b ${branch}`);
+    }
+    function gitPushBranch(branch) {
+      exec(`git push -u origin ${branch}`);
     }
     function gitHasChanges() {
       const output = exec("git status --porcelain");
