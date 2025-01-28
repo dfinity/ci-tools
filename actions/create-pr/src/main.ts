@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { getInput, gitHasChanges } from '@dfinity/action-utils';
+import { generateRandomSuffix, getInput, gitHasChanges } from '@dfinity/action-utils';
 import { createPullRequest } from './create-pull-request';
 import { createCommit } from './create-commit';
 
@@ -8,7 +8,7 @@ export async function run(): Promise<void> {
   try {
     const authorName = getInput('author_name');
     const authorEmail = getInput('author_email');
-    const head = getInput('branch_name');
+    const head = `${getInput('branch_name')}-${generateRandomSuffix(6)}`;
     const base = getInput('base_branch_name');
     const message = getInput('commit_message');
     const title = getInput('pull_request_title');

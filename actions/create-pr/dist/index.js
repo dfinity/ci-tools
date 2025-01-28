@@ -23232,13 +23232,11 @@ function createCommit({
   authorName,
   authorEmail
 }) {
-  const randomSuffix = (0, import_action_utils.generateRandomSuffix)(6);
-  const branchName = `${head}-${randomSuffix}`;
-  (0, import_action_utils.gitCheckoutBranch)(branchName);
+  (0, import_action_utils.gitCheckoutBranch)(head);
   (0, import_action_utils.gitAdd)();
   (0, import_action_utils.gitCommit)(message, authorName, authorEmail);
-  (0, import_action_utils.gitPushBranch)(branchName);
-  core2.info(`Created git commit on branch ${branchName}`);
+  (0, import_action_utils.gitPushBranch)(head);
+  core2.info(`Created git commit on branch ${head}`);
 }
 
 // src/main.ts
@@ -23246,7 +23244,7 @@ async function run() {
   try {
     const authorName = (0, import_action_utils2.getInput)("author_name");
     const authorEmail = (0, import_action_utils2.getInput)("author_email");
-    const head = (0, import_action_utils2.getInput)("branch_name");
+    const head = `${(0, import_action_utils2.getInput)("branch_name")}-${(0, import_action_utils2.generateRandomSuffix)(6)}`;
     const base = (0, import_action_utils2.getInput)("base_branch_name");
     const message = (0, import_action_utils2.getInput)("commit_message");
     const title = (0, import_action_utils2.getInput)("pull_request_title");

@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 import {
-  generateRandomSuffix,
   gitAdd,
   gitCheckoutBranch,
   gitCommit,
@@ -20,13 +19,10 @@ export function createCommit({
   authorName,
   authorEmail,
 }: CreateCommitOptions): void {
-  const randomSuffix = generateRandomSuffix(6);
-  const branchName = `${head}-${randomSuffix}`;
-
-  gitCheckoutBranch(branchName);
+  gitCheckoutBranch(head);
   gitAdd();
   gitCommit(message, authorName, authorEmail);
-  gitPushBranch(branchName);
+  gitPushBranch(head);
 
-  core.info(`Created git commit on branch ${branchName}`);
+  core.info(`Created git commit on branch ${head}`);
 }
