@@ -23250,7 +23250,7 @@ async function enableAutoMerge({
 async function run() {
   try {
     const token = (0, import_action_utils.getInput)("token");
-    const mergeMethod = (0, import_action_utils.getInput)("merge_method");
+    const mergeMethod = getMergeMethod();
     const pullRequestNumber = (0, import_action_utils.getNumberInput)("pull_request_number");
     const octokit = github.getOctokit(token);
     const graphql = octokit.graphql.defaults({
@@ -23272,6 +23272,21 @@ async function run() {
     if (error instanceof Error) {
       core3.setFailed(error.message);
     }
+  }
+}
+function getMergeMethod() {
+  const mergeMethod = (0, import_action_utils.getInput)("merge_method").toLowerCase();
+  switch (mergeMethod) {
+    case "merge":
+      return "MERGE" /* Merge */;
+    case "squash":
+      return "SQUASH" /* Squash */;
+    case "rebase":
+      return "REBASE" /* Rebase */;
+    default:
+      throw new Error(
+        `Invalid merge method: ${mergeMethod}. Supported values are "merge", "squash", and "rebase".`
+      );
   }
 }
 

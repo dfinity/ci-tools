@@ -6,11 +6,12 @@ Any pull requests created as a result of actions that use the default token (`${
 
 ## Action inputs
 
-| Input                 | Description                                | Default               |
-| --------------------- | ------------------------------------------ | --------------------- |
-| `pull_request_number` | The number of the pull request to approve. | _required_            |
-| `auto_merge`          | Enable auto-merge for the pull request.    | `false`               |
-| `token`               | Access token to manage the pull request.   | `${{ GITHUB_TOKEN }}` |
+| Input                 | Description                                                                  | Default               |
+| --------------------- | ---------------------------------------------------------------------------- | --------------------- |
+| `pull_request_number` | The number of the pull request to approve.                                   | _required_            |
+| `auto_merge`          | Enable auto-merge for the pull request.                                      | `false`               |
+| `token`               | Access token to manage the pull request.                                     | `${{ GITHUB_TOKEN }}` |
+| `merge_method`        | The merge method to use. Possible values are `merge`, `squash`, or `rebase`. | `merge`               |
 
 ## Example usage
 
@@ -45,4 +46,5 @@ jobs:
         with:
           pull_request_number: ${{ steps.create_pr.outputs.pull_request_number }}
           auto_merge: true
+          merge_method: 'rebase'
 ```

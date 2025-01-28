@@ -4,10 +4,16 @@ import { Octokit, Graphql } from '@dfinity/action-utils';
 export interface EnableAutoMergeOptions {
   owner: string;
   repo: string;
-  mergeMethod: string;
+  mergeMethod: MergeMethod;
   pullRequestNumber: number;
   octokit: Octokit;
   graphql: Graphql;
+}
+
+export enum MergeMethod {
+  Merge = 'MERGE',
+  Squash = 'SQUASH',
+  Rebase = 'REBASE',
 }
 
 export async function enableAutoMerge({

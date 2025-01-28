@@ -14,6 +14,10 @@ inputs:
     description: 'Access token to manage the pull request.'
     required: false
     default: ${{ github.token }}
+  merge_method:
+    description: 'Merge method to use when auto-merging. Supported values are "merge", "squash", and "rebase".'
+    required: false
+    default: 'merge'
 
 runs:
   using: node20
