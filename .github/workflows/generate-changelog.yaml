@@ -8,16 +8,6 @@ on:
         required: false
         default: 'CHANGELOG.md'
         type: string
-      auto_merge:
-        description: 'Whether to automatically merge the pull request.'
-        required: false
-        default: true
-        type: boolean
-      merge_method:
-        description: 'The merge method to use when merging the pull request. Supported values are `merge`, `squash`, and `rebase`.'
-        required: false
-        default: 'merge'
-        type: string
 
       branch_name:
         description: 'The name of the branch to create the pull request from.'
