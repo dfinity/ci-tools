@@ -23,4 +23,4 @@ jobs:
         uses: ./actions/setup-pnpm
 
       - name: 'Check formatting'
-        uses: pnpm run format:check
+        run: pnpm run format:check

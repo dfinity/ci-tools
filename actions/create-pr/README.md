@@ -36,6 +36,13 @@ jobs:
   create_pr:
     runs-on: ubuntu-latest
     steps:
+      - name: 'Create GitHub App Token'
+        uses: actions/create-github-app-token@v1
+        id: generate_token
+        with:
+          app-id: ${{ vars.PR_AUTOMATION_BOT_PUBLIC_APP_ID }}
+          private-key: ${{ secrets.PR_AUTOMATION_BOT_PUBLIC_PRIVATE_KEY }}
+
       - name: 'Checkout repository'
         uses: actions/checkout@v4
 
@@ -47,4 +54,5 @@ jobs:
           pull_request_title: 'chore: generate changelog'
           pull_request_body: 'This pull request was automatically created by a GitHub Action to generate changelogs.'
           commit_message: 'chore: generate changelog'
+          token: ${{ steps.generate_token.outputs.token }}
 ```

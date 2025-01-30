@@ -1,6 +1,10 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { generateRandomSuffix, getInput, gitHasChanges } from '@dfinity/action-utils';
+import {
+  generateRandomSuffix,
+  getInput,
+  gitHasChanges,
+} from '@dfinity/action-utils';
 import { createPullRequest } from './create-pull-request';
 import { createCommit } from './create-commit';
 

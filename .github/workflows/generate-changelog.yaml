@@ -58,15 +58,26 @@ on:
         default: 'chore: generate changelog'
         type: string
 
+      token_app_id:
+        description: 'A GitHub App ID used to generate an access token to create a pull request.'
+        required: true
+        type: string
+
     secrets:
-      token:
-        description: 'Access token to manage the pull request.'
-        required: false
+      token_private_key:
+        description: 'A GitHub App private key used to generate an access token to create a pull request.'
 
 jobs:
   generate_changelog:
     runs-on: ubuntu-latest
     steps:
+      - name: 'Create GitHub App Token'
+        uses: actions/create-github-app-token@v1
+        id: generate_token
+        with:
+          app-id: ${{ inputs.token_app_id }}
+          private-key: ${{ secrets.token_private_key }}
+
       - name: 'Checkout repository'
         uses: actions/checkout@v4
         with:
@@ -84,7 +95,6 @@ jobs:
           file_name: ${{ inputs.file_name }}
 
       - name: 'Create pull request'
-        id: create_pr
         uses: dfinity/ci-tools/actions/create-pr@main
         with:
           branch_name: ${{ inputs.branch_name }}
@@ -94,13 +104,4 @@ jobs:
           author_name: ${{ inputs.author_name }}
           author_email: ${{ inputs.author_email }}
           commit_message: ${{ inputs.commit_message }}
-          token: ${{ secrets.token }}
-
-      - name: 'Approve pull request'
-        uses: dfinity/ci-tools/actions/approve-pr@main
-        if: ${{ steps.create_pr.outputs.pull_request_created }}
-        with:
-          pull_request_number: ${{ steps.create_pr.outputs.pull_request_number }}
-          auto_merge: ${{ inputs.auto_merge }}
-          merge_method: ${{ inputs.merge_method }}
-          token: ${{ secrets.token }}
+          token: ${{ steps.generate_token.outputs.token }}

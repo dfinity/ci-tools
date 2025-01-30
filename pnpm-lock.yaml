@@ -34,12 +34,6 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
 
-  actions/approve-pr:
-    dependencies:
-      '@dfinity/action-utils':
-        specifier: workspace:*
-        version: link:../../lib/action-utils
-
   actions/create-pr:
     dependencies:
       '@dfinity/action-utils':

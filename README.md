@@ -10,7 +10,6 @@ Shared GitHub workflows and actions for DFINITY repositories.
 
 ## Actions
 
-- [Approve pull request](./actions/approve-pr/README.md)
 - [Bump version](./actions//bump-version/README.md)
 - [Check commit messages](./actions/check-commit-messages/README.md)
 - [Check pull request title](./actions/check-pr-title/README.md)
