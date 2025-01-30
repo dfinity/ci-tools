@@ -13,7 +13,6 @@ This workflow generates a changelog based on the repository's commit messages wr
 | `author_name`        | The name of the author of the pull request and commit.                     | `${{ github.actor }}`                                                 |
 | `author_email`       | The email of the author of the pull request and commit.                    | `${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com` |
 | `commit_message`     | The message of the commit.                                                 | `'chore: automated by GitHub actions'`                                |
-| `auto_merge`         | Enable auto-merge for the pull request.                                    | `false`                                                               |
 | `token_app_id`       | A GitHub App ID used to generate an access token to create a pull request. | _required_                                                            |
 
 ## Workflow secrets
@@ -36,7 +35,6 @@ jobs:
   generate_changelog:
     uses: dfinity/ci-tools/.github/workflows/generate-changelog.yaml@main
     with:
-      auto_merge: true
       token_app_id: ${{ vars.PR_AUTOMATION_BOT_PUBLIC_APP_ID }}
     secrets:
       token_private_key: ${{ secrets.PR_AUTOMATION_BOT_PUBLIC_PRIVATE_KEY }}
