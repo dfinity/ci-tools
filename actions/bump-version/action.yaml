@@ -10,7 +10,7 @@ runs:
   steps:
     - name: 'Get next version'
       shell: bash
-      run: echo "version=$(cz bump --get-next)" >> $GITHUB_ENV
+      run: echo "version=$(cz bump --get-next)" >> "$GITHUB_OUTPUT"
 
     - name: 'Generate changelog'
       shell: bash
