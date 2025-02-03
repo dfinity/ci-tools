@@ -2,6 +2,12 @@
 
 This workflow generates a changelog based on the repository's commit messages written according to the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/) and creates a pull request to update the repository.
 
+Any files that will be changed and committed to the pull request must be listed in the `.github/repo_policies/BOT_APPROVED_FILES` file of the repository. For example:
+
+```
+CHANGELOG.md
+```
+
 ## Workflow inputs
 
 | Input                | Description                                                                | Default                                                               |
