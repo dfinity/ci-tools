@@ -35,7 +35,7 @@ jobs:
         uses: dfinity/ci-tools/actions/setup-commitizen@main
 
       - name: 'Generate release notes'
-        uses: dfinity/ci-tools/actions/generate-release_notes@main
+        uses: dfinity/ci-tools/actions/generate-release-notes@main
         with:
           file_name: 'RELEASE.md'
 ```
