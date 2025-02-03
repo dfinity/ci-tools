@@ -4,6 +4,14 @@ This action creates a pull request from a branch to a target branch.
 
 Any pull requests created as a result of actions that use the default token (`${{ GITHUB_TOKEN }}`) will not trigger any pipeline events. To ensure that any pipelines are triggered, a different token must be used.
 
+Any files that will be changed and committed to the pull request must be listed in the `.github/repo_policies/BOT_APPROVED_FILES` file of the repository. For example:
+
+```
+CHANGELOG.md
+Cargo.toml
+packages/some-package/package.json
+```
+
 ## Action inputs
 
 | Input                | Description                                                   | Default                                                               |
