@@ -1,6 +1,12 @@
 name: 'Bump version'
 description: "This action bumps package versions based on the repository's commit messages written according to the Conventional Commits specification."
 
+inputs:
+  prerelease:
+    description: 'Optional prerelease identifier (e.g., alpha, beta, rc).'
+    required: false
+    default: ''
+
 outputs:
   version:
     description: 'The new version that packages were bumped to.'
@@ -16,4 +22,11 @@ runs:
 
     - name: 'Generate changelog'
       shell: bash
-      run: cz bump --files-only --changelog
+      run: |
+        cmd="cz bump --files-only --changelog"
+
+        if [ -n "${{ inputs.prerelease }}" ]; then
+          cmd="$cmd --prerelease ${{ inputs.prerelease }}"
+        fi
+
+        $cmd
