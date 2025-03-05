@@ -3,10 +3,10 @@ name: 'Check commit messages workflow'
 on:
   workflow_call:
     inputs:
-      starting_commit:
-        description: 'The commit to start checking from.'
+      target_branch:
+        description: 'The branch to check against. All commits on the current branch that are not on the target branch will be checked.'
         required: false
-        default: '${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}'
+        default: 'main'
         type: string
 
 jobs:
@@ -27,4 +27,4 @@ jobs:
       - name: 'Check commit messages'
         uses: dfinity/ci-tools/actions/check-commit-messages@main
         with:
-          starting_commit: ${{ inputs.starting_commit }}
+          target_branch: ${{ inputs.target_branch }}

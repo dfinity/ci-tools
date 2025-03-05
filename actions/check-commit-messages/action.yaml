@@ -2,14 +2,14 @@ name: 'Check commit messages'
 description: 'This action checks the commit messages on a branch to ensure they follow the Conventional Commits specification.'
 
 inputs:
-  starting_commit:
-    description: 'The commit to start checking from.'
+  target_branch:
+    description: 'The branch to check against. All commits on the current branch that are not on the target branch will be checked.'
     required: false
-    default: '${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}'
+    default: 'main'
 
 runs:
   using: composite
   steps:
     - name: 'Check commit messages'
       shell: bash
-      run: cz check --rev-range ${{ inputs.starting_commit }}..HEAD
+      run: cz check --rev-range ${{ inputs.target_branch }}..HEAD
