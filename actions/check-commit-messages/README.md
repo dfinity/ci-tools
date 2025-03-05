@@ -6,9 +6,9 @@ There is also a ready-to-use [workflow](../../workflows/check-commit-messages/RE
 
 ## Action inputs
 
-| Input             | Description                                                             | Default                                           |
-| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------- |
-| `starting_commit` | The commit to start checking from. By default, all commits are checked. | `'${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}'` |
+| Input           | Description                                                                                                       | Default  |
+| --------------- | ----------------------------------------------------------------------------------------------------------------- | -------- |
+| `target_branch` | The branch to check against. All commits on the current branch that are not on the target branch will be checked. | `'main'` |
 
 ## Example usage
 
@@ -39,5 +39,5 @@ jobs:
       - name: 'Check commit messages'
         uses: dfinity/ci-tools/actions/check-commit-messages@main
         with:
-          starting_commit: 'c8ecbc19b8c4a482e55907d37554d66f2f2f9a8f'
+          target_branch: 'develop'
 ```

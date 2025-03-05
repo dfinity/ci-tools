@@ -4,9 +4,9 @@ This workflow checks the commit messages on a branch to ensure they follow the [
 
 ## Workflow inputs
 
-| Input             | Description                                                             | Default                                           |
-| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------- |
-| `starting_commit` | The commit to start checking from. By default, all commits are checked. | `'${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}'` |
+| Input           | Description                                                                                                       | Default  |
+| --------------- | ----------------------------------------------------------------------------------------------------------------- | -------- |
+| `target_branch` | The branch to check against. All commits on the current branch that are not on the target branch will be checked. | `'main'` |
 
 ## Example usage
 
@@ -23,5 +23,5 @@ jobs:
   check_commit_messages:
     uses: dfinity/ci-tools/.github/workflows/check-commit-messages.yaml@main
     with:
-      starting_commit: 'c8ecbc19b8c4a482e55907d37554d66f2f2f9a8f'
+      target_branch: 'develop'
 ```
