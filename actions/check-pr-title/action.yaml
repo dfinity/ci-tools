@@ -1,9 +1,22 @@
 name: 'Check pull request title'
 description: 'This action checks the title of a pull request to ensure it follows the Conventional Commits specification.'
 
+inputs:
+  include_description:
+    description: 'Include the pull request description in the commit message.'
+    required: false
+    default: true
+
 runs:
   using: composite
   steps:
     - name: 'Check pull request title'
       shell: bash
-      run: cz check -m "${{ github.event.pull_request.title }}"
+      run: |
+        COMMIT_MESSAGE="${{ github.event.pull_request.title }}"
+
+        if [ "${{ inputs.include-description }}" == "true" ]; then
+          COMMIT_MESSAGE=$(printf "${COMMIT_MESSAGE}\n${{ github.event.pull_request.body }}")
+        fi
+
+        cz check -m "$COMMIT_MESSAGE"

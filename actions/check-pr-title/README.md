@@ -4,6 +4,12 @@ This action checks the title of a pull request to ensure it follows the [Convent
 
 There is also a ready-to-use [workflow](../../workflows/check-pr-title/README.md) that uses this action.
 
+## Action inputs
+
+| Input                 | Description                                                 | Default |
+| --------------------- | ----------------------------------------------------------- | ------- |
+| `include_description` | Include the pull request description in the commit message. | `true`  |
+
 ## Example usage
 
 ```yaml
@@ -24,4 +30,6 @@ jobs:
 
       - name: 'Check pull request title'
         uses: dfinity/ci-tools/actions/check-pr-title@main
+        with:
+          include_description: false
 ```
