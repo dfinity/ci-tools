@@ -1,0 +1,16 @@
+name: 'Is beta tag'
+description: 'This action checks if the current git tag uses the beta release format.'
+
+outputs:
+  is_beta_tag:
+    description: 'A boolean indicating whether the current git tag uses the beta release format.'
+    value: ${{ steps.is_beta_tag.outputs.is_beta_tag }}
+
+runs:
+  using: composite
+  steps:
+    - name: Is beta tag
+      id: is_beta_tag
+      run: |
+        IS_BETA_TAG=$([[ '${{ github.ref_name }}' == *b* ]] && echo true || echo false)
+        echo "is_beta_tag=$IS_BETA_TAG" >> $GITHUB_OUTPUT
