@@ -1,6 +1,6 @@
 # Is beta tag
 
-This action checks if the current git tag uses the beta release format.
+This action checks if the current git tag uses the beta release format. The expected format is `${majorVersion}.${minorVersion}.${patchVersion}b${betaVersion}`.
 
 ## Action outputs
 
