@@ -1,5 +1,5 @@
 name: 'Is beta tag'
-description: 'This action checks if the current git tag uses the beta release format.'
+description: 'This action checks if the current git tag uses the beta release format. The expected format is `${majorVersion}.${minorVersion}.${patchVersion}b${betaVersion}`.'
 
 outputs:
   is_beta_tag:
