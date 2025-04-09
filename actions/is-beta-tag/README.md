@@ -4,7 +4,7 @@ This action checks if the current git tag uses the beta release format. The expe
 
 ## Action outputs
 
-- `is_beta_tag`: A boolean indicating whether the current git tag uses the beta release format.
+- `is_beta_tag`: A stringified boolean indicating whether the current git tag uses the beta release format.
 
 ## Example usage
 
@@ -34,6 +34,6 @@ jobs:
         with:
           tag: '${{ github.ref_name }}'
           commit: 'main'
-          prerelease: ${{ steps.is_beta_tag.outputs.is_beta_tag == true }}
-          makeLatest: ${{ steps.is_beta_tag.outputs.is_beta_tag == false }}
+          prerelease: ${{ steps.is_beta_tag.outputs.is_beta_tag == 'true' }}
+          makeLatest: ${{ steps.is_beta_tag.outputs.is_beta_tag == 'false' }}
 ```

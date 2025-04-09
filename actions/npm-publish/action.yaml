@@ -6,9 +6,9 @@ inputs:
     description: 'The npm token to use for authentication.'
     required: true
   is_beta:
-    description: 'Publish the package as a beta version.'
+    description: 'A stringified boolean indicating whether to publish the package as a beta version.'
     required: false
-    default: false
+    default: 'false'
 
 outputs:
   artifact_filepath:
@@ -27,7 +27,7 @@ runs:
         echo "artifact_filepath=$artifact_filepath" >> "$GITHUB_OUTPUT"
 
         release_cmd="npm publish --access public"
-        if [ "${{ inputs.is_beta }}" = true ]; then
+        if [ "${{ inputs.is_beta }}" = 'true' ]; then
           release_cmd="$release_cmd --tag beta"
         fi
 

@@ -18,12 +18,20 @@ runs:
     - name: 'Get next version'
       id: get_version
       shell: bash
-      run: echo "version=$(cz bump --get-next)" >> "$GITHUB_OUTPUT"
+      run: |
+        cmd="cz bump --get-next --yes"
+
+        if [ -n "${{ inputs.prerelease }}" ]; then
+          cmd="$cmd --prerelease ${{ inputs.prerelease }}"
+        fi
+
+        version=$($cmd)
+        echo "version=$version" >> "$GITHUB_OUTPUT"
 
     - name: 'Generate changelog'
       shell: bash
       run: |
-        cmd="cz bump --files-only --changelog"
+        cmd="cz bump --files-only --changelog --yes"
 
         if [ -n "${{ inputs.prerelease }}" ]; then
           cmd="$cmd --prerelease ${{ inputs.prerelease }}"
