@@ -3,7 +3,7 @@ description: 'This action checks if the current git tag uses the beta release fo
 
 outputs:
   is_beta_tag:
-    description: 'A boolean indicating whether the current git tag uses the beta release format.'
+    description: 'A stringified boolean indicating whether the current git tag uses the beta release format.'
     value: ${{ steps.is_beta_tag.outputs.is_beta_tag }}
 
 runs:

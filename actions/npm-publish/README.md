@@ -4,10 +4,10 @@ This action publishes a package to the npm registry. It assumes that `npm` is al
 
 ## Action inputs
 
-| Input     | Description                                          | Default    |
-| --------- | ---------------------------------------------------- | ---------- |
-| `token`   | The npm token to authenticate with the npm registry. | _required_ |
-| `is_beta` | Publish the package as a beta version.               | `false`    |
+| Input     | Description                                                           | Default    |
+| --------- | --------------------------------------------------------------------- | ---------- |
+| `token`   | The npm token to authenticate with the npm registry.                  | _required_ |
+| `is_beta` | Publish the package as a beta version. Expects a stringified boolean. | `'false'`  |
 
 ## Action outputs
 
@@ -53,6 +53,6 @@ jobs:
           artifacts: ${{  steps.publish_dfinity_cns.outputs.artifact_filepath }}
           tag: '${{ github.ref_name }}'
           commit: 'main'
-          prerelease: ${{ steps.is_beta_tag.outputs.is_beta_tag == true }}
-          makeLatest: ${{ steps.is_beta_tag.outputs.is_beta_tag == false }}
+          prerelease: ${{ steps.is_beta_tag.outputs.is_beta_tag == 'true' }}
+          makeLatest: ${{ steps.is_beta_tag.outputs.is_beta_tag == 'false' }}
 ```
