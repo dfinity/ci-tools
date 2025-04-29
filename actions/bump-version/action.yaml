@@ -6,6 +6,10 @@ inputs:
     description: 'Optional prerelease identifier (e.g., alpha, beta, rc).'
     required: false
     default: ''
+  major_version_zero:
+    description: 'Set to true to keep the major version at zero, even for breaking changes.'
+    required: false
+    default: false
 
 outputs:
   version:
@@ -25,6 +29,10 @@ runs:
           cmd="$cmd --prerelease ${{ inputs.prerelease }}"
         fi
 
+        if [ -n "${{ inputs.major_version_zero }}" ]; then
+          cmd="$cmd --major-version-zero"
+        fi
+
         version=$($cmd)
         echo "version=$version" >> "$GITHUB_OUTPUT"
 
@@ -35,6 +43,10 @@ runs:
 
         if [ -n "${{ inputs.prerelease }}" ]; then
           cmd="$cmd --prerelease ${{ inputs.prerelease }}"
+        fi
+
+        if [ -n "${{ inputs.major_version_zero }}" ]; then
+          cmd="$cmd --major-version-zero"
         fi
 
         $cmd
