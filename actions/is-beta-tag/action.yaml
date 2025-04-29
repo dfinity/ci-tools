@@ -11,6 +11,7 @@ runs:
   steps:
     - name: Is beta tag
       id: is_beta_tag
+      shell: bash
       run: |
         IS_BETA_TAG=$([[ '${{ github.ref_name }}' == *b* ]] && echo true || echo false)
         echo "is_beta_tag=$IS_BETA_TAG" >> $GITHUB_OUTPUT
