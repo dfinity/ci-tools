@@ -4,9 +4,10 @@ This action bumps package versions based on the repository's commit messages wri
 
 ## Action inputs
 
-| Input        | Description                                                                         | Default |
-| ------------ | ----------------------------------------------------------------------------------- | ------- |
-| `prerelease` | Optional prerelease identifier, supported values include `alpha`, `beta`, and `rc`. | `''`    |
+| Input                | Description                                                                         | Default |
+| -------------------- | ----------------------------------------------------------------------------------- | ------- |
+| `prerelease`         | Optional prerelease identifier, supported values include `alpha`, `beta`, and `rc`. | `''`    |
+| `major_version_zero` | Set to true to keep the major version at zero, even for breaking changes.           | `false` |
 
 ## Action outputs
 
