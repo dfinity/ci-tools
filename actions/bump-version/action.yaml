@@ -8,6 +8,7 @@ inputs:
     default: ''
   major_version_zero:
     description: 'Set to true to keep the major version at zero, even for breaking changes.'
+    type: boolean
     required: false
     default: false
 
@@ -22,14 +23,17 @@ runs:
     - name: 'Get next version'
       id: get_version
       shell: bash
+      env:
+        PRERELEASE: ${{ inputs.prerelease }}
+        MAJOR_VERSION_ZERO: ${{ inputs.major_version_zero }}
       run: |
         cmd="cz bump --get-next --yes"
 
-        if [ -n "${{ inputs.prerelease }}" ]; then
-          cmd="$cmd --prerelease ${{ inputs.prerelease }}"
+        if [ -n "$PRERELEASE" ]; then
+          cmd="$cmd --prerelease $PRERELEASE"
         fi
 
-        if [ -n "${{ inputs.major_version_zero }}" ]; then
+        if [ -n "$MAJOR_VERSION_ZERO" ]; then
           cmd="$cmd --major-version-zero"
         fi
 
@@ -38,14 +42,17 @@ runs:
 
     - name: 'Generate changelog'
       shell: bash
+      env:
+        PRERELEASE: ${{ inputs.prerelease }}
+        MAJOR_VERSION_ZERO: ${{ inputs.major_version_zero }}
       run: |
         cmd="cz bump --files-only --changelog --yes"
 
-        if [ -n "${{ inputs.prerelease }}" ]; then
-          cmd="$cmd --prerelease ${{ inputs.prerelease }}"
+        if [ -n "$PRERELEASE" ]; then
+          cmd="$cmd --prerelease $PRERELEASE"
         fi
 
-        if [ -n "${{ inputs.major_version_zero }}" ]; then
+        if [ -n "$MAJOR_VERSION_ZERO" ]; then
           cmd="$cmd --major-version-zero"
         fi
 

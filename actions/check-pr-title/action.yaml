@@ -4,6 +4,7 @@ description: 'This action checks the title of a pull request to ensure it follow
 inputs:
   include_description:
     description: 'Include the pull request description in the commit message.'
+    type: boolean
     required: false
     default: true
 
@@ -12,11 +13,14 @@ runs:
   steps:
     - name: 'Check pull request title'
       shell: bash
+      env:
+        PR_TITLE: ${{ github.event.pull_request.title }}
+        PR_DESCRIPTION: ${{ github.event.pull_request.body }}
       run: |
-        COMMIT_MESSAGE="${{ github.event.pull_request.title }}"
+        COMMIT_MESSAGE="$PR_TITLE"
 
-        if [ "${{ inputs.include-description }}" == "true" ]; then
-          COMMIT_MESSAGE=$(printf "${COMMIT_MESSAGE}\n${{ github.event.pull_request.body }}")
+        if [ "${{ inputs.include_description }}" == "true" ]; then
+          COMMIT_MESSAGE=$(printf "${COMMIT_MESSAGE}\n${PR_DESCRIPTION}")
         fi
 
         cz check -m "$COMMIT_MESSAGE"

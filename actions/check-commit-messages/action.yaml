@@ -12,4 +12,6 @@ runs:
   steps:
     - name: 'Check commit messages'
       shell: bash
-      run: cz check --rev-range origin/${{ inputs.target_branch }}..HEAD
+      env:
+        TARGET_BRANCH: ${{ inputs.target_branch }}
+      run: cz check --rev-range "origin/${TARGET_BRANCH}..HEAD"
