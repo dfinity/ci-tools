@@ -17,4 +17,7 @@ runs:
   steps:
     - name: 'Generate changelog'
       shell: bash
-      run: cz changelog ${{ inputs.version }} --file-name="${{ inputs.file_name }}"
+      env:
+        FILE_NAME: ${{ inputs.file_name }}
+        VERSION: ${{ inputs.version }}
+      run: cz changelog "$VERSION" --file-name="$FILE_NAME"

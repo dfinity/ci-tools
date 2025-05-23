@@ -22,13 +22,14 @@ runs:
       id: npm_publish
       env:
         NODE_AUTH_TOKEN: ${{ inputs.token }}
+        IS_BETA: ${{ inputs.is_beta }}
       shell: bash
       run: |
         artifact_filepath=$(pwd)/$(npm pack --json | jq -r '.[0].filename')
         echo "artifact_filepath=$artifact_filepath" >> "$GITHUB_OUTPUT"
 
         release_cmd="npm publish --access public"
-        if [ "${{ inputs.is_beta }}" = 'true' ]; then
+        if [ "$IS_BETA" = 'true' ]; then
           release_cmd="$release_cmd --tag beta"
         fi
 

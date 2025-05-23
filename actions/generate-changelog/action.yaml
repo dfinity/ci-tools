@@ -12,4 +12,6 @@ runs:
   steps:
     - name: 'Generate changelog'
       shell: bash
-      run: cz changelog --incremental --merge-prerelease --file-name="${{ inputs.file_name }}"
+      env:
+        FILE_NAME: ${{ inputs.file_name }}
+      run: cz changelog --incremental --merge-prerelease --file-name="$FILE_NAME"
