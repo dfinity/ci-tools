@@ -17,10 +17,10 @@ runs:
         PR_TITLE: ${{ github.event.pull_request.title }}
         PR_DESCRIPTION: ${{ github.event.pull_request.body }}
       run: |
-        COMMIT_MESSAGE="$PR_TITLE"
+        echo $PR_TITLE > commit-message.txt
 
         if [ "${{ inputs.include_description }}" == "true" ]; then
-          COMMIT_MESSAGE="${COMMIT_MESSAGE}\n${PR_DESCRIPTION}"
+          echo -e "\n\n${PR_DESCRIPTION}" >> commit-message.txt
         fi
 
-        cz check -m "$COMMIT_MESSAGE"
+        cz check --commit-msg-file commit-message.txt
