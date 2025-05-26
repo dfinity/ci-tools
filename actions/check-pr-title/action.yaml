@@ -20,7 +20,7 @@ runs:
         COMMIT_MESSAGE="$PR_TITLE"
 
         if [ "${{ inputs.include_description }}" == "true" ]; then
-          COMMIT_MESSAGE=$(printf "${COMMIT_MESSAGE}\n${PR_DESCRIPTION}")
+          COMMIT_MESSAGE="${COMMIT_MESSAGE}\n${PR_DESCRIPTION}"
         fi
 
         cz check -m "$COMMIT_MESSAGE"
