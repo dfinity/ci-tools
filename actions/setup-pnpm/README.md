@@ -7,6 +7,7 @@ This action sets up [pnpm](https://pnpm.io/) for use in actions. The version of 
 | Input               | Description                                                 | Default           |
 | ------------------- | ----------------------------------------------------------- | ----------------- |
 | `node_version_file` | The path to the file containing the Node.js version to use. | `'.node-version'` |
+| `node_version`      | The specific Node.js version to use.                        | `''`              |
 
 ## Example usage
 
