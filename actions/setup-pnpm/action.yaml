@@ -38,4 +38,4 @@ runs:
     - name: 'Install dependencies'
       shell: bash
       run: pnpm i --frozen-lockfile
-      working_directory: ${{ inputs.working_directory }}
+      working-directory: ${{ inputs.working_directory }}
