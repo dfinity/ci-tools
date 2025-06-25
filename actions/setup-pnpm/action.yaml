@@ -22,6 +22,8 @@ runs:
   steps:
     - name: 'Install pnpm'
       uses: pnpm/action-setup@v3
+      with:
+        package_json_file: ${{ inputs.working-directory }}/package.json
 
     - name: 'Install Node.js'
       uses: actions/setup-node@v4
