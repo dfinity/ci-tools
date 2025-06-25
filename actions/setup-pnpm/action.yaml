@@ -25,12 +25,22 @@ runs:
       with:
         package_json_file: ${{ inputs.working_directory }}/package.json
 
+    - name: 'Calculate node version file path'
+      shell: bash
+      id: node-version-file-path
+      # If `node_version_file` is the default `.node-version`, we need to prepend the working directory to the path
+      run: |
+        if [ "${{ inputs.node_version_file }}" = ".node-version" ]; then
+          echo "path=${{ inputs.working_directory }}/${{ inputs.node_version_file }}" >> $GITHUB_OUTPUT
+        else
+          echo "path=${{ inputs.node_version_file }}" >> $GITHUB_OUTPUT
+        fi
+
     - name: 'Install Node.js'
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node_version }}
-        # If `node_version_file` is the default `.node-version`, we need to prepend the working directory to the path
-        node-version-file: ${{ inputs.node_version_file == '.node-version' && format('{0}/{1}', inputs.working_directory, inputs.node_version_file) || inputs.node_version_file }}
+        node-version-file: ${{ steps.node-version-file-path.outputs.path }}
         registry-url: 'https://registry.npmjs.org'
         cache: pnpm
         cache-dependency-path: ${{ inputs.working_directory }}/pnpm-lock.yaml
