@@ -11,7 +11,7 @@ This workflow checks the commit messages on a branch to ensure they follow the [
 ## Example usage
 
 ```yaml
-name: 'Check commit messages'
+name: Check commit messages
 
 on:
   push:

@@ -13,7 +13,7 @@ There is also a ready-to-use [workflow](../../workflows/check-pr-title/README.md
 ## Example usage
 
 ```yaml
-name: 'Check pull request title'
+name: Check pull request title
 
 on:
   pull_request:
@@ -22,13 +22,13 @@ jobs:
   check_pr_title:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Setup Python'
+      - name: Setup Python
         uses: dfinity/ci-tools/actions/setup-python@main
 
-      - name: 'Setup Commitizen'
+      - name: Setup Commitizen
         uses: dfinity/ci-tools/actions/setup-commitizen@main
 
-      - name: 'Check pull request title'
+      - name: Check pull request title
         uses: dfinity/ci-tools/actions/check-pr-title@main
         with:
           include_description: false

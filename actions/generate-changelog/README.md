@@ -13,7 +13,7 @@ There is also a ready-to-use [workflow](../../workflows/generate-changelog/READM
 ## Example usage
 
 ```yaml
-name: 'Generate changelog'
+name: Generate changelog
 
 on:
   push:
@@ -24,18 +24,18 @@ jobs:
   generate_changelog:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout repository'
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
-      - name: 'Setup Python'
+      - name: Setup Python
         uses: dfinity/ci-tools/actions/setup-python@main
 
-      - name: 'Setup Commitizen'
+      - name: Setup Commitizen
         uses: dfinity/ci-tools/actions/setup-commitizen@main
 
-      - name: 'Generate changelog'
+      - name: Generate changelog
         uses: dfinity/ci-tools/actions/generate-changelog@main
         with:
           file_name: 'CHANGES.md'

@@ -1,4 +1,4 @@
-name: 'Bump version'
+name: Bump version
 description: "This action bumps package versions based on the repository's commit messages written according to the Conventional Commits specification."
 
 inputs:
@@ -20,7 +20,7 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: 'Get next version'
+    - name: Get next version
       id: get_version
       shell: bash
       env:
@@ -40,7 +40,7 @@ runs:
         version=$($cmd)
         echo "version=$version" >> "$GITHUB_OUTPUT"
 
-    - name: 'Generate changelog'
+    - name: Generate changelog
       shell: bash
       env:
         PRERELEASE: ${{ inputs.prerelease }}

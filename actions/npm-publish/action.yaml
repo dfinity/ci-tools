@@ -1,4 +1,4 @@
-name: 'NPM publish'
+name: NPM publish
 description: 'This action publishes a package to the npm registry.'
 
 inputs:
@@ -7,6 +7,10 @@ inputs:
     required: true
   is_beta:
     description: 'A stringified boolean indicating whether to publish the package as a beta version.'
+    required: false
+    default: 'false'
+  use_pnpm:
+    description: 'A stringified boolean indicating whether to use pnpm for publishing.'
     required: false
     default: 'false'
 
@@ -25,10 +29,12 @@ runs:
         IS_BETA: ${{ inputs.is_beta }}
       shell: bash
       run: |
-        artifact_filepath=$(pwd)/$(npm pack --json | jq -r '.[0].filename')
+        pkg_mngr=$(if [ "${{ inputs.use_pnpm }}" = 'true' ]; then echo 'pnpm'; else echo 'npm'; fi)
+
+        artifact_filepath=$(pwd)/$($pkg_mngr pack --json | jq -r '.[0].filename')
         echo "artifact_filepath=$artifact_filepath" >> "$GITHUB_OUTPUT"
 
-        release_cmd="npm publish --access public"
+        release_cmd="$pkg_mngr publish --access public"
         if [ "$IS_BETA" = 'true' ]; then
           release_cmd="$release_cmd --tag beta"
         fi

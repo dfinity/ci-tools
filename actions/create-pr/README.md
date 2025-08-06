@@ -33,7 +33,7 @@ packages/some-package/package.json
 ## Example usage
 
 ```yaml
-name: 'Create pull request'
+name: Create pull request
 
 on:
   push:
@@ -44,17 +44,17 @@ jobs:
   create_pr:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Create GitHub App Token'
-        uses: actions/create-github-app-token@v1
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         id: generate_token
         with:
           app-id: ${{ vars.PR_AUTOMATION_BOT_PUBLIC_APP_ID }}
           private-key: ${{ secrets.PR_AUTOMATION_BOT_PUBLIC_PRIVATE_KEY }}
 
-      - name: 'Checkout repository'
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: 'Create pull request'
+      - name: Create pull request
         uses: dfinity/ci-tools/actions/create-pr@main
         with:
           branch_name: 'chore/generate-changelog'

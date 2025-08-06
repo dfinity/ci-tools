@@ -30,7 +30,7 @@ CHANGELOG.md
 ## Example usage
 
 ```yaml
-name: 'Generate changelog'
+name: Generate changelog
 
 on:
   push:

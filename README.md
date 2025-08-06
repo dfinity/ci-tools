@@ -19,6 +19,7 @@ Shared GitHub workflows and actions for DFINITY repositories.
 - [Is beta tag](./actions/is-beta-tag/README.md)
 - [NPM publish](./actions/npm-publish/README.md)
 - [Setup Commitizen](./actions/setup-commitizen/README.md)
+- [Setup Deno](./actions/setup-deno/README.md)
 - [Setup pnpm](./actions/setup-pnpm/README.md)
 - [Setup Python](./actions/setup-python/README.md)
 
@@ -46,6 +47,57 @@ Example:
 
 ```yaml
 name: my_action:required
+```
+
+## Locking Versions
+
+When referencing 3rd party actions, use a specific commit SHA to lock the version. This ensures that the action will not change unexpectedly, which could lead to breaking changes in your workflows.
+
+```yaml
+name: checkout_repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  checkout_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+```
+
+## Managing Concurrency
+
+For workflows that run on pull requests, use the `concurrency` key to ensure that only one workflow runs at a time for a given pull request. This prevents multiple workflows from running simultaneously and potentially causing conflicts.
+
+```yaml
+name: commitizen
+
+on:
+  merge_group:
+  pull_request:
+
+concurrency:
+  group: pr-${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+```
+
+For workflows that perform deployments or releases, setup concurrency to ensure that only one deployment or release is in progress at a time. This prevents multiple deployments or releases from being triggered simultaneously, which could lead to inconsistencies.
+
+```yaml
+name: release
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: production
+  cancel-in-progress: false
 ```
 
 ## Using Commitizen
@@ -80,7 +132,10 @@ version.workspace = true
 
 Create the `.github/repo_policies/BOT_APPROVED_FILES` file and add the following content:
 
-```plaintext
+```text
+# List of approved files that can be changed by a bot via an automated PR.
+# This is to increase security and prevent accidentally updating files that shouldn't be changed by a bot.
+
 .cz.yaml
 CHANGELOG.md
 Cargo.lock
@@ -174,45 +229,8 @@ jobs:
 
 ## Contributing
 
-Check out the [contribution guidelines](./.github/CONTRIBUTING.md).
+Contributions are welcome! Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md), where you can find all you need to know to contribute to this project.
 
-## Setup
+## License
 
-- Install [`fnm`](https://github.com/Schniz/fnm).
-  ```bash
-  curl -fsSL https://get.pnpm.io/install.sh | sh -
-  ```
-- Install the correct version of [`nodejs`](https://nodejs.org).
-  ```bash
-  fnm install
-  ```
-- Enable the correct version of `nodejs`.
-  ```bash
-  fnm use
-  ```
-- Set up the correct version of [`pnpm`](https://pnpm.io/).
-  ```bash
-  corepack enable
-  ```
-- Install dependencies:
-  ```bash
-  pnpm i
-  ```
-
-### Updating `pnpm`
-
-To update the version of `pnpm` that is used:
-
-```bash
-corepack use pnpm@9.x
-```
-
-### Building
-
-Actions are built locally and the built files are committed to the repository. To build the actions, run:
-
-```bash
-pnpm build
-```
-
-The GitHub actions pipeline will attempt to build the actions and check if there are any differences between the built files and those that are committed to the repository. If there are any differences, the pipeline will fail.
+This project is licensed under the [Apache-2.0 License](LICENSE).

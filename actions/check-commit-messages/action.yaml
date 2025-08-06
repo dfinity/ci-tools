@@ -1,4 +1,4 @@
-name: 'Check commit messages'
+name: Check commit messages
 description: 'This action checks the commit messages on a branch to ensure they follow the Conventional Commits specification.'
 
 inputs:
@@ -10,7 +10,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: 'Check commit messages'
+    - name: Check commit messages
       shell: bash
       env:
         TARGET_BRANCH: ${{ inputs.target_branch }}

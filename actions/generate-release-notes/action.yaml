@@ -1,4 +1,4 @@
-name: 'Generate release notes'
+name: Generate release notes
 description: "This action generates release notes based on the repository's commit messages written according to the Conventional Commits specification."
 
 inputs:
@@ -15,7 +15,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: 'Generate changelog'
+    - name: Generate changelog
       shell: bash
       env:
         FILE_NAME: ${{ inputs.file_name }}

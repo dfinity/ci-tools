@@ -12,7 +12,7 @@ This action generates release notes based on the repository's commit messages ac
 ## Example usage
 
 ```yaml
-name: 'Generate release notes'
+name: Generate release notes
 
 on:
   push:
@@ -23,18 +23,18 @@ jobs:
   generate_release_notes:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout repository'
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
-      - name: 'Setup Python'
+      - name: Setup Python
         uses: dfinity/ci-tools/actions/setup-python@main
 
-      - name: 'Setup Commitizen'
+      - name: Setup Commitizen
         uses: dfinity/ci-tools/actions/setup-commitizen@main
 
-      - name: 'Generate release notes'
+      - name: Generate release notes
         uses: dfinity/ci-tools/actions/generate-release-notes@main
         with:
           file_name: 'RELEASE.md'
