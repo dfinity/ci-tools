@@ -3,10 +3,10 @@
   "private": true,
   "engines": {
     "node": "^20",
-    "pnpm": "^9",
+    "pnpm": "^10",
     "npm": "please use pnpm"
   },
-  "packageManager": "pnpm@9.12.3+sha256.24235772cc4ac82a62627cd47f834c72667a2ce87799a846ec4e8e555e2d4b8b",
+  "packageManager": "pnpm@10.14.0+sha256.297534e65d5842450539c1e8022c8831ab5e1fe2eb74664787a815519542d620",
   "scripts": {
     "build": "pnpm run -r build",
     "format": "prettier --write .",

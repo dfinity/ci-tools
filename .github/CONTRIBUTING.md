@@ -56,15 +56,12 @@ If you want to submit a pull request to fix an issue or add a feature, here's a 
 6. Create a new branch for your fix by running a command similar to the
    following:
    ```shell
-   git checkout -b $YOUR_BRANCH_NAME
+   git switch -c $YOUR_BRANCH_NAME
    ```
 
 ### Install dependencies
 
 - Install [`fnm`](https://github.com/Schniz/fnm).
-  ```bash
-  curl -fsSL https://get.pnpm.io/install.sh | sh -
-  ```
 - Install the correct version of [`nodejs`](https://nodejs.org).
   ```bash
   fnm install
@@ -110,7 +107,7 @@ If you want to submit a pull request to fix an issue or add a feature, here's a 
 To update the version of `pnpm` that is used:
 
 ```bash
-corepack use pnpm@9.x
+corepack use pnpm@10.x
 ```
 
 ## Building
