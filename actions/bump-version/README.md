@@ -16,7 +16,7 @@ This action bumps package versions based on the repository's commit messages wri
 ## Example usage
 
 ```yaml
-name: 'Bump version'
+name: Bump version
 
 on:
   push:
@@ -27,22 +27,21 @@ jobs:
   bump_version:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout repository'
-        uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
-      - name: 'Setup Python'
+      - name: Setup Python
         uses: dfinity/ci-tools/actions/setup-python@main
 
-      - name: 'Setup Commitizen'
+      - name: Setup Commitizen
         uses: dfinity/ci-tools/actions/setup-commitizen@main
 
-      - name: 'Bump version'
+      - name: Bump version
         id: bump_version
         uses: dfinity/ci-tools/actions/bump-version@main
 
-      - name: 'Print version'
+      - name: Print version
         run: |
           echo "New version: ${{ steps.bump_version.outputs.version }}"
 ```

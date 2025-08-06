@@ -1,9 +1,9 @@
-name: 'Setup Commitizen'
+name: Setup Commitizen
 description: 'This action sets up Commitizen for use in actions.'
 
 runs:
   using: composite
   steps:
-    - name: 'Install Commitzen'
+    - name: Install Commitzen
       shell: bash
       run: pip install -U Commitizen

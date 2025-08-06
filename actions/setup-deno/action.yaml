@@ -1,0 +1,27 @@
+name: Setup Deno
+description: 'This action sets up [Deno](https://deno.com/) for use in actions.'
+
+inputs:
+  deno_version_file:
+    description: 'Set a deno version file to determine the Deno version to use'
+    required: false
+    default: ''
+
+  deno_version:
+    description: 'Set a specific Deno version to use'
+    required: false
+    default: 'v2.x'
+
+runs:
+  using: composite
+  steps:
+    - name: Install Deno
+      uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
+      with:
+        cache: true
+        deno-version: ${{ inputs.deno_version }}
+        deno-version-file: ${{ inputs.deno_version_file }}
+
+    - name: Install dependencies
+      shell: bash
+      run: deno i --frozen=true

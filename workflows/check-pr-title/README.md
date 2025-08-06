@@ -5,7 +5,7 @@ This workflow checks the title of a pull request to ensure it follows the [Conve
 ## Example usage
 
 ```yaml
-name: 'Check PR title'
+name: Check PR title
 
 on:
   pull_request:

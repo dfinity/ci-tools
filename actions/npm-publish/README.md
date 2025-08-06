@@ -1,13 +1,14 @@
 # NPM publish
 
-This action publishes a package to the npm registry. It assumes that `npm` is already setup, see the [setup PNPM action](../setup-pnpm/README.md) for a ready to use action to do this.
+This action publishes a package to the npm registry. It assumes that `npm` and `pnpm` is already setup, see the [setup PNPM action](../setup-pnpm/README.md) for a ready to use action to do this.
 
 ## Action inputs
 
-| Input     | Description                                                           | Default    |
-| --------- | --------------------------------------------------------------------- | ---------- |
-| `token`   | The npm token to authenticate with the npm registry.                  | _required_ |
-| `is_beta` | Publish the package as a beta version. Expects a stringified boolean. | `'false'`  |
+| Input      | Description                                                           | Default    |
+| ---------- | --------------------------------------------------------------------- | ---------- |
+| `token`    | The npm token to authenticate with the npm registry.                  | _required_ |
+| `is_beta`  | Publish the package as a beta version. Expects a stringified boolean. | `'false'`  |
+| `use_pnpm` | Use `pnpm` instead of `npm` for publishing.                           | `'false'`  |
 
 ## Action outputs
 
@@ -30,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup PNPM
         uses: dfinity/ci-tools/actions/setup-pnpm@main
@@ -48,7 +49,7 @@ jobs:
           is_beta: ${{ steps.is_beta_tag.outputs.is_beta_tag }}
 
       - name: Create Github release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@bcfe5470707e8832e12347755757cec0eb3c22af # v1.18.0
         with:
           artifacts: ${{  steps.publish_dfinity_cns.outputs.artifact_filepath }}
           tag: '${{ github.ref_name }}'

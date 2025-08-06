@@ -12,7 +12,7 @@ This action sets up [pnpm](https://pnpm.io/) for use in actions. The version of 
 ## Example usage
 
 ```yaml
-name: 'Setup PNPM'
+name: Setup PNPM
 
 on:
   push:
@@ -24,10 +24,10 @@ jobs:
   setup_pnpm:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout repository'
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: 'Setup PNPM'
+      - name: Setup PNPM
         uses: dfinity/ci-tools/actions/setup-pnpm@main
         with:
           node_version_file: '.nvmrc'
