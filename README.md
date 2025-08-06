@@ -199,6 +199,10 @@ on:
   merge_group:
   pull_request:
 
+concurrency:
+  group: pr-${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   check_pr_title:
     name: check_pr_title

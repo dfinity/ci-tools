@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: main-${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   generate_changelog:
     uses: ./.github/workflows/generate-changelog.yaml

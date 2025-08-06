@@ -10,6 +10,10 @@ name: Check PR title
 on:
   pull_request:
 
+concurrency:
+  group: pr-${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   check_pr_title:
     uses: dfinity/ci-tools/.github/workflows/check-pr-title.yaml@main
