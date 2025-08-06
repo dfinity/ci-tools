@@ -4,11 +4,11 @@ This action publishes a package to the npm registry. It assumes that `npm` and `
 
 ## Action inputs
 
-| Input      | Description                                                           | Default    |
-| ---------- | --------------------------------------------------------------------- | ---------- |
-| `token`    | The npm token to authenticate with the npm registry.                  | _required_ |
-| `is_beta`  | Publish the package as a beta version. Expects a stringified boolean. | `'false'`  |
-| `use_pnpm` | Use `pnpm` instead of `npm` for publishing.                           | `'false'`  |
+| Input             | Description                                                           | Default    |
+| ----------------- | --------------------------------------------------------------------- | ---------- |
+| `token`           | The npm token to authenticate with the npm registry.                  | _required_ |
+| `is_beta`         | Publish the package as a beta version. Expects a stringified boolean. | `'false'`  |
+| `package_manager` | The package manager to use for publishing.                            | `'npm'`    |
 
 ## Action outputs
 

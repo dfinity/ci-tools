@@ -9,10 +9,10 @@ inputs:
     description: 'A stringified boolean indicating whether to publish the package as a beta version.'
     required: false
     default: 'false'
-  use_pnpm:
-    description: 'A stringified boolean indicating whether to use pnpm for publishing.'
+  package_manager:
+    description: 'The package manager to use for publishing.'
     required: false
-    default: 'false'
+    default: 'npm'
 
 outputs:
   artifact_filepath:
@@ -29,12 +29,10 @@ runs:
         IS_BETA: ${{ inputs.is_beta }}
       shell: bash
       run: |
-        pkg_mngr=$(if [ "${{ inputs.use_pnpm }}" = 'true' ]; then echo 'pnpm'; else echo 'npm'; fi)
-
-        artifact_filepath=$(pwd)/$($pkg_mngr pack --json | jq -r '.[0].filename')
+        artifact_filepath=$(pwd)/$(${{ inputs.package_manager }} pack --json | jq -r '.[0].filename')
         echo "artifact_filepath=$artifact_filepath" >> "$GITHUB_OUTPUT"
 
-        release_cmd="$pkg_mngr publish --access public"
+        release_cmd="${{ inputs.package_manager }} publish --access public"
         if [ "$IS_BETA" = 'true' ]; then
           release_cmd="$release_cmd --tag beta"
         fi
