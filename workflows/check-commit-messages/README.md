@@ -14,10 +14,11 @@ This workflow checks the commit messages on a branch to ensure they follow the [
 name: Check commit messages
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
+
+concurrency:
+  group: pr-${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   check_commit_messages:
