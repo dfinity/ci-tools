@@ -19153,7 +19153,7 @@ function extractFromCargoToml(cwd) {
   const text = readTextFile(file);
   if (!text)
     return null;
-  const match = text.match(/^version\s*=\s*"(?<version>\d+\.\d+\.\d+)"/m);
+  const match = text.match(/^version\s*=\s*["'](?<version>[^"']+)["']/m);
   if (!match?.groups?.version)
     return null;
   return parseSemver(match.groups.version);

@@ -19,6 +19,8 @@ Supported files:
 - `major_minor`: The major.minor version (e.g., `1.2`).
 - `major_minor_patch`: The major.minor.patch version (e.g., `1.2.3`).
 
+> **Note**: Semver prerelease (`-beta.1`) and build labels (`+meta`) are ignored when extracting the version from the specified file.
+
 ## Example usage
 
 ```yaml

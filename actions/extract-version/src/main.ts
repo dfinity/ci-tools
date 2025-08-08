@@ -27,6 +27,8 @@ function readTextFile(filePath: string): string | null {
 }
 
 function parseSemver(version: string): VersionParts | null {
+  // Accept versions like 1.2.3, 1.2.3-beta.1, 1.2.3+build
+  // and only capture the numeric major.minor.patch
   const match = version.trim().match(/^(\d+)\.(\d+)\.(\d+)/);
   if (!match) return null;
   const [, major, minor, patch] = match;
@@ -44,7 +46,7 @@ function extractFromCargoToml(cwd: string): VersionParts | null {
   const file = path.resolve(cwd, 'Cargo.toml');
   const text = readTextFile(file);
   if (!text) return null;
-  const match = text.match(/^version\s*=\s*"(?<version>\d+\.\d+\.\d+)"/m);
+  const match = text.match(/^version\s*=\s*["'](?<version>[^"']+)["']/m);
   if (!match?.groups?.version) return null;
   return parseSemver(match.groups.version);
 }
