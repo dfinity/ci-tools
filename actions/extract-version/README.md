@@ -3,15 +3,16 @@
 This action extracts version parts from a specified file and exposes them as outputs.
 
 Supported files:
+
 - `package.json` (`version`)
 - `Cargo.toml` (`version = "x.y.z"`)
 - `cz.json` (`commitizen.version`)
 
 ## Action inputs
 
-| Input | Description | Default |
-| ----- | ----------- | ------- |
-| `file` | Path to the file to parse. Supported file types: `package.json`, `Cargo.toml`, `cz.json`. | — |
+| Input  | Description                                                                               | Default    |
+| ------ | ----------------------------------------------------------------------------------------- | ---------- |
+| `file` | Path to the file to parse. Supported file types: `package.json`, `Cargo.toml`, `cz.json`. | _required_ |
 
 ## Action outputs
 

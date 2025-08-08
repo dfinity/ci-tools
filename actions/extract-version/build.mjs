@@ -8,4 +8,3 @@ await esbuild.build({
   platform: 'node',
   target: 'node20',
 });
-
