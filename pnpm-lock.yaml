@@ -40,6 +40,12 @@ importers:
         specifier: workspace:*
         version: link:../../lib/action-utils
 
+  actions/extract-version:
+    dependencies:
+      '@dfinity/action-utils':
+        specifier: workspace:*
+        version: link:../../lib/action-utils
+
   lib/action-utils:
     dependencies:
       '@actions/core':

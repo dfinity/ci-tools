@@ -1,3 +1,4 @@
 packages:
   - 'actions/create-pr'
+  - 'actions/extract-version'
   - 'lib/action-utils'
