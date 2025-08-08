@@ -19143,7 +19143,7 @@ var import_action_utils = __toESM(require_dist());
 var LATEST_VERSION_NAME = "latest";
 var VERSIONS_JSON_FILE_NAME = "versions.json";
 async function upsertVersionsJson(params) {
-  const { zipsPaths, latestVersion } = params;
+  const { zipsPaths, docsVersionLabel, latestVersion } = params;
   const versionsPath = import_node_path.default.resolve(process.cwd(), VERSIONS_JSON_FILE_NAME);
   let versions = (0, import_action_utils.readJsonFile)(versionsPath) || [];
   for (const zipPath of zipsPaths) {
@@ -19154,11 +19154,11 @@ async function upsertVersionsJson(params) {
       if (isLatest && latestVersion) {
         existing.label = `${LATEST_VERSION_NAME} (${latestVersion})`;
       }
-      if (!isLatest) {
-        existing.label = versionName;
+      if (!isLatest && docsVersionLabel) {
+        existing.label = docsVersionLabel;
       }
     } else {
-      const label = isLatest ? latestVersion ? `latest (${latestVersion})` : "latest" : versionName;
+      const label = isLatest ? latestVersion ? `latest (${latestVersion})` : "latest" : docsVersionLabel || versionName;
       versions.push({ path: versionName, label });
     }
   }
@@ -19237,6 +19237,10 @@ async function run() {
       required: true,
       trimWhitespace: true
     });
+    const docsVersionLabel = core2.getInput("docs_version_label", {
+      required: false,
+      trimWhitespace: true
+    });
     const latestVersion = core2.getInput("latest_version", {
       required: false,
       trimWhitespace: true
@@ -19260,6 +19264,7 @@ async function run() {
     (0, import_action_utils2.exec)(`git switch icp-pages`);
     await upsertVersionsJson({
       zipsPaths,
+      docsVersionLabel,
       latestVersion
     });
     (0, import_action_utils2.exec)(`git config user.name "github-actions[bot]"`);

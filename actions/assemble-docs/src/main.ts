@@ -26,6 +26,10 @@ export async function run(): Promise<void> {
       required: true,
       trimWhitespace: true,
     });
+    const docsVersionLabel = core.getInput('docs_version_label', {
+      required: false,
+      trimWhitespace: true,
+    });
     const latestVersion = core.getInput('latest_version', {
       required: false,
       trimWhitespace: true,
@@ -54,6 +58,7 @@ export async function run(): Promise<void> {
 
     await upsertVersionsJson({
       zipsPaths,
+      docsVersionLabel,
       latestVersion,
     });
 
