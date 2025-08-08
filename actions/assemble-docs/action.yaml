@@ -1,0 +1,22 @@
+name: Assemble docs
+description: 'Zips documentation folders and updates versions.json on the icp-pages branch.'
+
+inputs:
+  docs_output_dir:
+    description: 'Path to the directory containing per-version documentation folders.'
+    required: true
+  docs_version:
+    description: 'The docs version to package. Allowed values: vX | vX.Y | vX.Y.Z | beta | dev | next | nightly'
+    required: true
+  latest_version:
+    description: 'Optional label value to set for the latest entry label to "latest (<latest_version>)"'
+    required: false
+  github_token:
+    description: 'The GitHub token to use for pushing to the `icp-pages` branch'
+    required: true
+
+runs:
+  using: node20
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+  main: dist/index.js

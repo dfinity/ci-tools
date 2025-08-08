@@ -1,3 +1,4 @@
 packages:
   - 'actions/create-pr'
+  - 'actions/assemble-docs'
   - 'lib/action-utils'
