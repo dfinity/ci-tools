@@ -3,7 +3,7 @@ description: 'Extracts major, major.minor, and major.minor.patch versions from C
 
 inputs:
   file:
-    description: 'Path to the file to parse. Supported files: package.json, Cargo.toml, cz.json'
+    description: 'Path to the file to parse. Supported file types: package.json, Cargo.toml, cz.json'
     required: true
 
 outputs:

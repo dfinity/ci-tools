@@ -11,7 +11,7 @@ Supported files:
 
 | Input | Description | Default |
 | ----- | ----------- | ------- |
-| `file` | Path to the file to parse (e.g., `package.json`, `Cargo.toml`, `cz.json`). | — |
+| `file` | Path to the file to parse. Supported file types: `package.json`, `Cargo.toml`, `cz.json`. | — |
 
 ## Action outputs
 
