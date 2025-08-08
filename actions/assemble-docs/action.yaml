@@ -20,6 +20,4 @@ inputs:
 
 runs:
   using: node20
-  env:
-    GITHUB_TOKEN: ${{ inputs.github_token }}
   main: dist/index.js
