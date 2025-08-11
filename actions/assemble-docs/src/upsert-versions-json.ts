@@ -34,15 +34,15 @@ export async function upsertVersionsJson(params: {
     } else {
       const label = isLatest
         ? latestVersion
-          ? `latest (${latestVersion})`
-          : 'latest'
+          ? `${LATEST_VERSION_NAME} (${latestVersion})`
+          : LATEST_VERSION_NAME
         : docsVersionLabel || versionName;
 
       versions.push({ path: versionName, label });
     }
   }
 
-  // Sort versions: latest first, then others alphabetically by path
+  // Sort versions: latest first, then reverse alphabetically by path
   versions = versions.sort((a, b) => {
     if (a.path === LATEST_VERSION_NAME && b.path !== LATEST_VERSION_NAME) {
       return -1;
@@ -50,7 +50,7 @@ export async function upsertVersionsJson(params: {
     if (b.path === LATEST_VERSION_NAME && a.path !== LATEST_VERSION_NAME) {
       return 1;
     }
-    return a.path.localeCompare(b.path);
+    return b.path.localeCompare(a.path);
   });
 
   writeJsonFile(versionsPath, versions);

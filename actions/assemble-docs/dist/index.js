@@ -19164,7 +19164,7 @@ async function upsertVersionsJson(params) {
         existing.label = docsVersionLabel;
       }
     } else {
-      const label = isLatest ? latestVersion ? `latest (${latestVersion})` : "latest" : docsVersionLabel || versionName;
+      const label = isLatest ? latestVersion ? `${LATEST_VERSION_NAME} (${latestVersion})` : LATEST_VERSION_NAME : docsVersionLabel || versionName;
       versions.push({ path: versionName, label });
     }
   }
@@ -19175,7 +19175,7 @@ async function upsertVersionsJson(params) {
     if (b.path === LATEST_VERSION_NAME && a.path !== LATEST_VERSION_NAME) {
       return 1;
     }
-    return a.path.localeCompare(b.path);
+    return b.path.localeCompare(a.path);
   });
   (0, import_action_utils.writeJsonFile)(versionsPath, versions);
 }
