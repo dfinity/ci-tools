@@ -8,18 +8,11 @@ import {
 } from '@dfinity/action-utils';
 import { upsertVersionsJson } from './upsert-versions-json';
 import { zipDocsFolders } from './zip-docs-folders';
-
-const VALID_VERSION_FORMATS = [
-  'vX',
-  'vX.Y',
-  'vX.Y.Z',
-  'beta',
-  'dev',
-  'next',
-  'nightly',
-];
-const VALID_VERSION_PATTERNS =
-  /^(?:v\d+(?:\.\d+(?:\.\d+)?)?|beta|dev|next|nightly)$/;
+import {
+  ALLOWED_VERSIONS_MESSAGE,
+  isStableVersion,
+  isValidVersion,
+} from './versions';
 
 const ICP_PAGES_BRANCH_NAME = 'icp-pages';
 const ICP_PAGES_FOLDER_NAME = 'icp-pages';
@@ -52,15 +45,15 @@ export async function run(): Promise<void> {
       trimWhitespace: true,
     });
 
-    if (!VALID_VERSION_PATTERNS.test(docsVersion)) {
+    if (!isValidVersion(docsVersion)) {
       throw new Error(
-        `Invalid docs_version '${docsVersion}'. Allowed values: ${VALID_VERSION_FORMATS.join(' | ')}`,
+        `Invalid docs_version '${docsVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`,
       );
     }
 
-    if (latestVersion && !VALID_VERSION_PATTERNS.test(latestVersion)) {
+    if (latestVersion && !isValidVersion(latestVersion)) {
       throw new Error(
-        `Invalid latest_version '${latestVersion}'. Allowed values: ${VALID_VERSION_FORMATS.join(' | ')}`,
+        `Invalid latest_version '${latestVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`,
       );
     }
 
@@ -77,11 +70,14 @@ export async function run(): Promise<void> {
     // Change working directory to the icp-pages folder
     process.chdir(icpPagesFolderName);
 
-    await upsertVersionsJson({
-      zipFiles,
-      docsVersionLabel,
-      latestVersion,
-    });
+    if (isStableVersion(docsVersion)) {
+      // Only add or update version entries in versions.json for stable versions
+      await upsertVersionsJson({
+        zipFiles,
+        docsVersionLabel,
+        latestVersion,
+      });
+    }
 
     gitAdd();
     gitCommit(

@@ -19221,7 +19221,7 @@ async function zipDocsFolders(docsOutputDir, docsVersionFolderName) {
   return zippedFoldersPaths;
 }
 
-// src/main.ts
+// src/versions.ts
 var VALID_VERSION_FORMATS = [
   "vX",
   "vX.Y",
@@ -19232,6 +19232,15 @@ var VALID_VERSION_FORMATS = [
   "nightly"
 ];
 var VALID_VERSION_PATTERNS = /^(?:v\d+(?:\.\d+(?:\.\d+)?)?|beta|dev|next|nightly)$/;
+var ALLOWED_VERSIONS_MESSAGE = `Allowed values: ${VALID_VERSION_FORMATS.join(" | ")}`;
+var isStableVersion = (version2) => {
+  return version2.startsWith("v");
+};
+var isValidVersion = (version2) => {
+  return VALID_VERSION_PATTERNS.test(version2);
+};
+
+// src/main.ts
 var ICP_PAGES_BRANCH_NAME = "icp-pages";
 var ICP_PAGES_FOLDER_NAME = "icp-pages";
 async function run() {
@@ -19260,14 +19269,14 @@ async function run() {
       required: true,
       trimWhitespace: true
     });
-    if (!VALID_VERSION_PATTERNS.test(docsVersion)) {
+    if (!isValidVersion(docsVersion)) {
       throw new Error(
-        `Invalid docs_version '${docsVersion}'. Allowed values: ${VALID_VERSION_FORMATS.join(" | ")}`
+        `Invalid docs_version '${docsVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`
       );
     }
-    if (latestVersion && !VALID_VERSION_PATTERNS.test(latestVersion)) {
+    if (latestVersion && !isValidVersion(latestVersion)) {
       throw new Error(
-        `Invalid latest_version '${latestVersion}'. Allowed values: ${VALID_VERSION_FORMATS.join(" | ")}`
+        `Invalid latest_version '${latestVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`
       );
     }
     const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
@@ -19278,11 +19287,13 @@ async function run() {
       zipFiles.push(zipName);
     }
     process.chdir(icpPagesFolderName);
-    await upsertVersionsJson({
-      zipFiles,
-      docsVersionLabel,
-      latestVersion
-    });
+    if (isStableVersion(docsVersion)) {
+      await upsertVersionsJson({
+        zipFiles,
+        docsVersionLabel,
+        latestVersion
+      });
+    }
     (0, import_action_utils2.gitAdd)();
     (0, import_action_utils2.gitCommit)(
       `Update static assets for docs version ${docsVersion}`,
