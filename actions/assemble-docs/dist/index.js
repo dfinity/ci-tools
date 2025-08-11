@@ -1321,14 +1321,14 @@ var require_util = __commonJS({
         }
         const port = url.port != null ? url.port : url.protocol === "https:" ? 443 : 80;
         let origin = url.origin != null ? url.origin : `${url.protocol}//${url.hostname}:${port}`;
-        let path3 = url.path != null ? url.path : `${url.pathname || ""}${url.search || ""}`;
+        let path4 = url.path != null ? url.path : `${url.pathname || ""}${url.search || ""}`;
         if (origin.endsWith("/")) {
           origin = origin.substring(0, origin.length - 1);
         }
-        if (path3 && !path3.startsWith("/")) {
-          path3 = `/${path3}`;
+        if (path4 && !path4.startsWith("/")) {
+          path4 = `/${path4}`;
         }
-        url = new URL(origin + path3);
+        url = new URL(origin + path4);
       }
       return url;
     }
@@ -2944,19 +2944,19 @@ var require_parseParams = __commonJS({
 var require_basename = __commonJS({
   "../../node_modules/.pnpm/@fastify+busboy@2.1.1/node_modules/@fastify/busboy/lib/utils/basename.js"(exports2, module2) {
     "use strict";
-    module2.exports = function basename(path3) {
-      if (typeof path3 !== "string") {
+    module2.exports = function basename(path4) {
+      if (typeof path4 !== "string") {
         return "";
       }
-      for (var i = path3.length - 1; i >= 0; --i) {
-        switch (path3.charCodeAt(i)) {
+      for (var i = path4.length - 1; i >= 0; --i) {
+        switch (path4.charCodeAt(i)) {
           case 47:
           case 92:
-            path3 = path3.slice(i + 1);
-            return path3 === ".." || path3 === "." ? "" : path3;
+            path4 = path4.slice(i + 1);
+            return path4 === ".." || path4 === "." ? "" : path4;
         }
       }
-      return path3 === ".." || path3 === "." ? "" : path3;
+      return path4 === ".." || path4 === "." ? "" : path4;
     };
   }
 });
@@ -5975,7 +5975,7 @@ var require_request = __commonJS({
     }
     var Request = class _Request {
       constructor(origin, {
-        path: path3,
+        path: path4,
         method,
         body,
         headers,
@@ -5989,11 +5989,11 @@ var require_request = __commonJS({
         throwOnError,
         expectContinue
       }, handler) {
-        if (typeof path3 !== "string") {
+        if (typeof path4 !== "string") {
           throw new InvalidArgumentError("path must be a string");
-        } else if (path3[0] !== "/" && !(path3.startsWith("http://") || path3.startsWith("https://")) && method !== "CONNECT") {
+        } else if (path4[0] !== "/" && !(path4.startsWith("http://") || path4.startsWith("https://")) && method !== "CONNECT") {
           throw new InvalidArgumentError("path must be an absolute URL or start with a slash");
-        } else if (invalidPathRegex.exec(path3) !== null) {
+        } else if (invalidPathRegex.exec(path4) !== null) {
           throw new InvalidArgumentError("invalid request path");
         }
         if (typeof method !== "string") {
@@ -6056,7 +6056,7 @@ var require_request = __commonJS({
         this.completed = false;
         this.aborted = false;
         this.upgrade = upgrade || null;
-        this.path = query ? util.buildURL(path3, query) : path3;
+        this.path = query ? util.buildURL(path4, query) : path4;
         this.origin = origin;
         this.idempotent = idempotent == null ? method === "HEAD" || method === "GET" : idempotent;
         this.blocking = blocking == null ? false : blocking;
@@ -7073,9 +7073,9 @@ var require_RedirectHandler = __commonJS({
           return this.handler.onHeaders(statusCode, headers, resume, statusText);
         }
         const { origin, pathname, search } = util.parseURL(new URL(this.location, this.opts.origin && new URL(this.opts.path, this.opts.origin)));
-        const path3 = search ? `${pathname}${search}` : pathname;
+        const path4 = search ? `${pathname}${search}` : pathname;
         this.opts.headers = cleanRequestHeaders(this.opts.headers, statusCode === 303, this.opts.origin !== origin);
-        this.opts.path = path3;
+        this.opts.path = path4;
         this.opts.origin = origin;
         this.opts.maxRedirections = 0;
         this.opts.query = null;
@@ -8315,7 +8315,7 @@ var require_client = __commonJS({
         writeH2(client, client[kHTTP2Session], request);
         return;
       }
-      const { body, method, path: path3, host, upgrade, headers, blocking, reset } = request;
+      const { body, method, path: path4, host, upgrade, headers, blocking, reset } = request;
       const expectsPayload = method === "PUT" || method === "POST" || method === "PATCH";
       if (body && typeof body.read === "function") {
         body.read(0);
@@ -8365,7 +8365,7 @@ var require_client = __commonJS({
       if (blocking) {
         socket[kBlocking] = true;
       }
-      let header = `${method} ${path3} HTTP/1.1\r
+      let header = `${method} ${path4} HTTP/1.1\r
 `;
       if (typeof host === "string") {
         header += `host: ${host}\r
@@ -8428,7 +8428,7 @@ upgrade: ${upgrade}\r
       return true;
     }
     function writeH2(client, session, request) {
-      const { body, method, path: path3, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
+      const { body, method, path: path4, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
       let headers;
       if (typeof reqHeaders === "string")
         headers = Request[kHTTP2CopyHeaders](reqHeaders.trim());
@@ -8474,7 +8474,7 @@ upgrade: ${upgrade}\r
         });
         return true;
       }
-      headers[HTTP2_HEADER_PATH] = path3;
+      headers[HTTP2_HEADER_PATH] = path4;
       headers[HTTP2_HEADER_SCHEME] = "https";
       const expectsPayload = method === "PUT" || method === "POST" || method === "PATCH";
       if (body && typeof body.read === "function") {
@@ -10707,20 +10707,20 @@ var require_mock_utils = __commonJS({
       }
       return true;
     }
-    function safeUrl(path3) {
-      if (typeof path3 !== "string") {
-        return path3;
+    function safeUrl(path4) {
+      if (typeof path4 !== "string") {
+        return path4;
       }
-      const pathSegments = path3.split("?");
+      const pathSegments = path4.split("?");
       if (pathSegments.length !== 2) {
-        return path3;
+        return path4;
       }
       const qp = new URLSearchParams(pathSegments.pop());
       qp.sort();
       return [...pathSegments, qp.toString()].join("?");
     }
-    function matchKey(mockDispatch2, { path: path3, method, body, headers }) {
-      const pathMatch = matchValue(mockDispatch2.path, path3);
+    function matchKey(mockDispatch2, { path: path4, method, body, headers }) {
+      const pathMatch = matchValue(mockDispatch2.path, path4);
       const methodMatch = matchValue(mockDispatch2.method, method);
       const bodyMatch = typeof mockDispatch2.body !== "undefined" ? matchValue(mockDispatch2.body, body) : true;
       const headersMatch = matchHeaders(mockDispatch2, headers);
@@ -10738,7 +10738,7 @@ var require_mock_utils = __commonJS({
     function getMockDispatch(mockDispatches, key) {
       const basePath = key.query ? buildURL(key.path, key.query) : key.path;
       const resolvedPath = typeof basePath === "string" ? safeUrl(basePath) : basePath;
-      let matchedMockDispatches = mockDispatches.filter(({ consumed }) => !consumed).filter(({ path: path3 }) => matchValue(safeUrl(path3), resolvedPath));
+      let matchedMockDispatches = mockDispatches.filter(({ consumed }) => !consumed).filter(({ path: path4 }) => matchValue(safeUrl(path4), resolvedPath));
       if (matchedMockDispatches.length === 0) {
         throw new MockNotMatchedError(`Mock dispatch not matched for path '${resolvedPath}'`);
       }
@@ -10775,9 +10775,9 @@ var require_mock_utils = __commonJS({
       }
     }
     function buildKey(opts) {
-      const { path: path3, method, body, headers, query } = opts;
+      const { path: path4, method, body, headers, query } = opts;
       return {
-        path: path3,
+        path: path4,
         method,
         body,
         headers,
@@ -11226,10 +11226,10 @@ var require_pending_interceptors_formatter = __commonJS({
       }
       format(pendingInterceptors) {
         const withPrettyHeaders = pendingInterceptors.map(
-          ({ method, path: path3, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
+          ({ method, path: path4, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
             Method: method,
             Origin: origin,
-            Path: path3,
+            Path: path4,
             "Status code": statusCode,
             Persistent: persist ? "\u2705" : "\u274C",
             Invocations: timesInvoked,
@@ -15852,8 +15852,8 @@ var require_util6 = __commonJS({
         }
       }
     }
-    function validateCookiePath(path3) {
-      for (const char of path3) {
+    function validateCookiePath(path4) {
+      for (const char of path4) {
         const code = char.charCodeAt(0);
         if (code < 33 || char === ";") {
           throw new Error("Invalid cookie path");
@@ -17545,11 +17545,11 @@ var require_undici = __commonJS({
           if (typeof opts.path !== "string") {
             throw new InvalidArgumentError("invalid opts.path");
           }
-          let path3 = opts.path;
+          let path4 = opts.path;
           if (!opts.path.startsWith("/")) {
-            path3 = `/${path3}`;
+            path4 = `/${path4}`;
           }
-          url = new URL(util.parseOrigin(url).origin + path3);
+          url = new URL(util.parseOrigin(url).origin + path4);
         } else {
           if (!opts) {
             opts = typeof url === "object" ? url : {};
@@ -18778,7 +18778,7 @@ var require_path_utils = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.toPlatformPath = exports2.toWin32Path = exports2.toPosixPath = void 0;
-    var path3 = __importStar(require("path"));
+    var path4 = __importStar(require("path"));
     function toPosixPath(pth) {
       return pth.replace(/[\\]/g, "/");
     }
@@ -18788,7 +18788,7 @@ var require_path_utils = __commonJS({
     }
     exports2.toWin32Path = toWin32Path;
     function toPlatformPath(pth) {
-      return pth.replace(/[/\\]/g, path3.sep);
+      return pth.replace(/[/\\]/g, path4.sep);
     }
     exports2.toPlatformPath = toPlatformPath;
   }
@@ -18859,7 +18859,7 @@ var require_core = __commonJS({
     var file_command_1 = require_file_command();
     var utils_1 = require_utils();
     var os = __importStar(require("os"));
-    var path3 = __importStar(require("path"));
+    var path4 = __importStar(require("path"));
     var oidc_utils_1 = require_oidc_utils();
     var ExitCode;
     (function(ExitCode2) {
@@ -18887,7 +18887,7 @@ var require_core = __commonJS({
       } else {
         command_1.issueCommand("add-path", {}, inputPath);
       }
-      process.env["PATH"] = `${inputPath}${path3.delimiter}${process.env["PATH"]}`;
+      process.env["PATH"] = `${inputPath}${path4.delimiter}${process.env["PATH"]}`;
     }
     exports2.addPath = addPath;
     function getInput3(name, options) {
@@ -19056,13 +19056,15 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
+      copyFile: () => copyFile2,
+      ensureDir: () => ensureDir,
       exec: () => exec2,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
-      gitAdd: () => gitAdd,
+      gitAdd: () => gitAdd2,
       gitCheckoutBranch: () => gitCheckoutBranch,
-      gitCommit: () => gitCommit,
+      gitCommit: () => gitCommit2,
       gitHasChanges: () => gitHasChanges,
       gitPushBranch: () => gitPushBranch,
       readJsonFile: () => readJsonFile2,
@@ -19081,10 +19083,19 @@ var require_dist = __commonJS({
       }
       return result;
     }
-    function gitAdd() {
+    var import_node_fs2 = __toESM2(require("node:fs"));
+    function ensureDir(dir) {
+      if (!import_node_fs2.default.existsSync(dir)) {
+        import_node_fs2.default.mkdirSync(dir, { recursive: true });
+      }
+    }
+    function copyFile2(src, dest) {
+      import_node_fs2.default.copyFileSync(src, dest);
+    }
+    function gitAdd2() {
       exec2(`git add .`);
     }
-    function gitCommit(message, authorName, authorEmail) {
+    function gitCommit2(message, authorName, authorEmail) {
       exec2(`git config user.name "${authorName}"`);
       exec2(`git config user.email "${authorEmail}"`);
       exec2(`git commit -m "${message}"`);
@@ -19113,15 +19124,15 @@ var require_dist = __commonJS({
       }
       return numberInput;
     }
-    var import_node_fs2 = __toESM2(require("node:fs"));
+    var import_node_fs22 = __toESM2(require("node:fs"));
     var core22 = __toESM2(require_core());
     function writeJsonFile2(filePath, data) {
       const json = JSON.stringify(data, null, 2) + "\n";
-      import_node_fs2.default.writeFileSync(filePath, json, "utf8");
+      import_node_fs22.default.writeFileSync(filePath, json, "utf8");
     }
     function readJsonFile2(filePath) {
       try {
-        const raw = import_node_fs2.default.readFileSync(filePath, "utf8");
+        const raw = import_node_fs22.default.readFileSync(filePath, "utf8");
         return JSON.parse(raw);
       } catch (err) {
         core22.info(
@@ -19134,6 +19145,8 @@ var require_dist = __commonJS({
 });
 
 // src/main.ts
+var import_node_path3 = __toESM(require("node:path"));
+var import_child_process2 = require("child_process");
 var core2 = __toESM(require_core());
 var import_action_utils2 = __toESM(require_dist());
 
@@ -19143,11 +19156,11 @@ var import_action_utils = __toESM(require_dist());
 var LATEST_VERSION_NAME = "latest";
 var VERSIONS_JSON_FILE_NAME = "versions.json";
 async function upsertVersionsJson(params) {
-  const { zipsPaths, docsVersionLabel, latestVersion } = params;
+  const { zipFiles, docsVersionLabel, latestVersion } = params;
   const versionsPath = import_node_path.default.resolve(process.cwd(), VERSIONS_JSON_FILE_NAME);
   let versions = (0, import_action_utils.readJsonFile)(versionsPath) || [];
-  for (const zipPath of zipsPaths) {
-    const versionName = import_node_path.default.basename(zipPath, ".zip");
+  for (const zipFile of zipFiles) {
+    const versionName = import_node_path.default.basename(zipFile, ".zip");
     const isLatest = versionName === LATEST_VERSION_NAME;
     const existing = versions.find((v) => v.path === versionName);
     if (existing) {
@@ -19189,8 +19202,8 @@ function zipFolder(params) {
   const zipName = `${folderName}.zip`;
   const zipPath = import_node_path2.default.join(absDir, zipName);
   core.info(`Zipping ${folderPath} -> ${zipPath}`);
-  (0, import_child_process.execSync)(`zip -rqX ${zipName} ${folderName}`, {
-    cwd: absDir
+  (0, import_child_process.execSync)(`zip -rqX ${zipPath} .`, {
+    cwd: folderPath
   });
   return zipPath;
 }
@@ -19216,7 +19229,6 @@ async function zipDocsFolders(docsOutputDir, docsVersionFolderName) {
 }
 
 // src/main.ts
-var import_child_process2 = require("child_process");
 var VALID_VERSION_FORMATS = [
   "vX",
   "vX.Y",
@@ -19227,6 +19239,8 @@ var VALID_VERSION_FORMATS = [
   "nightly"
 ];
 var VALID_VERSION_PATTERNS = /^(?:v\d+(?:\.\d+(?:\.\d+)?)?|beta|dev|next|nightly)$/;
+var ICP_PAGES_BRANCH_NAME = "icp-pages";
+var ICP_PAGES_FOLDER_NAME = "icp-pages";
 async function run() {
   try {
     const docsOutputDir = core2.getInput("docs_output_dir", {
@@ -19260,20 +19274,29 @@ async function run() {
       );
     }
     const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
-    (0, import_action_utils2.exec)(`git fetch origin icp-pages:icp-pages`);
-    (0, import_action_utils2.exec)(`git switch icp-pages`);
+    const remoteUrl = (0, import_action_utils2.exec)(`git config --get remote.origin.url`);
+    (0, import_action_utils2.exec)(
+      `git clone ${remoteUrl} --branch ${ICP_PAGES_BRANCH_NAME} --single-branch ${ICP_PAGES_FOLDER_NAME}`
+    );
+    const zipFiles = [];
+    for (const zipPath of zipsPaths) {
+      const zipName = import_node_path3.default.basename(zipPath);
+      (0, import_action_utils2.copyFile)(zipPath, `${ICP_PAGES_FOLDER_NAME}/${zipName}`);
+      zipFiles.push(zipName);
+    }
+    process.chdir(ICP_PAGES_FOLDER_NAME);
     await upsertVersionsJson({
-      zipsPaths,
+      zipFiles,
       docsVersionLabel,
       latestVersion
     });
-    (0, import_action_utils2.exec)(`git config user.name "github-actions[bot]"`);
-    (0, import_action_utils2.exec)(
-      `git config user.email "github-actions[bot]@users.noreply.github.com"`
-    );
-    (0, import_action_utils2.exec)("git add .");
+    (0, import_action_utils2.gitAdd)();
     const commitMessage = `Update static assets for docs version ${docsVersion}`;
-    (0, import_action_utils2.exec)(`git commit -m "${commitMessage}" || echo "No changes to commit"`);
+    (0, import_action_utils2.gitCommit)(
+      commitMessage,
+      "github-actions[bot]",
+      "github-actions[bot]@users.noreply.github.com"
+    );
     (0, import_child_process2.execSync)("git push origin icp-pages", {
       env: {
         GITHUB_TOKEN: githubToken

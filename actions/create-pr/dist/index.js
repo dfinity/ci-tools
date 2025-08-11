@@ -23135,6 +23135,8 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
+      copyFile: () => copyFile,
+      ensureDir: () => ensureDir,
       exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix2,
       getInput: () => getInput22,
@@ -23159,6 +23161,15 @@ var require_dist = __commonJS({
         result += ALPHANUM.charAt(Math.floor(Math.random() * ALPHANUM.length));
       }
       return result;
+    }
+    var import_node_fs = __toESM2(require("node:fs"));
+    function ensureDir(dir) {
+      if (!import_node_fs.default.existsSync(dir)) {
+        import_node_fs.default.mkdirSync(dir, { recursive: true });
+      }
+    }
+    function copyFile(src, dest) {
+      import_node_fs.default.copyFileSync(src, dest);
     }
     function gitAdd2() {
       exec(`git add .`);
@@ -23192,15 +23203,15 @@ var require_dist = __commonJS({
       }
       return numberInput;
     }
-    var import_node_fs = __toESM2(require("node:fs"));
+    var import_node_fs2 = __toESM2(require("node:fs"));
     var core22 = __toESM2(require_core());
     function writeJsonFile(filePath, data) {
       const json = JSON.stringify(data, null, 2) + "\n";
-      import_node_fs.default.writeFileSync(filePath, json, "utf8");
+      import_node_fs2.default.writeFileSync(filePath, json, "utf8");
     }
     function readJsonFile(filePath) {
       try {
-        const raw = import_node_fs.default.readFileSync(filePath, "utf8");
+        const raw = import_node_fs2.default.readFileSync(filePath, "utf8");
         return JSON.parse(raw);
       } catch (err) {
         core22.info(

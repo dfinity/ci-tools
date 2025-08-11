@@ -19,8 +19,8 @@ function zipFolder(params: { absDir: string; folderName: string }): string {
   core.info(`Zipping ${folderPath} -> ${zipPath}`);
   // Use native zip available on macOS/ubuntu-latest runners
   // -r recursive, -q quiet, -X strip extra file attrs
-  execSync(`zip -rqX ${zipName} ${folderName}`, {
-    cwd: absDir,
+  execSync(`zip -rqX ${zipPath} .`, {
+    cwd: folderPath,
   });
 
   return zipPath;

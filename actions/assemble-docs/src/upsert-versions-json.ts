@@ -8,19 +8,19 @@ const VERSIONS_JSON_FILE_NAME = 'versions.json';
 type VersionEntry = { path: string; label: string };
 
 export async function upsertVersionsJson(params: {
-  zipsPaths: string[];
+  zipFiles: string[];
   docsVersionLabel?: string;
   latestVersion?: string;
 }): Promise<void> {
-  const { zipsPaths, docsVersionLabel, latestVersion } = params;
+  const { zipFiles, docsVersionLabel, latestVersion } = params;
 
   const versionsPath = path.resolve(process.cwd(), VERSIONS_JSON_FILE_NAME);
 
   let versions: VersionEntry[] =
     readJsonFile<VersionEntry[]>(versionsPath) || [];
 
-  for (const zipPath of zipsPaths) {
-    const versionName = path.basename(zipPath, '.zip');
+  for (const zipFile of zipFiles) {
+    const versionName = path.basename(zipFile, '.zip');
     const isLatest = versionName === LATEST_VERSION_NAME;
     const existing = versions.find(v => v.path === versionName);
 

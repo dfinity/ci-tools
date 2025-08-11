@@ -1,8 +1,9 @@
+import path from 'node:path';
+import { execSync } from 'child_process';
 import * as core from '@actions/core';
-import { exec } from '@dfinity/action-utils';
+import { copyFile, exec, gitAdd, gitCommit } from '@dfinity/action-utils';
 import { upsertVersionsJson } from './upsert-versions-json';
 import { zipDocsFolders } from './zip-docs-folders';
-import { execSync } from 'child_process';
 
 const VALID_VERSION_FORMATS = [
   'vX',
@@ -15,6 +16,9 @@ const VALID_VERSION_FORMATS = [
 ];
 const VALID_VERSION_PATTERNS =
   /^(?:v\d+(?:\.\d+(?:\.\d+)?)?|beta|dev|next|nightly)$/;
+
+const ICP_PAGES_BRANCH_NAME = 'icp-pages';
+const ICP_PAGES_FOLDER_NAME = 'icp-pages';
 
 export async function run(): Promise<void> {
   try {
@@ -53,22 +57,36 @@ export async function run(): Promise<void> {
 
     const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
 
-    exec(`git fetch origin icp-pages:icp-pages`);
-    exec(`git switch icp-pages`);
+    // Clone the icp-pages branch into a temporary folder
+    const remoteUrl = exec(`git config --get remote.origin.url`);
+    exec(
+      `git clone ${remoteUrl} --branch ${ICP_PAGES_BRANCH_NAME} --single-branch ${ICP_PAGES_FOLDER_NAME}`,
+    );
+
+    // Copy the zips into the icp-pages folder
+    const zipFiles = [];
+    for (const zipPath of zipsPaths) {
+      const zipName = path.basename(zipPath);
+      copyFile(zipPath, `${ICP_PAGES_FOLDER_NAME}/${zipName}`);
+      zipFiles.push(zipName);
+    }
+
+    // Change working directory to the icp-pages folder
+    process.chdir(ICP_PAGES_FOLDER_NAME);
 
     await upsertVersionsJson({
-      zipsPaths,
+      zipFiles,
       docsVersionLabel,
       latestVersion,
     });
 
-    exec(`git config user.name "github-actions[bot]"`);
-    exec(
-      `git config user.email "github-actions[bot]@users.noreply.github.com"`,
-    );
-    exec('git add .');
+    gitAdd();
     const commitMessage = `Update static assets for docs version ${docsVersion}`;
-    exec(`git commit -m "${commitMessage}" || echo "No changes to commit"`);
+    gitCommit(
+      commitMessage,
+      'github-actions[bot]',
+      'github-actions[bot]@users.noreply.github.com',
+    );
     execSync('git push origin icp-pages', {
       env: {
         GITHUB_TOKEN: githubToken,
