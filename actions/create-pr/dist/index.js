@@ -23135,8 +23135,6 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
-      copyFile: () => copyFile,
-      ensureDir: () => ensureDir,
       exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix2,
       getInput: () => getInput22,
@@ -23146,6 +23144,7 @@ var require_dist = __commonJS({
       gitCommit: () => gitCommit2,
       gitHasChanges: () => gitHasChanges2,
       gitPushBranch: () => gitPushBranch2,
+      moveFile: () => moveFile,
       readJsonFile: () => readJsonFile,
       writeJsonFile: () => writeJsonFile
     });
@@ -23163,13 +23162,8 @@ var require_dist = __commonJS({
       return result;
     }
     var import_node_fs = __toESM2(require("node:fs"));
-    function ensureDir(dir) {
-      if (!import_node_fs.default.existsSync(dir)) {
-        import_node_fs.default.mkdirSync(dir, { recursive: true });
-      }
-    }
-    function copyFile(src, dest) {
-      import_node_fs.default.copyFileSync(src, dest);
+    function moveFile(src, dest) {
+      import_node_fs.default.renameSync(src, dest);
     }
     function gitAdd2() {
       exec(`git add .`);

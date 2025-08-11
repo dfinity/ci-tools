@@ -19056,8 +19056,6 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
-      copyFile: () => copyFile2,
-      ensureDir: () => ensureDir,
       exec: () => exec2,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
@@ -19066,7 +19064,8 @@ var require_dist = __commonJS({
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit2,
       gitHasChanges: () => gitHasChanges,
-      gitPushBranch: () => gitPushBranch2,
+      gitPushBranch: () => gitPushBranch,
+      moveFile: () => moveFile2,
       readJsonFile: () => readJsonFile2,
       writeJsonFile: () => writeJsonFile2
     });
@@ -19084,13 +19083,8 @@ var require_dist = __commonJS({
       return result;
     }
     var import_node_fs2 = __toESM2(require("node:fs"));
-    function ensureDir(dir) {
-      if (!import_node_fs2.default.existsSync(dir)) {
-        import_node_fs2.default.mkdirSync(dir, { recursive: true });
-      }
-    }
-    function copyFile2(src, dest) {
-      import_node_fs2.default.copyFileSync(src, dest);
+    function moveFile2(src, dest) {
+      import_node_fs2.default.renameSync(src, dest);
     }
     function gitAdd2() {
       exec2(`git add .`);
@@ -19103,7 +19097,7 @@ var require_dist = __commonJS({
     function gitCheckoutBranch(branch) {
       exec2(`git checkout -b ${branch}`);
     }
-    function gitPushBranch2(branch) {
+    function gitPushBranch(branch) {
       exec2(`git push -u origin ${branch}`);
     }
     function gitHasChanges() {
@@ -19280,7 +19274,7 @@ async function run() {
     const zipFiles = [];
     for (const zipPath of zipsPaths) {
       const zipName = import_node_path3.default.basename(zipPath);
-      (0, import_action_utils2.copyFile)(zipPath, `${ICP_PAGES_FOLDER_NAME}/${zipName}`);
+      (0, import_action_utils2.moveFile)(zipPath, `${ICP_PAGES_FOLDER_NAME}/${zipName}`);
       zipFiles.push(zipName);
     }
     process.chdir(ICP_PAGES_FOLDER_NAME);

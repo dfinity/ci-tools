@@ -1,12 +1,11 @@
 import path from 'node:path';
-import { execSync } from 'child_process';
 import * as core from '@actions/core';
 import {
-  copyFile,
   exec,
   gitAdd,
   gitCommit,
-  gitPushBranch,
+  // gitPushBranch,
+  moveFile,
 } from '@dfinity/action-utils';
 import { upsertVersionsJson } from './upsert-versions-json';
 import { zipDocsFolders } from './zip-docs-folders';
@@ -73,7 +72,7 @@ export async function run(): Promise<void> {
     const zipFiles = [];
     for (const zipPath of zipsPaths) {
       const zipName = path.basename(zipPath);
-      copyFile(zipPath, `${ICP_PAGES_FOLDER_NAME}/${zipName}`);
+      moveFile(zipPath, `${ICP_PAGES_FOLDER_NAME}/${zipName}`);
       zipFiles.push(zipName);
     }
 
