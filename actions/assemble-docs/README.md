@@ -11,13 +11,13 @@ This action:
 
 ## Action inputs
 
-| Input                | Description                                                                                                                      | Required | Default     |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------- |
-| `docs_output_dir`    | Directory containing per-version documentation folders. Zips are written next to these folders.                                  | Yes      | _required_  |
-| `docs_version`       | The docs version to package. Allowed values: `vX`, `vX.Y`, `vX.Y.Z`, `beta`, `dev`, `next`, `nightly`.                           | Yes      | _required_  |
-| `docs_version_label` | Optional label value to set for the docs version entry label. Defaults to `docs_version`.                                        | No       | `''`        |
-| `latest_version`     | If provided and a `latest` folder exists, sets the label for the latest entry in `versions.json` to `latest (<latest_version>)`. | No       | `''`        |
-| `icp_pages_dir`      | The name of the folder where the icp-pages branch has been cloned.                                                               | No       | `icp-pages` |
+| Input                | Description                                                                                                                                                                     | Required | Default     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------- |
+| `docs_output_dir`    | Directory containing per-version documentation folders. Zips are written next to these folders.                                                                                 | Yes      | _required_  |
+| `docs_version`       | The docs version to package. Allowed values: `vX`, `vX.Y`, `vX.Y.Z`, `beta`, `dev`, `next`, `nightly`.                                                                          | Yes      | _required_  |
+| `docs_version_label` | Optional label value to set for the docs version entry label. Defaults to `docs_version`.                                                                                       | No       | `''`        |
+| `latest_version`     | If provided and a `latest` folder exists, sets the label for the latest entry in `versions.json` to `latest (<latest_version>)`. Allowed values are the same as `docs_version`. | No       | `''`        |
+| `icp_pages_dir`      | The name of the folder where the icp-pages branch has been cloned.                                                                                                              | No       | `icp-pages` |
 
 ## Action outputs
 

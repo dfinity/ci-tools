@@ -3,6 +3,7 @@ import * as core from '@actions/core';
 import {
   gitAdd,
   gitCommit,
+  gitHasChanges,
   gitPushBranch,
   moveFile,
 } from '@dfinity/action-utils';
@@ -73,6 +74,16 @@ export async function run(): Promise<void> {
         docsVersionLabel,
         latestVersion,
       });
+    }
+
+    if (!gitHasChanges()) {
+      core.info(
+        `No changes to commit. Docs are already up to date for version ${docsVersion}.`,
+      );
+      if (latestVersion) {
+        core.info(`Latest version is already set to ${latestVersion}.`);
+      }
+      return;
     }
 
     gitAdd();
