@@ -63,13 +63,6 @@ export async function run(): Promise<void> {
 
     const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
 
-    // Clone the icp-pages branch into a temporary folder
-    const { owner, repo } = github.context.repo;
-    const remoteUrl = `https://github.com/${owner}/${repo}.git`;
-    exec(
-      `git clone ${remoteUrl} --branch ${ICP_PAGES_BRANCH_NAME} --single-branch ${ICP_PAGES_FOLDER_NAME}`,
-    );
-
     // Copy the zips into the icp-pages folder
     const zipFiles = [];
     for (const zipPath of zipsPaths) {
@@ -93,7 +86,8 @@ export async function run(): Promise<void> {
       'github-actions[bot]',
       'github-actions[bot]@users.noreply.github.com',
     );
-    gitPushBranch(ICP_PAGES_BRANCH_NAME);
+    console.log(exec(`git show`));
+    // gitPushBranch(ICP_PAGES_BRANCH_NAME);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);
