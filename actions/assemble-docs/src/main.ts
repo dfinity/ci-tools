@@ -92,7 +92,8 @@ export async function run(): Promise<void> {
       'github-actions[bot]',
       'github-actions[bot]@users.noreply.github.com',
     );
-    gitPushBranch(ICP_PAGES_BRANCH_NAME);
+    // gitPushBranch(ICP_PAGES_BRANCH_NAME);
+    exec(`git log -1 --name-only`);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);

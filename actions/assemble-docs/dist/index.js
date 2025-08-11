@@ -19295,7 +19295,7 @@ async function run() {
       "github-actions[bot]",
       "github-actions[bot]@users.noreply.github.com"
     );
-    (0, import_action_utils2.gitPushBranch)(ICP_PAGES_BRANCH_NAME);
+    (0, import_action_utils2.exec)(`git log -1 --name-only`);
   } catch (error) {
     if (error instanceof Error) {
       core2.setFailed(error.message);
