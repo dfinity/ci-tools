@@ -19071,9 +19071,9 @@ var require_dist = __commonJS({
       writeJsonFile: () => writeJsonFile2
     });
     module2.exports = __toCommonJS2(src_exports);
-    var import_child_process3 = require("child_process");
+    var import_child_process2 = require("child_process");
     function exec2(command) {
-      return (0, import_child_process3.execSync)(command).toString();
+      return (0, import_child_process2.execSync)(command).toString();
     }
     var ALPHANUM = "abcdefghijklmnopqrstuvwxyz0123456789";
     function generateRandomSuffix(length) {
@@ -19146,7 +19146,6 @@ var require_dist = __commonJS({
 
 // src/main.ts
 var import_node_path3 = __toESM(require("node:path"));
-var import_child_process2 = require("child_process");
 var core2 = __toESM(require_core());
 var import_action_utils2 = __toESM(require_dist());
 
@@ -19297,11 +19296,6 @@ async function run() {
       "github-actions[bot]",
       "github-actions[bot]@users.noreply.github.com"
     );
-    (0, import_child_process2.execSync)("git push origin icp-pages", {
-      env: {
-        GITHUB_TOKEN: githubToken
-      }
-    });
   } catch (error) {
     if (error instanceof Error) {
       core2.setFailed(error.message);

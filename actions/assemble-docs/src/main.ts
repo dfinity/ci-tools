@@ -87,11 +87,11 @@ export async function run(): Promise<void> {
       'github-actions[bot]',
       'github-actions[bot]@users.noreply.github.com',
     );
-    execSync('git push origin icp-pages', {
-      env: {
-        GITHUB_TOKEN: githubToken,
-      },
-    });
+    // execSync('git push origin icp-pages', {
+    //   env: {
+    //     GITHUB_TOKEN: githubToken,
+    //   },
+    // });
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);
