@@ -19265,10 +19265,6 @@ async function run() {
       required: false,
       trimWhitespace: true
     }) || ICP_PAGES_FOLDER_NAME;
-    const githubToken = core2.getInput("github_token", {
-      required: true,
-      trimWhitespace: true
-    });
     if (!isValidVersion(docsVersion)) {
       throw new Error(
         `Invalid docs_version '${docsVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`

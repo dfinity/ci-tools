@@ -40,10 +40,6 @@ export async function run(): Promise<void> {
         required: false,
         trimWhitespace: true,
       }) || ICP_PAGES_FOLDER_NAME;
-    const githubToken = core.getInput('github_token', {
-      required: true,
-      trimWhitespace: true,
-    });
 
     if (!isValidVersion(docsVersion)) {
       throw new Error(
