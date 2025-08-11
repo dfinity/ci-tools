@@ -23133,8 +23133,8 @@ var require_dist = __commonJS({
       mod
     ));
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
-    var src_exports2 = {};
-    __export2(src_exports2, {
+    var src_exports = {};
+    __export2(src_exports, {
       exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
@@ -23145,7 +23145,7 @@ var require_dist = __commonJS({
       gitHasChanges: () => gitHasChanges,
       gitPushBranch: () => gitPushBranch
     });
-    module2.exports = __toCommonJS2(src_exports2);
+    module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
     function exec(command) {
       return (0, import_child_process.execSync)(command).toString();
@@ -23193,12 +23193,7 @@ var require_dist = __commonJS({
   }
 });
 
-// src/index.ts
-var src_exports = {};
-__export(src_exports, {
-  run: () => run
-});
-module.exports = __toCommonJS(src_exports);
+// src/main.ts
 var core2 = __toESM(require_core());
 var github = __toESM(require_github());
 var import_action_utils = __toESM(require_dist());
@@ -23221,7 +23216,7 @@ async function createRepositoryDispatch({
   core.info(`Created dispatch event ${eventType} on ${owner}/${repo}`);
 }
 
-// src/index.ts
+// src/main.ts
 var DEFAULT_DESTINATION_REPO = "dfinity/icp-js-sdk-docs";
 var DEFAULT_EVENT_TYPE = "submit-project-docs";
 var DEFAULT_SOURCE_BRANCH = "icp-pages";
@@ -23273,10 +23268,9 @@ async function run() {
     }
   }
 }
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  run
-});
+
+// src/index.ts
+run();
 /*! Bundled license information:
 
 undici/lib/fetch/body.js:
