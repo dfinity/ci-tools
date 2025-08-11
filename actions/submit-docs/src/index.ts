@@ -15,8 +15,20 @@ type SubmitDocsActionPayload = {
 export async function run(): Promise<void> {
   try {
     const destinationRepo =
-      getInput('destination_repo') || DEFAULT_DESTINATION_REPO;
-    const eventType = getInput('event_type') || DEFAULT_EVENT_TYPE;
+      core.getInput('destination_repo', {
+        required: false,
+        trimWhitespace: true,
+      }) || DEFAULT_DESTINATION_REPO;
+    const eventType =
+      core.getInput('event_type', {
+        required: false,
+        trimWhitespace: true,
+      }) || DEFAULT_EVENT_TYPE;
+    const sourceBranch =
+      core.getInput('source_branch', {
+        required: false,
+        trimWhitespace: true,
+      }) || DEFAULT_SOURCE_BRANCH;
     const token = getInput('token');
 
     const [destOwner, destRepo] = destinationRepo.split('/');
@@ -31,7 +43,7 @@ export async function run(): Promise<void> {
 
     const clientPayload: SubmitDocsActionPayload = {
       repository: `${owner}/${repo}`,
-      branch: DEFAULT_SOURCE_BRANCH,
+      branch: sourceBranch,
     };
 
     core.info(

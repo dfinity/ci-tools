@@ -18890,7 +18890,7 @@ var require_core = __commonJS({
       process.env["PATH"] = `${inputPath}${path.delimiter}${process.env["PATH"]}`;
     }
     exports2.addPath = addPath;
-    function getInput3(name, options) {
+    function getInput4(name, options) {
       const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
       if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
@@ -18900,9 +18900,9 @@ var require_core = __commonJS({
       }
       return val.trim();
     }
-    exports2.getInput = getInput3;
+    exports2.getInput = getInput4;
     function getMultilineInput(name, options) {
-      const inputs = getInput3(name, options).split("\n").filter((x) => x !== "");
+      const inputs = getInput4(name, options).split("\n").filter((x) => x !== "");
       if (options && options.trimWhitespace === false) {
         return inputs;
       }
@@ -18912,7 +18912,7 @@ var require_core = __commonJS({
     function getBooleanInput(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
-      const val = getInput3(name, options);
+      const val = getInput4(name, options);
       if (trueValue.includes(val))
         return true;
       if (falseValue.includes(val))
@@ -23227,8 +23227,18 @@ var DEFAULT_EVENT_TYPE = "submit-project-docs";
 var DEFAULT_SOURCE_BRANCH = "icp-pages";
 async function run() {
   try {
-    const destinationRepo = (0, import_action_utils.getInput)("destination_repo") || DEFAULT_DESTINATION_REPO;
-    const eventType = (0, import_action_utils.getInput)("event_type") || DEFAULT_EVENT_TYPE;
+    const destinationRepo = core2.getInput("destination_repo", {
+      required: false,
+      trimWhitespace: true
+    }) || DEFAULT_DESTINATION_REPO;
+    const eventType = core2.getInput("event_type", {
+      required: false,
+      trimWhitespace: true
+    }) || DEFAULT_EVENT_TYPE;
+    const sourceBranch = core2.getInput("source_branch", {
+      required: false,
+      trimWhitespace: true
+    }) || DEFAULT_SOURCE_BRANCH;
     const token = (0, import_action_utils.getInput)("token");
     const [destOwner, destRepo] = destinationRepo.split("/");
     if (!destOwner || !destRepo) {
@@ -23240,7 +23250,7 @@ async function run() {
     const { owner, repo } = github.context.repo;
     const clientPayload = {
       repository: `${owner}/${repo}`,
-      branch: DEFAULT_SOURCE_BRANCH
+      branch: sourceBranch
     };
     core2.info(
       `Triggering repository_dispatch event on ${destinationRepo}. Event type: ${eventType}. Payload: ${JSON.stringify(
