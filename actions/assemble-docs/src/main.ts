@@ -1,5 +1,6 @@
 import path from 'node:path';
 import * as core from '@actions/core';
+import * as github from '@actions/github';
 import {
   exec,
   gitAdd,
@@ -63,7 +64,8 @@ export async function run(): Promise<void> {
     const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
 
     // Clone the icp-pages branch into a temporary folder
-    const remoteUrl = exec(`git config --get remote.origin.url`).trim();
+    const { owner, repo } = github.context.repo;
+    const remoteUrl = `https://github.com/${owner}/${repo}.git`;
     exec(
       `git clone ${remoteUrl} --branch ${ICP_PAGES_BRANCH_NAME} --single-branch ${ICP_PAGES_FOLDER_NAME}`,
     );
