@@ -19066,7 +19066,7 @@ var require_dist = __commonJS({
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit2,
       gitHasChanges: () => gitHasChanges,
-      gitPushBranch: () => gitPushBranch,
+      gitPushBranch: () => gitPushBranch2,
       readJsonFile: () => readJsonFile2,
       writeJsonFile: () => writeJsonFile2
     });
@@ -19103,7 +19103,7 @@ var require_dist = __commonJS({
     function gitCheckoutBranch(branch) {
       exec2(`git checkout -b ${branch}`);
     }
-    function gitPushBranch(branch) {
+    function gitPushBranch2(branch) {
       exec2(`git push -u origin ${branch}`);
     }
     function gitHasChanges() {
@@ -19290,12 +19290,12 @@ async function run() {
       latestVersion
     });
     (0, import_action_utils2.gitAdd)();
-    const commitMessage = `Update static assets for docs version ${docsVersion}`;
     (0, import_action_utils2.gitCommit)(
-      commitMessage,
+      `Update static assets for docs version ${docsVersion}`,
       "github-actions[bot]",
       "github-actions[bot]@users.noreply.github.com"
     );
+    (0, import_action_utils2.gitPushBranch)(ICP_PAGES_BRANCH_NAME);
   } catch (error) {
     if (error instanceof Error) {
       core2.setFailed(error.message);

@@ -1,7 +1,13 @@
 import path from 'node:path';
 import { execSync } from 'child_process';
 import * as core from '@actions/core';
-import { copyFile, exec, gitAdd, gitCommit } from '@dfinity/action-utils';
+import {
+  copyFile,
+  exec,
+  gitAdd,
+  gitCommit,
+  gitPushBranch,
+} from '@dfinity/action-utils';
 import { upsertVersionsJson } from './upsert-versions-json';
 import { zipDocsFolders } from './zip-docs-folders';
 
@@ -81,17 +87,12 @@ export async function run(): Promise<void> {
     });
 
     gitAdd();
-    const commitMessage = `Update static assets for docs version ${docsVersion}`;
     gitCommit(
-      commitMessage,
+      `Update static assets for docs version ${docsVersion}`,
       'github-actions[bot]',
       'github-actions[bot]@users.noreply.github.com',
     );
-    // execSync('git push origin icp-pages', {
-    //   env: {
-    //     GITHUB_TOKEN: githubToken,
-    //   },
-    // });
+    gitPushBranch(ICP_PAGES_BRANCH_NAME);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);
