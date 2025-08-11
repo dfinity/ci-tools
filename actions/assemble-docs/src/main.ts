@@ -1,8 +1,6 @@
 import path from 'node:path';
 import * as core from '@actions/core';
-import * as github from '@actions/github';
 import {
-  exec,
   gitAdd,
   gitCommit,
   gitPushBranch,
@@ -44,6 +42,11 @@ export async function run(): Promise<void> {
       required: false,
       trimWhitespace: true,
     });
+    const icpPagesFolderName =
+      core.getInput('icp_pages_dir', {
+        required: false,
+        trimWhitespace: true,
+      }) || ICP_PAGES_FOLDER_NAME;
     const githubToken = core.getInput('github_token', {
       required: true,
       trimWhitespace: true,
@@ -67,12 +70,12 @@ export async function run(): Promise<void> {
     const zipFiles = [];
     for (const zipPath of zipsPaths) {
       const zipName = path.basename(zipPath);
-      moveFile(zipPath, `${ICP_PAGES_FOLDER_NAME}/${zipName}`);
+      moveFile(zipPath, `${icpPagesFolderName}/${zipName}`);
       zipFiles.push(zipName);
     }
 
     // Change working directory to the icp-pages folder
-    process.chdir(ICP_PAGES_FOLDER_NAME);
+    process.chdir(icpPagesFolderName);
 
     await upsertVersionsJson({
       zipFiles,
@@ -84,10 +87,9 @@ export async function run(): Promise<void> {
     gitCommit(
       `Update static assets for docs version ${docsVersion}`,
       'github-actions[bot]',
-      'github-actions[bot]@users.noreply.github.com',
+      '41898282+github-actions[bot]@users.noreply.github.com',
     );
-    console.log(exec(`git show`));
-    // gitPushBranch(ICP_PAGES_BRANCH_NAME);
+    gitPushBranch(ICP_PAGES_BRANCH_NAME);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);

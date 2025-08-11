@@ -19056,7 +19056,7 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
-      exec: () => exec2,
+      exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
@@ -19071,7 +19071,7 @@ var require_dist = __commonJS({
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process2 = require("child_process");
-    function exec2(command) {
+    function exec(command) {
       return (0, import_child_process2.execSync)(command).toString();
     }
     var ALPHANUM = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -19087,21 +19087,21 @@ var require_dist = __commonJS({
       import_node_fs2.default.renameSync(src, dest);
     }
     function gitAdd2() {
-      exec2(`git add .`);
+      exec(`git add .`);
     }
     function gitCommit2(message, authorName, authorEmail) {
-      exec2(`git config user.name "${authorName}"`);
-      exec2(`git config user.email "${authorEmail}"`);
-      exec2(`git commit -m "${message}"`);
+      exec(`git config user.name "${authorName}"`);
+      exec(`git config user.email "${authorEmail}"`);
+      exec(`git commit -m "${message}"`);
     }
     function gitCheckoutBranch(branch) {
-      exec2(`git checkout -b ${branch}`);
+      exec(`git checkout -b ${branch}`);
     }
     function gitPushBranch2(branch) {
-      exec2(`git push -u origin ${branch}`);
+      exec(`git push -u origin ${branch}`);
     }
     function gitHasChanges() {
-      const output = exec2("git status --porcelain");
+      const output = exec("git status --porcelain");
       return output.trim().length > 0;
     }
     var core3 = __toESM2(require_core());
@@ -19232,6 +19232,7 @@ var VALID_VERSION_FORMATS = [
   "nightly"
 ];
 var VALID_VERSION_PATTERNS = /^(?:v\d+(?:\.\d+(?:\.\d+)?)?|beta|dev|next|nightly)$/;
+var ICP_PAGES_BRANCH_NAME = "icp-pages";
 var ICP_PAGES_FOLDER_NAME = "icp-pages";
 async function run() {
   try {
@@ -19251,6 +19252,10 @@ async function run() {
       required: false,
       trimWhitespace: true
     });
+    const icpPagesFolderName = core2.getInput("icp_pages_dir", {
+      required: false,
+      trimWhitespace: true
+    }) || ICP_PAGES_FOLDER_NAME;
     const githubToken = core2.getInput("github_token", {
       required: true,
       trimWhitespace: true
@@ -19269,10 +19274,10 @@ async function run() {
     const zipFiles = [];
     for (const zipPath of zipsPaths) {
       const zipName = import_node_path3.default.basename(zipPath);
-      (0, import_action_utils2.moveFile)(zipPath, `${ICP_PAGES_FOLDER_NAME}/${zipName}`);
+      (0, import_action_utils2.moveFile)(zipPath, `${icpPagesFolderName}/${zipName}`);
       zipFiles.push(zipName);
     }
-    process.chdir(ICP_PAGES_FOLDER_NAME);
+    process.chdir(icpPagesFolderName);
     await upsertVersionsJson({
       zipFiles,
       docsVersionLabel,
@@ -19282,9 +19287,9 @@ async function run() {
     (0, import_action_utils2.gitCommit)(
       `Update static assets for docs version ${docsVersion}`,
       "github-actions[bot]",
-      "github-actions[bot]@users.noreply.github.com"
+      "41898282+github-actions[bot]@users.noreply.github.com"
     );
-    console.log((0, import_action_utils2.exec)(`git show`));
+    (0, import_action_utils2.gitPushBranch)(ICP_PAGES_BRANCH_NAME);
   } catch (error) {
     if (error instanceof Error) {
       core2.setFailed(error.message);

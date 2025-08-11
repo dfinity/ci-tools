@@ -14,6 +14,9 @@ inputs:
   latest_version:
     description: 'Optional label value to set for the latest entry label to "latest ({latest_version})".'
     required: false
+  icp_pages_dir:
+    description: 'The name of the folder where the icp-pages branch has been cloned. Defaults to `icp-pages`.'
+    required: false
   github_token:
     description: 'The GitHub token to use for pushing to the `icp-pages` branch'
     required: true
