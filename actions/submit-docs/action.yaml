@@ -1,0 +1,23 @@
+name: Submit Documentation
+description: Triggers the pull-projects-docs workflow on a destination repository to update project documentation
+
+inputs:
+  destination_repo:
+    description: 'The destination repository to trigger the workflow on'
+    required: false
+    default: 'dfinity/icp-js-sdk-docs'
+  event_type:
+    description: 'The event type to trigger on the destination repository'
+    required: false
+    default: 'submit-project-docs'
+  source_branch:
+    description: 'The branch on this repository from the triggered workflow should fetch the documentation from'
+    required: false
+    default: 'icp-pages'
+  token:
+    description: 'GitHub token with permissions to trigger workflows on the destination repository'
+    required: true
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
