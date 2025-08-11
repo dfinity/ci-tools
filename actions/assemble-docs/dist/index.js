@@ -19289,7 +19289,7 @@ async function run() {
       "github-actions[bot]",
       "github-actions[bot]@users.noreply.github.com"
     );
-    (0, import_action_utils2.exec)(`git log -1 --name-only`);
+    console.log((0, import_action_utils2.exec)(`git show`));
   } catch (error) {
     if (error instanceof Error) {
       core2.setFailed(error.message);
