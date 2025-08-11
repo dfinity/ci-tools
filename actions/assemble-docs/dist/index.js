@@ -23143,7 +23143,7 @@ var require_dist = __commonJS({
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit2,
       gitHasChanges: () => gitHasChanges,
-      gitPushBranch: () => gitPushBranch,
+      gitPushBranch: () => gitPushBranch2,
       moveFile: () => moveFile2,
       readJsonFile: () => readJsonFile2,
       writeJsonFile: () => writeJsonFile2
@@ -23176,7 +23176,7 @@ var require_dist = __commonJS({
     function gitCheckoutBranch(branch) {
       exec2(`git checkout -b ${branch}`);
     }
-    function gitPushBranch(branch) {
+    function gitPushBranch2(branch) {
       exec2(`git push -u origin ${branch}`);
     }
     function gitHasChanges() {
@@ -23370,7 +23370,7 @@ async function run() {
       "github-actions[bot]",
       "github-actions[bot]@users.noreply.github.com"
     );
-    console.log((0, import_action_utils2.exec)(`git show`));
+    (0, import_action_utils2.gitPushBranch)(ICP_PAGES_BRANCH_NAME);
   } catch (error) {
     if (error instanceof Error) {
       core2.setFailed(error.message);

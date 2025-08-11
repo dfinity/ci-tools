@@ -5,7 +5,7 @@ import {
   exec,
   gitAdd,
   gitCommit,
-  // gitPushBranch,
+  gitPushBranch,
   moveFile,
 } from '@dfinity/action-utils';
 import { upsertVersionsJson } from './upsert-versions-json';
@@ -93,8 +93,7 @@ export async function run(): Promise<void> {
       'github-actions[bot]',
       'github-actions[bot]@users.noreply.github.com',
     );
-    // gitPushBranch(ICP_PAGES_BRANCH_NAME);
-    console.log(exec(`git show`));
+    gitPushBranch(ICP_PAGES_BRANCH_NAME);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);
