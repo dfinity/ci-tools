@@ -19267,7 +19267,7 @@ async function run() {
       );
     }
     const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
-    const remoteUrl = (0, import_action_utils2.exec)(`git config --get remote.origin.url`);
+    const remoteUrl = (0, import_action_utils2.exec)(`git config --get remote.origin.url`).trim();
     (0, import_action_utils2.exec)(
       `git clone ${remoteUrl} --branch ${ICP_PAGES_BRANCH_NAME} --single-branch ${ICP_PAGES_FOLDER_NAME}`
     );

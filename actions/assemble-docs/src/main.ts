@@ -63,7 +63,7 @@ export async function run(): Promise<void> {
     const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
 
     // Clone the icp-pages branch into a temporary folder
-    const remoteUrl = exec(`git config --get remote.origin.url`);
+    const remoteUrl = exec(`git config --get remote.origin.url`).trim();
     exec(
       `git clone ${remoteUrl} --branch ${ICP_PAGES_BRANCH_NAME} --single-branch ${ICP_PAGES_FOLDER_NAME}`,
     );
