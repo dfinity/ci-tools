@@ -18,6 +18,8 @@ import {
 const ICP_PAGES_BRANCH_NAME = 'icp-pages';
 const ICP_PAGES_FOLDER_NAME = 'icp-pages';
 
+const DEFAULT_LATEST_VERSION_LABEL = 'latest';
+
 export async function run(): Promise<void> {
   try {
     const docsOutputDir = core.getInput('docs_output_dir', {
@@ -32,10 +34,11 @@ export async function run(): Promise<void> {
       required: false,
       trimWhitespace: true,
     });
-    const latestVersion = core.getInput('latest_version', {
-      required: false,
-      trimWhitespace: true,
-    });
+    const latestVersionLabel =
+      core.getInput('latest_version_label', {
+        required: false,
+        trimWhitespace: true,
+      }) || DEFAULT_LATEST_VERSION_LABEL;
     const icpPagesFolderName =
       core.getInput('icp_pages_dir', {
         required: false,
@@ -45,12 +48,6 @@ export async function run(): Promise<void> {
     if (!isValidVersion(docsVersion)) {
       throw new Error(
         `Invalid docs_version '${docsVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`,
-      );
-    }
-
-    if (latestVersion && !isValidVersion(latestVersion)) {
-      throw new Error(
-        `Invalid latest_version '${latestVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`,
       );
     }
 
@@ -72,7 +69,7 @@ export async function run(): Promise<void> {
       await upsertVersionsJson({
         zipFiles,
         docsVersionLabel,
-        latestVersion,
+        latestVersionLabel,
       });
     }
 
@@ -80,8 +77,8 @@ export async function run(): Promise<void> {
       core.info(
         `No changes to commit. Docs are already up to date for version ${docsVersion}.`,
       );
-      if (latestVersion) {
-        core.info(`Latest version is already set to ${latestVersion}.`);
+      if (latestVersionLabel) {
+        core.info(`Latest version is already set to ${latestVersionLabel}.`);
       }
       return;
     }

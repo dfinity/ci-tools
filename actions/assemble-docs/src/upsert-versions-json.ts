@@ -9,9 +9,9 @@ type VersionEntry = { path: string; label: string };
 export async function upsertVersionsJson(params: {
   zipFiles: string[];
   docsVersionLabel?: string;
-  latestVersion?: string;
+  latestVersionLabel: string;
 }): Promise<void> {
-  const { zipFiles, docsVersionLabel, latestVersion } = params;
+  const { zipFiles, docsVersionLabel, latestVersionLabel } = params;
 
   const versionsPath = path.resolve(process.cwd(), VERSIONS_JSON_FILE_NAME);
 
@@ -24,17 +24,15 @@ export async function upsertVersionsJson(params: {
     const existing = versions.find(v => v.path === versionName);
 
     if (existing) {
-      if (isLatest && latestVersion) {
-        existing.label = `${LATEST_VERSION_NAME} (${latestVersion})`;
+      if (isLatest && latestVersionLabel) {
+        existing.label = latestVersionLabel;
       }
       if (!isLatest && docsVersionLabel) {
         existing.label = docsVersionLabel;
       }
     } else {
       const label = isLatest
-        ? latestVersion
-          ? `${LATEST_VERSION_NAME} (${latestVersion})`
-          : LATEST_VERSION_NAME
+        ? latestVersionLabel
         : docsVersionLabel || versionName;
 
       versions.push({ path: versionName, label });

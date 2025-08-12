@@ -11,9 +11,10 @@ inputs:
   docs_version_label:
     description: 'Optional label value to set for the docs version entry label. Defaults to `docs_version`.'
     required: false
-  latest_version:
-    description: 'Optional version to set for the latest entry label to "latest ({latest_version})". Allowed values are the same as `docs_version`.'
+  latest_version_label:
+    description: 'Optional version to set for the latest entry label.'
     required: false
+    default: 'latest'
   icp_pages_dir:
     description: 'The name of the folder where the icp-pages branch has been cloned. Defaults to `icp-pages`.'
     required: false
