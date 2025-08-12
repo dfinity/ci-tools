@@ -23219,7 +23219,6 @@ async function createRepositoryDispatch({
 // src/main.ts
 var DEFAULT_DESTINATION_REPO = "dfinity/icp-js-sdk-docs";
 var DEFAULT_EVENT_TYPE = "submit-project-docs";
-var DEFAULT_SOURCE_BRANCH = "icp-pages";
 async function run() {
   try {
     const destinationRepo = core2.getInput("destination_repo", {
@@ -23230,10 +23229,6 @@ async function run() {
       required: false,
       trimWhitespace: true
     }) || DEFAULT_EVENT_TYPE;
-    const sourceBranch = core2.getInput("source_branch", {
-      required: false,
-      trimWhitespace: true
-    }) || DEFAULT_SOURCE_BRANCH;
     const token = (0, import_action_utils.getInput)("token");
     const [destOwner, destRepo] = destinationRepo.split("/");
     if (!destOwner || !destRepo) {
@@ -23244,8 +23239,7 @@ async function run() {
     const octokit = github.getOctokit(token);
     const { owner, repo } = github.context.repo;
     const clientPayload = {
-      repository: `${owner}/${repo}`,
-      branch: sourceBranch
+      project_repository: `${owner}/${repo}`
     };
     core2.info(
       `Triggering repository_dispatch event on ${destinationRepo}. Event type: ${eventType}. Payload: ${JSON.stringify(
