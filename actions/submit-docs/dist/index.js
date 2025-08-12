@@ -18890,7 +18890,7 @@ var require_core = __commonJS({
       process.env["PATH"] = `${inputPath}${path.delimiter}${process.env["PATH"]}`;
     }
     exports2.addPath = addPath;
-    function getInput4(name, options) {
+    function getInput3(name, options) {
       const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
       if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
@@ -18900,9 +18900,9 @@ var require_core = __commonJS({
       }
       return val.trim();
     }
-    exports2.getInput = getInput4;
+    exports2.getInput = getInput3;
     function getMultilineInput(name, options) {
-      const inputs = getInput4(name, options).split("\n").filter((x) => x !== "");
+      const inputs = getInput3(name, options).split("\n").filter((x) => x !== "");
       if (options && options.trimWhitespace === false) {
         return inputs;
       }
@@ -18912,7 +18912,7 @@ var require_core = __commonJS({
     function getBooleanInput(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
-      const val = getInput4(name, options);
+      const val = getInput3(name, options);
       if (trueValue.includes(val))
         return true;
       if (falseValue.includes(val))
@@ -23139,6 +23139,7 @@ var require_dist = __commonJS({
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
+      getOptInput: () => getOptInput2,
       gitAdd: () => gitAdd,
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit,
@@ -23179,6 +23180,9 @@ var require_dist = __commonJS({
     var core3 = __toESM2(require_core());
     function getInput22(name) {
       return core3.getInput(name, { required: true, trimWhitespace: true });
+    }
+    function getOptInput2(name, defaultValue) {
+      return core3.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
     }
     function getNumberInput(name) {
       const input = getInput22(name);
@@ -23221,14 +23225,11 @@ var DEFAULT_DESTINATION_REPO = "dfinity/icp-js-sdk-docs";
 var DEFAULT_EVENT_TYPE = "submit-project-docs";
 async function run() {
   try {
-    const destinationRepo = core2.getInput("destination_repo", {
-      required: false,
-      trimWhitespace: true
-    }) || DEFAULT_DESTINATION_REPO;
-    const eventType = core2.getInput("event_type", {
-      required: false,
-      trimWhitespace: true
-    }) || DEFAULT_EVENT_TYPE;
+    const destinationRepo = (0, import_action_utils.getOptInput)(
+      "destination_repo",
+      DEFAULT_DESTINATION_REPO
+    );
+    const eventType = (0, import_action_utils.getOptInput)("event_type", DEFAULT_EVENT_TYPE);
     const token = (0, import_action_utils.getInput)("token");
     const [destOwner, destRepo] = destinationRepo.split("/");
     if (!destOwner || !destRepo) {

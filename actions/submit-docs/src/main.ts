@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { getInput } from '@dfinity/action-utils';
+import { getInput, getOptInput } from '@dfinity/action-utils';
 import { createRepositoryDispatch } from './dispatch';
 
 const DEFAULT_DESTINATION_REPO = 'dfinity/icp-js-sdk-docs';
@@ -12,16 +12,11 @@ type SubmitDocsActionPayload = {
 
 export async function run(): Promise<void> {
   try {
-    const destinationRepo =
-      core.getInput('destination_repo', {
-        required: false,
-        trimWhitespace: true,
-      }) || DEFAULT_DESTINATION_REPO;
-    const eventType =
-      core.getInput('event_type', {
-        required: false,
-        trimWhitespace: true,
-      }) || DEFAULT_EVENT_TYPE;
+    const destinationRepo = getOptInput(
+      'destination_repo',
+      DEFAULT_DESTINATION_REPO,
+    );
+    const eventType = getOptInput('event_type', DEFAULT_EVENT_TYPE);
     const token = getInput('token');
 
     const [destOwner, destRepo] = destinationRepo.split('/');

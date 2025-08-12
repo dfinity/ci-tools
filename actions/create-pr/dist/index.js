@@ -23139,6 +23139,7 @@ var require_dist = __commonJS({
       generateRandomSuffix: () => generateRandomSuffix2,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
+      getOptInput: () => getOptInput,
       gitAdd: () => gitAdd2,
       gitCheckoutBranch: () => gitCheckoutBranch2,
       gitCommit: () => gitCommit2,
@@ -23179,6 +23180,9 @@ var require_dist = __commonJS({
     var core4 = __toESM2(require_core());
     function getInput22(name) {
       return core4.getInput(name, { required: true, trimWhitespace: true });
+    }
+    function getOptInput(name, defaultValue) {
+      return core4.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
     }
     function getNumberInput(name) {
       const input = getInput22(name);
