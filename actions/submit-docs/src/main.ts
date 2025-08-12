@@ -5,11 +5,9 @@ import { createRepositoryDispatch } from './dispatch';
 
 const DEFAULT_DESTINATION_REPO = 'dfinity/icp-js-sdk-docs';
 const DEFAULT_EVENT_TYPE = 'submit-project-docs';
-const DEFAULT_SOURCE_BRANCH = 'icp-pages';
 
 type SubmitDocsActionPayload = {
-  repository: string;
-  branch: string;
+  project_repository: string;
 };
 
 export async function run(): Promise<void> {
@@ -24,11 +22,6 @@ export async function run(): Promise<void> {
         required: false,
         trimWhitespace: true,
       }) || DEFAULT_EVENT_TYPE;
-    const sourceBranch =
-      core.getInput('source_branch', {
-        required: false,
-        trimWhitespace: true,
-      }) || DEFAULT_SOURCE_BRANCH;
     const token = getInput('token');
 
     const [destOwner, destRepo] = destinationRepo.split('/');
@@ -42,8 +35,7 @@ export async function run(): Promise<void> {
     const { owner, repo } = github.context.repo;
 
     const clientPayload: SubmitDocsActionPayload = {
-      repository: `${owner}/${repo}`,
-      branch: sourceBranch,
+      project_repository: `${owner}/${repo}`,
     };
 
     core.info(

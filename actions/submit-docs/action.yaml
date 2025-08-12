@@ -10,10 +10,6 @@ inputs:
     description: 'The event type to trigger on the destination repository'
     required: false
     default: 'submit-project-docs'
-  source_branch:
-    description: 'The branch on this repository from the triggered workflow should fetch the documentation from'
-    required: false
-    default: 'icp-pages'
   token:
     description: 'GitHub token with permissions to trigger workflows on the destination repository'
     required: true

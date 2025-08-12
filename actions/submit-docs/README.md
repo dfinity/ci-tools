@@ -4,12 +4,11 @@ This action triggers the `pull-projects-docs` workflow on a destination reposito
 
 ## Action inputs
 
-| Input              | Description                                                                                   | Required | Default                     |
-| ------------------ | --------------------------------------------------------------------------------------------- | -------- | --------------------------- |
-| `destination_repo` | The destination repository to trigger the workflow on                                         | No       | `'dfinity/icp-js-sdk-docs'` |
-| `event_type`       | The event type to trigger on the destination repository                                       | No       | `'submit-project-docs'`     |
-| `source_branch`    | The branch on this repository from the triggered workflow should fetch the documentation from | No       | `'icp-pages'`               |
-| `token`            | GitHub token with permissions to trigger workflows on the destination repository              | Yes      | _required_                  |
+| Input              | Description                                                                      | Required | Default                     |
+| ------------------ | -------------------------------------------------------------------------------- | -------- | --------------------------- |
+| `destination_repo` | The destination repository to trigger the workflow on                            | No       | `'dfinity/icp-js-sdk-docs'` |
+| `event_type`       | The event type to trigger on the destination repository                          | No       | `'submit-project-docs'`     |
+| `token`            | GitHub token with permissions to trigger workflows on the destination repository | Yes      | _required_                  |
 
 ## Example usage
 
@@ -30,6 +29,8 @@ jobs:
         with:
           app-id: ${{ vars.PR_AUTOMATION_BOT_PUBLIC_APP_ID }}
           private-key: ${{ secrets.PR_AUTOMATION_BOT_PUBLIC_PRIVATE_KEY }}
+          owner: dfinity
+          repo: icp-js-sdk-docs
 
       # Build your docs and commit them to the `icp-pages` branch.
       # Use the assemble-docs action for convenience.
