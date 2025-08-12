@@ -32,8 +32,22 @@ jobs:
           owner: dfinity
           repo: icp-js-sdk-docs
 
-      # Build your docs and commit them to the `icp-pages` branch.
-      # Use the assemble-docs action for convenience.
+      # Build your docs and put them in the `docs/dist` folder.
+
+      - name: Checkout icp-pages branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: icp-pages
+          path: icp-pages
+
+      - name: Assemble docs
+        uses: dfinity/ci-tools/actions/assemble-docs@luca/assemble-docs-action
+        with:
+          docs_output_dir: docs/dist # must be the same the folder where the static docs assets are written after build
+          docs_version: v1
+          docs_version_label: 'Version 1'
+          latest_version_label: 'latest (v1)'
+          icp_pages_dir: icp-pages # must be the same as the `path` in the checkout step
 
       - name: Submit Documentation
         uses: dfinity/ci-tools/actions/submit-docs@main
