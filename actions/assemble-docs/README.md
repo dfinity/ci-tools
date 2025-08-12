@@ -11,13 +11,13 @@ This action:
 
 ## Action inputs
 
-| Input                  | Description                                                                                            | Required | Default     |
-| ---------------------- | ------------------------------------------------------------------------------------------------------ | -------- | ----------- |
-| `docs_output_dir`      | Directory containing per-version documentation folders. Zips are written next to these folders.        | Yes      | _required_  |
-| `docs_version`         | The docs version to package. Allowed values: `vX`, `vX.Y`, `vX.Y.Z`, `beta`, `dev`, `next`, `nightly`. | Yes      | _required_  |
-| `docs_version_label`   | Optional label value to set for the docs version entry label. Defaults to `docs_version`.              | No       | `''`        |
-| `latest_version_label` | Optional label value to set for the latest entry in `versions.json`.                                   | No       | `'latest'`  |
-| `icp_pages_dir`        | The name of the folder where the icp-pages branch has been cloned.                                     | No       | `icp-pages` |
+| Input                  | Description                                                                                            | Default     |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ | ----------- |
+| `docs_output_dir`      | Directory containing per-version documentation folders. Zips are written next to these folders.        | _required_  |
+| `docs_version`         | The docs version to package. Allowed values: `vX`, `vX.Y`, `vX.Y.Z`, `beta`, `dev`, `next`, `nightly`. | _required_  |
+| `docs_version_label`   | Optional label value to set for the docs version entry label. Defaults to `docs_version`.              | `''`        |
+| `latest_version_label` | Optional label value to set for the latest entry in `versions.json`.                                   | `'latest'`  |
+| `icp_pages_dir`        | The name of the folder where the icp-pages branch has been cloned.                                     | `icp-pages` |
 
 ## Action outputs
 
