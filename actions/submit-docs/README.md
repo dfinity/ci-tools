@@ -4,11 +4,11 @@ This action triggers the `pull-projects-docs` workflow on a destination reposito
 
 ## Action inputs
 
-| Input              | Description                                                                      | Required | Default                     |
-| ------------------ | -------------------------------------------------------------------------------- | -------- | --------------------------- |
-| `destination_repo` | The destination repository to trigger the workflow on                            | No       | `'dfinity/icp-js-sdk-docs'` |
-| `event_type`       | The event type to trigger on the destination repository                          | No       | `'submit-project-docs'`     |
-| `token`            | GitHub token with permissions to trigger workflows on the destination repository | Yes      | _required_                  |
+| Input              | Description                                                                      | Default                     |
+| ------------------ | -------------------------------------------------------------------------------- | --------------------------- |
+| `destination_repo` | The destination repository to trigger the workflow on                            | `'dfinity/icp-js-sdk-docs'` |
+| `event_type`       | The event type to trigger on the destination repository                          | `'submit-project-docs'`     |
+| `token`            | GitHub token with permissions to trigger workflows on the destination repository | _required_                  |
 
 ## Example usage
 
