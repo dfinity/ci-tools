@@ -19149,7 +19149,7 @@ var import_action_utils = __toESM(require_dist());
 var LATEST_VERSION_NAME = "latest";
 var VERSIONS_JSON_FILE_NAME = "versions.json";
 async function upsertVersionsJson(params) {
-  const { zipFiles, docsVersionLabel, latestVersion } = params;
+  const { zipFiles, docsVersionLabel, latestVersionLabel } = params;
   const versionsPath = import_node_path.default.resolve(process.cwd(), VERSIONS_JSON_FILE_NAME);
   let versions = (0, import_action_utils.readJsonFile)(versionsPath) || [];
   for (const zipFile of zipFiles) {
@@ -19157,14 +19157,14 @@ async function upsertVersionsJson(params) {
     const isLatest = versionName === LATEST_VERSION_NAME;
     const existing = versions.find((v) => v.path === versionName);
     if (existing) {
-      if (isLatest && latestVersion) {
-        existing.label = `${LATEST_VERSION_NAME} (${latestVersion})`;
+      if (isLatest && latestVersionLabel) {
+        existing.label = latestVersionLabel;
       }
       if (!isLatest && docsVersionLabel) {
         existing.label = docsVersionLabel;
       }
     } else {
-      const label = isLatest ? latestVersion ? `${LATEST_VERSION_NAME} (${latestVersion})` : LATEST_VERSION_NAME : docsVersionLabel || versionName;
+      const label = isLatest ? latestVersionLabel : docsVersionLabel || versionName;
       versions.push({ path: versionName, label });
     }
   }
@@ -19243,6 +19243,7 @@ var isValidVersion = (version2) => {
 // src/main.ts
 var ICP_PAGES_BRANCH_NAME = "icp-pages";
 var ICP_PAGES_FOLDER_NAME = "icp-pages";
+var DEFAULT_LATEST_VERSION_LABEL = "latest";
 async function run() {
   try {
     const docsOutputDir = core2.getInput("docs_output_dir", {
@@ -19257,10 +19258,10 @@ async function run() {
       required: false,
       trimWhitespace: true
     });
-    const latestVersion = core2.getInput("latest_version", {
+    const latestVersionLabel = core2.getInput("latest_version_label", {
       required: false,
       trimWhitespace: true
-    });
+    }) || DEFAULT_LATEST_VERSION_LABEL;
     const icpPagesFolderName = core2.getInput("icp_pages_dir", {
       required: false,
       trimWhitespace: true
@@ -19268,11 +19269,6 @@ async function run() {
     if (!isValidVersion(docsVersion)) {
       throw new Error(
         `Invalid docs_version '${docsVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`
-      );
-    }
-    if (latestVersion && !isValidVersion(latestVersion)) {
-      throw new Error(
-        `Invalid latest_version '${latestVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`
       );
     }
     const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
@@ -19287,15 +19283,15 @@ async function run() {
       await upsertVersionsJson({
         zipFiles,
         docsVersionLabel,
-        latestVersion
+        latestVersionLabel
       });
     }
     if (!(0, import_action_utils2.gitHasChanges)()) {
       core2.info(
         `No changes to commit. Docs are already up to date for version ${docsVersion}.`
       );
-      if (latestVersion) {
-        core2.info(`Latest version is already set to ${latestVersion}.`);
+      if (latestVersionLabel) {
+        core2.info(`Latest version is already set to ${latestVersionLabel}.`);
       }
       return;
     }
