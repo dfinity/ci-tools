@@ -24,6 +24,7 @@ export async function run(): Promise<void> {
       );
     }
 
+    core.info(`Zipping ${assetsDir} to ${zipTargetPath}`);
     zip(assetsDir, zipTargetPath);
 
     const versionsJsonPath = path.resolve(
@@ -32,6 +33,7 @@ export async function run(): Promise<void> {
     );
 
     if (isVersionListedInVersionsJson(version)) {
+      core.info(`Upserting versions.json for version ${version}`);
       await upsertVersionsJson({
         versionsJsonPath,
         version,

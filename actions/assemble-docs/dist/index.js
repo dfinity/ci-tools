@@ -19214,12 +19214,14 @@ async function run() {
         `Invalid version '${version2}'. ${ALLOWED_VERSIONS_MESSAGE}`
       );
     }
+    core.info(`Zipping ${assetsDir} to ${zipTargetPath}`);
     (0, import_action_utils2.zip)(assetsDir, zipTargetPath);
     const versionsJsonPath = import_node_path.default.resolve(
       process.cwd(),
       VERSIONS_JSON_FILE_NAME
     );
     if (isVersionListedInVersionsJson(version2)) {
+      core.info(`Upserting versions.json for version ${version2}`);
       await upsertVersionsJson({
         versionsJsonPath,
         version: version2,
