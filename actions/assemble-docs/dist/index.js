@@ -19192,9 +19192,9 @@ function isValidVersion(version2) {
 async function upsertVersionsJson(params) {
   const { versionsJsonPath, version: version2, versionLabel } = params;
   let versions = (0, import_action_utils.readJsonFile)(versionsJsonPath) || [];
-  const versionEntry = versions.find((v) => v.path === version2);
-  if (versionEntry) {
-    versionEntry.label = versionLabel;
+  const versionEntryIndex = versions.findIndex((v) => v.path === version2);
+  if (versionEntryIndex !== -1) {
+    versions[versionEntryIndex].label = versionLabel;
   } else {
     versions.push({ path: version2, label: versionLabel });
   }
