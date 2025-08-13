@@ -1,5 +1,6 @@
 packages:
   - 'actions/create-pr'
   - 'actions/assemble-docs'
+  - 'actions/extract-version'
   - 'actions/submit-docs'
   - 'lib/action-utils'
