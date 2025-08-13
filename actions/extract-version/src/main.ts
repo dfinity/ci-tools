@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { exec } from '@dfinity/action-utils';
+import { exec, getOptInput } from '@dfinity/action-utils';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -65,15 +65,11 @@ function extractFromCargoToml(filePath: string): VersionParts | null {
 
 export async function run(): Promise<void> {
   try {
-    // TODO: use getOptInput from @dfinity/action-utils once #47 is merged
-    const fileInput = core.getInput('file', {
-      required: false,
-      trimWhitespace: true,
-    });
+    const fileInput = getOptInput('file', '');
 
     let parts: VersionParts | null = null;
 
-    if (fileInput && fileInput !== '') {
+    if (fileInput) {
       const filePath = path.resolve(process.cwd(), fileInput);
       const lowerFilename = path.basename(filePath).toLowerCase();
 

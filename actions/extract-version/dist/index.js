@@ -18890,7 +18890,7 @@ var require_core = __commonJS({
       process.env["PATH"] = `${inputPath}${path2.delimiter}${process.env["PATH"]}`;
     }
     exports2.addPath = addPath;
-    function getInput3(name, options) {
+    function getInput2(name, options) {
       const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
       if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
@@ -18900,9 +18900,9 @@ var require_core = __commonJS({
       }
       return val.trim();
     }
-    exports2.getInput = getInput3;
+    exports2.getInput = getInput2;
     function getMultilineInput(name, options) {
-      const inputs = getInput3(name, options).split("\n").filter((x) => x !== "");
+      const inputs = getInput2(name, options).split("\n").filter((x) => x !== "");
       if (options && options.trimWhitespace === false) {
         return inputs;
       }
@@ -18912,7 +18912,7 @@ var require_core = __commonJS({
     function getBooleanInput(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
-      const val = getInput3(name, options);
+      const val = getInput2(name, options);
       if (trueValue.includes(val))
         return true;
       if (falseValue.includes(val))
@@ -19058,8 +19058,9 @@ var require_dist = __commonJS({
     __export2(src_exports, {
       exec: () => exec2,
       generateRandomSuffix: () => generateRandomSuffix,
-      getInput: () => getInput22,
+      getInput: () => getInput2,
       getNumberInput: () => getNumberInput,
+      getOptInput: () => getOptInput2,
       gitAdd: () => gitAdd,
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit,
@@ -19098,11 +19099,14 @@ var require_dist = __commonJS({
       return output.trim().length > 0;
     }
     var core2 = __toESM2(require_core());
-    function getInput22(name) {
+    function getInput2(name) {
       return core2.getInput(name, { required: true, trimWhitespace: true });
     }
+    function getOptInput2(name, defaultValue) {
+      return core2.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
+    }
     function getNumberInput(name) {
-      const input = getInput22(name);
+      const input = getInput2(name);
       const numberInput = Number(input);
       if (isNaN(numberInput)) {
         throw new Error(
@@ -19167,12 +19171,9 @@ function extractFromCargoToml(filePath) {
 }
 async function run() {
   try {
-    const fileInput = core.getInput("file", {
-      required: false,
-      trimWhitespace: true
-    });
+    const fileInput = (0, import_action_utils.getOptInput)("file", "");
     let parts = null;
-    if (fileInput && fileInput !== "") {
+    if (fileInput) {
       const filePath = import_node_path.default.resolve(process.cwd(), fileInput);
       const lowerFilename = import_node_path.default.basename(filePath).toLowerCase();
       if (lowerFilename === "package.json") {
