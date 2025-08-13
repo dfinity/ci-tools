@@ -19056,6 +19056,7 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
+      deleteFile: () => deleteFile2,
       exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
@@ -19094,6 +19095,12 @@ var require_dist = __commonJS({
     var import_node_fs = __toESM2(require("node:fs"));
     function moveFile(src, dest) {
       import_node_fs.default.renameSync(src, dest);
+    }
+    function deleteFile2(path2) {
+      try {
+        import_node_fs.default.rmSync(path2);
+      } catch {
+      }
     }
     function gitAdd() {
       exec(`git add .`);
@@ -19211,16 +19218,18 @@ async function run() {
     const version2 = (0, import_action_utils2.getInput)("version");
     const versionLabel = (0, import_action_utils2.getOptInput)("version_label", version2);
     const targetDir = (0, import_action_utils2.getInput)("target_dir");
-    const zipTargetPath = import_node_path.default.join(process.cwd(), targetDir, `${version2}.zip`);
+    const targetZipFile = import_node_path.default.join(process.cwd(), targetDir, `${version2}.zip`);
     if (!isValidVersion(version2)) {
       throw new Error(
         `Invalid version '${version2}'. ${ALLOWED_VERSIONS_MESSAGE}`
       );
     }
-    core.info(`Zipping ${assetsDir} to ${zipTargetPath}`);
+    core.info(`Cleaning up ${targetZipFile}`);
+    (0, import_action_utils2.deleteFile)(targetZipFile);
+    core.info(`Zipping ${assetsDir} to ${targetZipFile}`);
     (0, import_action_utils2.zip)({
       absoluteSrcPath: assetsDir,
-      absoluteDestPath: zipTargetPath
+      absoluteDestPath: targetZipFile
     });
     const versionsJsonPath = import_node_path.default.resolve(
       process.cwd(),

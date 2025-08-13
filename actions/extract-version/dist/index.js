@@ -19056,6 +19056,7 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
+      deleteFile: () => deleteFile,
       exec: () => exec2,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput2,
@@ -19094,6 +19095,12 @@ var require_dist = __commonJS({
     var import_node_fs2 = __toESM2(require("node:fs"));
     function moveFile(src, dest) {
       import_node_fs2.default.renameSync(src, dest);
+    }
+    function deleteFile(path2) {
+      try {
+        import_node_fs2.default.rmSync(path2);
+      } catch {
+      }
     }
     function gitAdd() {
       exec2(`git add .`);

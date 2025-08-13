@@ -1,6 +1,6 @@
 import path from 'node:path';
 import * as core from '@actions/core';
-import { getInput, getOptInput, zip } from '@dfinity/action-utils';
+import { deleteFile, getInput, getOptInput, zip } from '@dfinity/action-utils';
 import { upsertVersionsJson } from './upsert-versions-json';
 import {
   ALLOWED_VERSIONS_MESSAGE,
@@ -16,7 +16,7 @@ export async function run(): Promise<void> {
     const version = getInput('version');
     const versionLabel = getOptInput('version_label', version);
     const targetDir = getInput('target_dir');
-    const zipTargetPath = path.join(process.cwd(), targetDir, `${version}.zip`);
+    const targetZipFile = path.join(process.cwd(), targetDir, `${version}.zip`);
 
     if (!isValidVersion(version)) {
       throw new Error(
@@ -24,10 +24,13 @@ export async function run(): Promise<void> {
       );
     }
 
-    core.info(`Zipping ${assetsDir} to ${zipTargetPath}`);
+    core.info(`Cleaning up ${targetZipFile}`);
+    deleteFile(targetZipFile);
+
+    core.info(`Zipping ${assetsDir} to ${targetZipFile}`);
     zip({
       absoluteSrcPath: assetsDir,
-      absoluteDestPath: zipTargetPath,
+      absoluteDestPath: targetZipFile,
     });
 
     const versionsJsonPath = path.resolve(
