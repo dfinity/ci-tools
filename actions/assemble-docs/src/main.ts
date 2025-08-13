@@ -1,6 +1,8 @@
 import path from 'node:path';
 import * as core from '@actions/core';
 import {
+  getInput,
+  getOptInput,
   gitAdd,
   gitCommit,
   gitHasChanges,
@@ -22,28 +24,17 @@ const DEFAULT_LATEST_VERSION_LABEL = 'latest';
 
 export async function run(): Promise<void> {
   try {
-    const docsOutputDir = core.getInput('docs_output_dir', {
-      required: true,
-      trimWhitespace: true,
-    });
-    const docsVersion = core.getInput('docs_version', {
-      required: true,
-      trimWhitespace: true,
-    });
-    const docsVersionLabel = core.getInput('docs_version_label', {
-      required: false,
-      trimWhitespace: true,
-    });
-    const latestVersionLabel =
-      core.getInput('latest_version_label', {
-        required: false,
-        trimWhitespace: true,
-      }) || DEFAULT_LATEST_VERSION_LABEL;
-    const icpPagesFolderName =
-      core.getInput('icp_pages_dir', {
-        required: false,
-        trimWhitespace: true,
-      }) || ICP_PAGES_FOLDER_NAME;
+    const docsOutputDir = getInput('docs_output_dir');
+    const docsVersion = getInput('docs_version');
+    const docsVersionLabel = getOptInput('docs_version_label', undefined);
+    const latestVersionLabel = getOptInput(
+      'latest_version_label',
+      DEFAULT_LATEST_VERSION_LABEL,
+    );
+    const icpPagesFolderName = getOptInput(
+      'icp_pages_dir',
+      ICP_PAGES_FOLDER_NAME,
+    );
 
     if (!isValidVersion(docsVersion)) {
       throw new Error(

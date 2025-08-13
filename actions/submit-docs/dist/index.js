@@ -23144,7 +23144,10 @@ var require_dist = __commonJS({
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit,
       gitHasChanges: () => gitHasChanges,
-      gitPushBranch: () => gitPushBranch
+      gitPushBranch: () => gitPushBranch,
+      moveFile: () => moveFile,
+      readJsonFile: () => readJsonFile,
+      writeJsonFile: () => writeJsonFile
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -23158,6 +23161,10 @@ var require_dist = __commonJS({
         result += ALPHANUM.charAt(Math.floor(Math.random() * ALPHANUM.length));
       }
       return result;
+    }
+    var import_node_fs = __toESM2(require("node:fs"));
+    function moveFile(src, dest) {
+      import_node_fs.default.renameSync(src, dest);
     }
     function gitAdd() {
       exec(`git add .`);
@@ -23193,6 +23200,23 @@ var require_dist = __commonJS({
         );
       }
       return numberInput;
+    }
+    var import_node_fs2 = __toESM2(require("node:fs"));
+    var core22 = __toESM2(require_core());
+    function writeJsonFile(filePath, data) {
+      const json = JSON.stringify(data, null, 2) + "\n";
+      import_node_fs2.default.writeFileSync(filePath, json, "utf8");
+    }
+    function readJsonFile(filePath) {
+      try {
+        const raw = import_node_fs2.default.readFileSync(filePath, "utf8");
+        return JSON.parse(raw);
+      } catch (err) {
+        core22.info(
+          `Could not read or parse JSON file ${filePath}. Reason: ${err.message}`
+        );
+        return null;
+      }
     }
   }
 });

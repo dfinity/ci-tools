@@ -19060,6 +19060,7 @@ var require_dist = __commonJS({
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
+      getOptInput: () => getOptInput2,
       gitAdd: () => gitAdd2,
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit2,
@@ -19107,6 +19108,9 @@ var require_dist = __commonJS({
     var core3 = __toESM2(require_core());
     function getInput22(name) {
       return core3.getInput(name, { required: true, trimWhitespace: true });
+    }
+    function getOptInput2(name, defaultValue) {
+      return core3.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
     }
     function getNumberInput(name) {
       const input = getInput22(name);
@@ -19246,26 +19250,17 @@ var ICP_PAGES_FOLDER_NAME = "icp-pages";
 var DEFAULT_LATEST_VERSION_LABEL = "latest";
 async function run() {
   try {
-    const docsOutputDir = core2.getInput("docs_output_dir", {
-      required: true,
-      trimWhitespace: true
-    });
-    const docsVersion = core2.getInput("docs_version", {
-      required: true,
-      trimWhitespace: true
-    });
-    const docsVersionLabel = core2.getInput("docs_version_label", {
-      required: false,
-      trimWhitespace: true
-    });
-    const latestVersionLabel = core2.getInput("latest_version_label", {
-      required: false,
-      trimWhitespace: true
-    }) || DEFAULT_LATEST_VERSION_LABEL;
-    const icpPagesFolderName = core2.getInput("icp_pages_dir", {
-      required: false,
-      trimWhitespace: true
-    }) || ICP_PAGES_FOLDER_NAME;
+    const docsOutputDir = (0, import_action_utils2.getInput)("docs_output_dir");
+    const docsVersion = (0, import_action_utils2.getInput)("docs_version");
+    const docsVersionLabel = (0, import_action_utils2.getOptInput)("docs_version_label", void 0);
+    const latestVersionLabel = (0, import_action_utils2.getOptInput)(
+      "latest_version_label",
+      DEFAULT_LATEST_VERSION_LABEL
+    );
+    const icpPagesFolderName = (0, import_action_utils2.getOptInput)(
+      "icp_pages_dir",
+      ICP_PAGES_FOLDER_NAME
+    );
     if (!isValidVersion(docsVersion)) {
       throw new Error(
         `Invalid docs_version '${docsVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`
