@@ -1,47 +1,49 @@
 # Assemble docs action
 
-Packages documentation assets for a specific version and updates the `versions.json` file on the `icp-pages` branch.
+This action packages documentation assets for a specific version and updates the `versions.json` file on the `icp-pages` branch. It is typically used in conjunction with the [submit-docs](../submit-docs/README.md) action.
 
 This action:
 
-- Zips the folder named after the requested `docs_version` inside `docs_output_dir`
-- If a `latest` folder is present, zips that as well and ensures an entry exists in `versions.json`
-- Checks out the `icp-pages` branch, upserts entries in `versions.json`, commits, and pushes the changes
-- **Note**: Only stable versions (starting with `v`) are added to `versions.json`; non-stable versions like `beta`, `dev`, `next`, `nightly` are packaged but not tracked in versions
+- Zips the `assets_dir` directory into `{target_dir}/{version}.zip`
+- Upserts the entry to `versions.json` for the `version`
 
 ## Action inputs
 
-| Input                  | Description                                                                                            | Default     |
-| ---------------------- | ------------------------------------------------------------------------------------------------------ | ----------- |
-| `docs_output_dir`      | Directory containing per-version documentation folders. Zips are written next to these folders.        | _required_  |
-| `docs_version`         | The docs version to package. Allowed values: `vX`, `vX.Y`, `vX.Y.Z`, `beta`, `dev`, `next`, `nightly`. | _required_  |
-| `docs_version_label`   | Optional label value to set for the docs version entry label. Defaults to `docs_version`.              | `''`        |
-| `latest_version_label` | Optional label value to set for the latest entry in `versions.json`.                                   | `'latest'`  |
-| `icp_pages_dir`        | The name of the folder where the icp-pages branch has been cloned.                                     | `icp-pages` |
-
-## Action outputs
-
-This action does not set any outputs.
+| Input           | Description                                                                                                                                                      | Default            |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `assets_dir`    | Path to the directory containing the documentation assets to be assembled.                                                                                       | _required_         |
+| `version`       | The subpath at which the assembled docs will be published. Allowed values: `vX` , `vX.Y` , `vX.Y.Z` , `latest` , `beta` , `dev` , `next` , `nightly` , `canary`. | _required_         |
+| `version_label` | Optional label value to set for this version's option in the website sidebar version dropdown.                                                                   | `{inputs.version}` |
+| `target_dir`    | The folder where the assembled docs must be saved.                                                                                                               | _required_         |
 
 ## Example usage
 
 ```yaml
-name: Assemble docs
+name: Publish docs
 
 on:
   workflow_dispatch:
 
 jobs:
-  assemble_docs:
+  publish_docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        id: generate_token
+        with:
+          app-id: ${{ vars.PR_AUTOMATION_BOT_PUBLIC_APP_ID }}
+          private-key: ${{ secrets.PR_AUTOMATION_BOT_PUBLIC_PRIVATE_KEY }}
+          owner: dfinity
+          repo: icp-js-sdk-docs
 
       # Add your own steps to build doc assets and output them to dist/docs/v1.2.3
       # (and optionally dist/docs/latest if you want to publish docs under the latest URL)
 
-      # Checkout a dedicated branch to update the prepared assets
+      # Checkout a dedicated branch where to push the assembled docs
       - name: Checkout icp-pages branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -51,39 +53,17 @@ jobs:
       - name: Assemble docs
         uses: dfinity/ci-tools/actions/assemble-docs@main
         with:
-          docs_output_dir: dist/docs/
-          docs_version: v1.2.3
-          docs_version_label: 'Version 1.2.3'
-          latest_version: v1 # optional; can be different from docs_version
-          icp_pages_dir: icp-pages # optional; must be the same as the path in the checkout step
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          assets_dir: dist/docs/v1.2.3
+          target_dir: icp-pages # must match the `path` in the checkout step
+          version: v1.2.3
+          version_label: 'Version 1.2.3'
+
+      - name: Submit docs
+        uses: dfinity/ci-tools/actions/submit-docs@main
+        with:
+          destination_repo: dfinity/icp-js-sdk-docs
+          event_type: submit-project-docs
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_dir: icp-pages # must match the `path` in the checkout step
+          target_branch: icp-pages # must match the `ref` in the checkout step
 ```
-
-In this example, the action will:
-
-1. **Package the version**: Zip the `dist/docs/v1.2.3` folder
-2. **Package latest** (if exists): Zip the `dist/docs/latest` folder
-3. **Update versions.json**: Add entries for both folders:
-   ```json
-   {
-     "path": "latest",
-     "label": "latest (v1)"
-   },
-   {
-     "path": "v1.2.3",
-     "label": "Version 1.2.3"
-   }
-   ```
-4. **Deploy**: Commit and push the changes to the `icp-pages` branch
-
-## Prerequisites
-
-- The `icp-pages` branch must exist in the repository and be checked out in the `icp_pages_dir`
-- The `docs_output_dir` must contain a subfolder matching `docs_version`
-- If a `latest` subfolder exists, it will be processed automatically
-
-## Notes
-
-- If `versions.json` does not exist on `icp-pages`, it will be created automatically
-- All zip files are placed in the `icp-pages` directory for deployment
-- Commit messages are automatically generated with the format: "Update static assets for docs version {docs_version}"

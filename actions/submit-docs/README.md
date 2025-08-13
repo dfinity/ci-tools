@@ -1,6 +1,6 @@
 # Submit Documentation Action
 
-This action triggers the `pull-projects-docs` workflow on a destination repository to sync the documentation files. An example of this workflow is available [here](https://github.com/dfinity/icp-js-sdk-docs/blob/ad33d389694f4e746473ccd9506aee55740456a7/.github/workflows/pull-project-docs.yml).
+This action triggers the `pull-projects-docs` workflow on a destination repository to sync the documentation files. It is typically used in conjunction with the [assemble-docs](../assemble-docs/README.md) action.
 
 ## Action inputs
 
@@ -13,16 +13,18 @@ This action triggers the `pull-projects-docs` workflow on a destination reposito
 ## Example usage
 
 ```yaml
-name: Submit Docs
+name: Publish docs
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  submit-docs:
+  publish_docs:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         id: generate_token
@@ -32,8 +34,10 @@ jobs:
           owner: dfinity
           repo: icp-js-sdk-docs
 
-      # Build your docs and put them in the `docs/dist` folder.
+      # Add your own steps to build doc assets and output them to dist/docs/v1.2.3
+      # (and optionally dist/docs/latest if you want to publish docs under the latest URL)
 
+      # Checkout a dedicated branch where to push the assembled docs
       - name: Checkout icp-pages branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -41,16 +45,19 @@ jobs:
           path: icp-pages
 
       - name: Assemble docs
-        uses: dfinity/ci-tools/actions/assemble-docs@luca/assemble-docs-action
+        uses: dfinity/ci-tools/actions/assemble-docs@main
         with:
-          docs_output_dir: docs/dist # must be the same the folder where the static docs assets are written after build
-          docs_version: v1
-          docs_version_label: 'Version 1'
-          latest_version_label: 'latest (v1)'
-          icp_pages_dir: icp-pages # must be the same as the `path` in the checkout step
+          assets_dir: dist/docs/v1.2.3
+          target_dir: icp-pages # must match the `path` in the checkout step
+          version: v1.2.3
+          version_label: 'Version 1.2.3'
 
-      - name: Submit Documentation
+      - name: Submit docs
         uses: dfinity/ci-tools/actions/submit-docs@main
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          destination_repo: dfinity/icp-js-sdk-docs
+          event_type: submit-project-docs
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_dir: icp-pages # must match the `path` in the checkout step
+          target_branch: icp-pages # must match the `ref` in the checkout step
 ```

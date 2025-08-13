@@ -1,42 +1,22 @@
-import path from 'node:path';
 import { writeJsonFile, readJsonFile } from '@dfinity/action-utils';
-
-const LATEST_VERSION_NAME = 'latest';
-const VERSIONS_JSON_FILE_NAME = 'versions.json';
+import { LATEST_VERSION_NAME } from './versions';
 
 type VersionEntry = { path: string; label: string };
 
 export async function upsertVersionsJson(params: {
-  zipFiles: string[];
-  docsVersionLabel?: string;
-  latestVersionLabel: string;
+  versionsJsonPath: string;
+  version: string;
+  versionLabel: string;
 }): Promise<void> {
-  const { zipFiles, docsVersionLabel, latestVersionLabel } = params;
+  const { versionsJsonPath, version, versionLabel } = params;
 
-  const versionsPath = path.resolve(process.cwd(), VERSIONS_JSON_FILE_NAME);
+  let versions = readJsonFile<VersionEntry[]>(versionsJsonPath) || [];
 
-  let versions: VersionEntry[] =
-    readJsonFile<VersionEntry[]>(versionsPath) || [];
-
-  for (const zipFile of zipFiles) {
-    const versionName = path.basename(zipFile, '.zip');
-    const isLatest = versionName === LATEST_VERSION_NAME;
-    const existing = versions.find(v => v.path === versionName);
-
-    if (existing) {
-      if (isLatest && latestVersionLabel) {
-        existing.label = latestVersionLabel;
-      }
-      if (!isLatest && docsVersionLabel) {
-        existing.label = docsVersionLabel;
-      }
-    } else {
-      const label = isLatest
-        ? latestVersionLabel
-        : docsVersionLabel || versionName;
-
-      versions.push({ path: versionName, label });
-    }
+  const versionEntry = versions.find(v => v.path === version);
+  if (versionEntry) {
+    versionEntry.label = versionLabel;
+  } else {
+    versions.push({ path: version, label: versionLabel });
   }
 
   // Sort versions: latest first, then reverse alphabetically by path
@@ -50,5 +30,5 @@ export async function upsertVersionsJson(params: {
     return b.path.localeCompare(a.path);
   });
 
-  writeJsonFile(versionsPath, versions);
+  writeJsonFile(versionsJsonPath, versions);
 }

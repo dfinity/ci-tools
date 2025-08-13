@@ -2,22 +2,18 @@ name: Assemble docs
 description: 'Zips documentation folders and updates versions.json on the icp-pages branch.'
 
 inputs:
-  docs_output_dir:
-    description: 'Path to the directory containing per-version documentation folders.'
+  assets_dir:
+    description: 'Path to the directory containing the documentation assets to be assembled.'
     required: true
-  docs_version:
-    description: 'The docs version to package. Allowed values: `vX` | `vX.Y` | `vX.Y.Z` | `beta` | `dev` | `next` | `nightly`.'
+  version:
+    description: 'The subpath at which the assembled docs will be published. Allowed values: `vX` | `vX.Y` | `vX.Y.Z` | `latest` | `beta` | `dev` | `next` | `nightly` | `canary`.'
     required: true
-  docs_version_label:
-    description: 'Optional label value to set for the docs version entry label. Defaults to `docs_version`.'
+  version_label:
+    description: "Optional label value to set for this version's option in the website sidebar version dropdown. Defaults to the value of the `version` input."
     required: false
-  latest_version_label:
-    description: 'Optional version to set for the latest entry label.'
-    required: false
-    default: 'latest'
-  icp_pages_dir:
-    description: 'The name of the folder where the icp-pages branch has been cloned. Defaults to `icp-pages`.'
-    required: false
+  target_dir:
+    description: 'The folder where the assembled docs must be saved.'
+    required: true
 
 runs:
   using: node20

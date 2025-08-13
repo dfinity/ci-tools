@@ -23145,9 +23145,11 @@ var require_dist = __commonJS({
       gitCommit: () => gitCommit2,
       gitHasChanges: () => gitHasChanges2,
       gitPushBranch: () => gitPushBranch2,
+      inDir: () => inDir,
       moveFile: () => moveFile,
       readJsonFile: () => readJsonFile,
-      writeJsonFile: () => writeJsonFile
+      writeJsonFile: () => writeJsonFile,
+      zip: () => zip
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -23161,6 +23163,12 @@ var require_dist = __commonJS({
         result += ALPHANUM.charAt(Math.floor(Math.random() * ALPHANUM.length));
       }
       return result;
+    }
+    function inDir(dir, fn) {
+      const currentDir = process.cwd();
+      process.chdir(dir);
+      fn();
+      process.chdir(currentDir);
     }
     var import_node_fs = __toESM2(require("node:fs"));
     function moveFile(src, dest) {
@@ -23217,6 +23225,11 @@ var require_dist = __commonJS({
         );
         return null;
       }
+    }
+    var import_node_path = __toESM2(require("node:path"));
+    function zip(srcPath, destPath) {
+      const zipPath = import_node_path.default.join(destPath, `${srcPath}.zip`);
+      exec(`zip -r "${zipPath}" "${srcPath}"`);
     }
   }
 });

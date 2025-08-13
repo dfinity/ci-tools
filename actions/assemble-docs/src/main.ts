@@ -1,86 +1,45 @@
 import path from 'node:path';
 import * as core from '@actions/core';
-import {
-  getInput,
-  getOptInput,
-  gitAdd,
-  gitCommit,
-  gitHasChanges,
-  gitPushBranch,
-  moveFile,
-} from '@dfinity/action-utils';
+import { getInput, getOptInput, zip } from '@dfinity/action-utils';
 import { upsertVersionsJson } from './upsert-versions-json';
-import { zipDocsFolders } from './zip-docs-folders';
 import {
   ALLOWED_VERSIONS_MESSAGE,
-  isStableVersion,
+  isVersionListedInVersionsJson,
   isValidVersion,
 } from './versions';
 
-const ICP_PAGES_BRANCH_NAME = 'icp-pages';
-const ICP_PAGES_FOLDER_NAME = 'icp-pages';
-
-const DEFAULT_LATEST_VERSION_LABEL = 'latest';
+const VERSIONS_JSON_FILE_NAME = 'versions.json';
 
 export async function run(): Promise<void> {
   try {
-    const docsOutputDir = getInput('docs_output_dir');
-    const docsVersion = getInput('docs_version');
-    const docsVersionLabel = getOptInput('docs_version_label', undefined);
-    const latestVersionLabel = getOptInput(
-      'latest_version_label',
-      DEFAULT_LATEST_VERSION_LABEL,
-    );
-    const icpPagesFolderName = getOptInput(
-      'icp_pages_dir',
-      ICP_PAGES_FOLDER_NAME,
-    );
+    const assetsDir = getInput('assets_dir');
+    const version = getInput('version');
+    const versionLabel = getOptInput('version_label', version);
+    const targetDir = getInput('target_dir');
+    const zipTargetPath = path.join(process.cwd(), targetDir, `${version}.zip`);
 
-    if (!isValidVersion(docsVersion)) {
+    if (!isValidVersion(version)) {
       throw new Error(
-        `Invalid docs_version '${docsVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`,
+        `Invalid version '${version}'. ${ALLOWED_VERSIONS_MESSAGE}`,
       );
     }
 
-    const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
+    zip(assetsDir, zipTargetPath);
 
-    // Copy the zips into the icp-pages folder
-    const zipFiles = [];
-    for (const zipPath of zipsPaths) {
-      const zipName = path.basename(zipPath);
-      moveFile(zipPath, `${icpPagesFolderName}/${zipName}`);
-      zipFiles.push(zipName);
-    }
+    const versionsJsonPath = path.resolve(
+      process.cwd(),
+      VERSIONS_JSON_FILE_NAME,
+    );
 
-    // Change working directory to the icp-pages folder
-    process.chdir(icpPagesFolderName);
-
-    if (isStableVersion(docsVersion)) {
-      // Only add or update version entries in versions.json for stable versions
+    if (isVersionListedInVersionsJson(version)) {
       await upsertVersionsJson({
-        zipFiles,
-        docsVersionLabel,
-        latestVersionLabel,
+        versionsJsonPath,
+        version,
+        versionLabel,
       });
     }
 
-    if (!gitHasChanges()) {
-      core.info(
-        `No changes to commit. Docs are already up to date for version ${docsVersion}.`,
-      );
-      if (latestVersionLabel) {
-        core.info(`Latest version is already set to ${latestVersionLabel}.`);
-      }
-      return;
-    }
-
-    gitAdd();
-    gitCommit(
-      `Update static assets for docs version ${docsVersion}`,
-      'github-actions[bot]',
-      '41898282+github-actions[bot]@users.noreply.github.com',
-    );
-    gitPushBranch(ICP_PAGES_BRANCH_NAME);
+    core.info(`Docs assembled for version ${version}.`);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);

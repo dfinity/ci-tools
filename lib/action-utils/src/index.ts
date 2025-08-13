@@ -4,3 +4,4 @@ export * from './git';
 export * from './inputs';
 export * from './json';
 export * from './octokit';
+export * from './zip';

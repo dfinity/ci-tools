@@ -15,3 +15,10 @@ export function generateRandomSuffix(length: number): string {
 
   return result;
 }
+
+export function inDir(dir: string, fn: () => void): void {
+  const currentDir = process.cwd();
+  process.chdir(dir);
+  fn();
+  process.chdir(currentDir);
+}

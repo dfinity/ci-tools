@@ -519,7 +519,7 @@ var require_file_command = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.prepareKeyValueMessage = exports2.issueFileCommand = void 0;
-    var fs2 = __importStar(require("fs"));
+    var fs = __importStar(require("fs"));
     var os = __importStar(require("os"));
     var uuid_1 = (init_esm_node(), __toCommonJS(esm_node_exports));
     var utils_1 = require_utils();
@@ -528,10 +528,10 @@ var require_file_command = __commonJS({
       if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
       }
-      if (!fs2.existsSync(filePath)) {
+      if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs2.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -1321,14 +1321,14 @@ var require_util = __commonJS({
         }
         const port = url.port != null ? url.port : url.protocol === "https:" ? 443 : 80;
         let origin = url.origin != null ? url.origin : `${url.protocol}//${url.hostname}:${port}`;
-        let path4 = url.path != null ? url.path : `${url.pathname || ""}${url.search || ""}`;
+        let path2 = url.path != null ? url.path : `${url.pathname || ""}${url.search || ""}`;
         if (origin.endsWith("/")) {
           origin = origin.substring(0, origin.length - 1);
         }
-        if (path4 && !path4.startsWith("/")) {
-          path4 = `/${path4}`;
+        if (path2 && !path2.startsWith("/")) {
+          path2 = `/${path2}`;
         }
-        url = new URL(origin + path4);
+        url = new URL(origin + path2);
       }
       return url;
     }
@@ -2944,19 +2944,19 @@ var require_parseParams = __commonJS({
 var require_basename = __commonJS({
   "../../node_modules/.pnpm/@fastify+busboy@2.1.1/node_modules/@fastify/busboy/lib/utils/basename.js"(exports2, module2) {
     "use strict";
-    module2.exports = function basename(path4) {
-      if (typeof path4 !== "string") {
+    module2.exports = function basename(path2) {
+      if (typeof path2 !== "string") {
         return "";
       }
-      for (var i = path4.length - 1; i >= 0; --i) {
-        switch (path4.charCodeAt(i)) {
+      for (var i = path2.length - 1; i >= 0; --i) {
+        switch (path2.charCodeAt(i)) {
           case 47:
           case 92:
-            path4 = path4.slice(i + 1);
-            return path4 === ".." || path4 === "." ? "" : path4;
+            path2 = path2.slice(i + 1);
+            return path2 === ".." || path2 === "." ? "" : path2;
         }
       }
-      return path4 === ".." || path4 === "." ? "" : path4;
+      return path2 === ".." || path2 === "." ? "" : path2;
     };
   }
 });
@@ -5975,7 +5975,7 @@ var require_request = __commonJS({
     }
     var Request = class _Request {
       constructor(origin, {
-        path: path4,
+        path: path2,
         method,
         body,
         headers,
@@ -5989,11 +5989,11 @@ var require_request = __commonJS({
         throwOnError,
         expectContinue
       }, handler) {
-        if (typeof path4 !== "string") {
+        if (typeof path2 !== "string") {
           throw new InvalidArgumentError("path must be a string");
-        } else if (path4[0] !== "/" && !(path4.startsWith("http://") || path4.startsWith("https://")) && method !== "CONNECT") {
+        } else if (path2[0] !== "/" && !(path2.startsWith("http://") || path2.startsWith("https://")) && method !== "CONNECT") {
           throw new InvalidArgumentError("path must be an absolute URL or start with a slash");
-        } else if (invalidPathRegex.exec(path4) !== null) {
+        } else if (invalidPathRegex.exec(path2) !== null) {
           throw new InvalidArgumentError("invalid request path");
         }
         if (typeof method !== "string") {
@@ -6056,7 +6056,7 @@ var require_request = __commonJS({
         this.completed = false;
         this.aborted = false;
         this.upgrade = upgrade || null;
-        this.path = query ? util.buildURL(path4, query) : path4;
+        this.path = query ? util.buildURL(path2, query) : path2;
         this.origin = origin;
         this.idempotent = idempotent == null ? method === "HEAD" || method === "GET" : idempotent;
         this.blocking = blocking == null ? false : blocking;
@@ -7073,9 +7073,9 @@ var require_RedirectHandler = __commonJS({
           return this.handler.onHeaders(statusCode, headers, resume, statusText);
         }
         const { origin, pathname, search } = util.parseURL(new URL(this.location, this.opts.origin && new URL(this.opts.path, this.opts.origin)));
-        const path4 = search ? `${pathname}${search}` : pathname;
+        const path2 = search ? `${pathname}${search}` : pathname;
         this.opts.headers = cleanRequestHeaders(this.opts.headers, statusCode === 303, this.opts.origin !== origin);
-        this.opts.path = path4;
+        this.opts.path = path2;
         this.opts.origin = origin;
         this.opts.maxRedirections = 0;
         this.opts.query = null;
@@ -8315,7 +8315,7 @@ var require_client = __commonJS({
         writeH2(client, client[kHTTP2Session], request);
         return;
       }
-      const { body, method, path: path4, host, upgrade, headers, blocking, reset } = request;
+      const { body, method, path: path2, host, upgrade, headers, blocking, reset } = request;
       const expectsPayload = method === "PUT" || method === "POST" || method === "PATCH";
       if (body && typeof body.read === "function") {
         body.read(0);
@@ -8365,7 +8365,7 @@ var require_client = __commonJS({
       if (blocking) {
         socket[kBlocking] = true;
       }
-      let header = `${method} ${path4} HTTP/1.1\r
+      let header = `${method} ${path2} HTTP/1.1\r
 `;
       if (typeof host === "string") {
         header += `host: ${host}\r
@@ -8428,7 +8428,7 @@ upgrade: ${upgrade}\r
       return true;
     }
     function writeH2(client, session, request) {
-      const { body, method, path: path4, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
+      const { body, method, path: path2, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
       let headers;
       if (typeof reqHeaders === "string")
         headers = Request[kHTTP2CopyHeaders](reqHeaders.trim());
@@ -8474,7 +8474,7 @@ upgrade: ${upgrade}\r
         });
         return true;
       }
-      headers[HTTP2_HEADER_PATH] = path4;
+      headers[HTTP2_HEADER_PATH] = path2;
       headers[HTTP2_HEADER_SCHEME] = "https";
       const expectsPayload = method === "PUT" || method === "POST" || method === "PATCH";
       if (body && typeof body.read === "function") {
@@ -10707,20 +10707,20 @@ var require_mock_utils = __commonJS({
       }
       return true;
     }
-    function safeUrl(path4) {
-      if (typeof path4 !== "string") {
-        return path4;
+    function safeUrl(path2) {
+      if (typeof path2 !== "string") {
+        return path2;
       }
-      const pathSegments = path4.split("?");
+      const pathSegments = path2.split("?");
       if (pathSegments.length !== 2) {
-        return path4;
+        return path2;
       }
       const qp = new URLSearchParams(pathSegments.pop());
       qp.sort();
       return [...pathSegments, qp.toString()].join("?");
     }
-    function matchKey(mockDispatch2, { path: path4, method, body, headers }) {
-      const pathMatch = matchValue(mockDispatch2.path, path4);
+    function matchKey(mockDispatch2, { path: path2, method, body, headers }) {
+      const pathMatch = matchValue(mockDispatch2.path, path2);
       const methodMatch = matchValue(mockDispatch2.method, method);
       const bodyMatch = typeof mockDispatch2.body !== "undefined" ? matchValue(mockDispatch2.body, body) : true;
       const headersMatch = matchHeaders(mockDispatch2, headers);
@@ -10738,7 +10738,7 @@ var require_mock_utils = __commonJS({
     function getMockDispatch(mockDispatches, key) {
       const basePath = key.query ? buildURL(key.path, key.query) : key.path;
       const resolvedPath = typeof basePath === "string" ? safeUrl(basePath) : basePath;
-      let matchedMockDispatches = mockDispatches.filter(({ consumed }) => !consumed).filter(({ path: path4 }) => matchValue(safeUrl(path4), resolvedPath));
+      let matchedMockDispatches = mockDispatches.filter(({ consumed }) => !consumed).filter(({ path: path2 }) => matchValue(safeUrl(path2), resolvedPath));
       if (matchedMockDispatches.length === 0) {
         throw new MockNotMatchedError(`Mock dispatch not matched for path '${resolvedPath}'`);
       }
@@ -10775,9 +10775,9 @@ var require_mock_utils = __commonJS({
       }
     }
     function buildKey(opts) {
-      const { path: path4, method, body, headers, query } = opts;
+      const { path: path2, method, body, headers, query } = opts;
       return {
-        path: path4,
+        path: path2,
         method,
         body,
         headers,
@@ -11226,10 +11226,10 @@ var require_pending_interceptors_formatter = __commonJS({
       }
       format(pendingInterceptors) {
         const withPrettyHeaders = pendingInterceptors.map(
-          ({ method, path: path4, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
+          ({ method, path: path2, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
             Method: method,
             Origin: origin,
-            Path: path4,
+            Path: path2,
             "Status code": statusCode,
             Persistent: persist ? "\u2705" : "\u274C",
             Invocations: timesInvoked,
@@ -15852,8 +15852,8 @@ var require_util6 = __commonJS({
         }
       }
     }
-    function validateCookiePath(path4) {
-      for (const char of path4) {
+    function validateCookiePath(path2) {
+      for (const char of path2) {
         const code = char.charCodeAt(0);
         if (code < 33 || char === ";") {
           throw new Error("Invalid cookie path");
@@ -17545,11 +17545,11 @@ var require_undici = __commonJS({
           if (typeof opts.path !== "string") {
             throw new InvalidArgumentError("invalid opts.path");
           }
-          let path4 = opts.path;
+          let path2 = opts.path;
           if (!opts.path.startsWith("/")) {
-            path4 = `/${path4}`;
+            path2 = `/${path2}`;
           }
-          url = new URL(util.parseOrigin(url).origin + path4);
+          url = new URL(util.parseOrigin(url).origin + path2);
         } else {
           if (!opts) {
             opts = typeof url === "object" ? url : {};
@@ -17926,12 +17926,12 @@ var require_lib = __commonJS({
             throw new Error("Client has already been disposed.");
           }
           const parsedUrl = new URL(requestUrl);
-          let info3 = this._prepareRequest(verb, parsedUrl, headers);
+          let info2 = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
           let response;
           do {
-            response = yield this.requestRaw(info3, data);
+            response = yield this.requestRaw(info2, data);
             if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
@@ -17941,7 +17941,7 @@ var require_lib = __commonJS({
                 }
               }
               if (authenticationHandler) {
-                return authenticationHandler.handleAuthentication(this, info3, data);
+                return authenticationHandler.handleAuthentication(this, info2, data);
               } else {
                 return response;
               }
@@ -17964,8 +17964,8 @@ var require_lib = __commonJS({
                   }
                 }
               }
-              info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info3, data);
+              info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+              response = yield this.requestRaw(info2, data);
               redirectsRemaining--;
             }
             if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
@@ -17994,7 +17994,7 @@ var require_lib = __commonJS({
        * @param info
        * @param data
        */
-      requestRaw(info3, data) {
+      requestRaw(info2, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => {
             function callbackForResult(err, res) {
@@ -18006,7 +18006,7 @@ var require_lib = __commonJS({
                 resolve(res);
               }
             }
-            this.requestRawWithCallback(info3, data, callbackForResult);
+            this.requestRawWithCallback(info2, data, callbackForResult);
           });
         });
       }
@@ -18016,12 +18016,12 @@ var require_lib = __commonJS({
        * @param data
        * @param onResult
        */
-      requestRawWithCallback(info3, data, onResult) {
+      requestRawWithCallback(info2, data, onResult) {
         if (typeof data === "string") {
-          if (!info3.options.headers) {
-            info3.options.headers = {};
+          if (!info2.options.headers) {
+            info2.options.headers = {};
           }
-          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         function handleResult(err, res) {
@@ -18030,7 +18030,7 @@ var require_lib = __commonJS({
             onResult(err, res);
           }
         }
-        const req = info3.httpModule.request(info3.options, (msg) => {
+        const req = info2.httpModule.request(info2.options, (msg) => {
           const res = new HttpClientResponse(msg);
           handleResult(void 0, res);
         });
@@ -18042,7 +18042,7 @@ var require_lib = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error(`Request timeout: ${info3.options.path}`));
+          handleResult(new Error(`Request timeout: ${info2.options.path}`));
         });
         req.on("error", function(err) {
           handleResult(err);
@@ -18078,27 +18078,27 @@ var require_lib = __commonJS({
         return this._getProxyAgentDispatcher(parsedUrl, proxyUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info3 = {};
-        info3.parsedUrl = requestUrl;
-        const usingSsl = info3.parsedUrl.protocol === "https:";
-        info3.httpModule = usingSsl ? https : http;
+        const info2 = {};
+        info2.parsedUrl = requestUrl;
+        const usingSsl = info2.parsedUrl.protocol === "https:";
+        info2.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info3.options = {};
-        info3.options.host = info3.parsedUrl.hostname;
-        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
-        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
-        info3.options.method = method;
-        info3.options.headers = this._mergeHeaders(headers);
+        info2.options = {};
+        info2.options.host = info2.parsedUrl.hostname;
+        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
+        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
+        info2.options.method = method;
+        info2.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info3.options.headers["user-agent"] = this.userAgent;
+          info2.options.headers["user-agent"] = this.userAgent;
         }
-        info3.options.agent = this._getAgent(info3.parsedUrl);
+        info2.options.agent = this._getAgent(info2.parsedUrl);
         if (this.handlers) {
           for (const handler of this.handlers) {
-            handler.prepareRequest(info3.options);
+            handler.prepareRequest(info2.options);
           }
         }
-        return info3;
+        return info2;
       }
       _mergeHeaders(headers) {
         if (this.requestOptions && this.requestOptions.headers) {
@@ -18778,7 +18778,7 @@ var require_path_utils = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.toPlatformPath = exports2.toWin32Path = exports2.toPosixPath = void 0;
-    var path4 = __importStar(require("path"));
+    var path2 = __importStar(require("path"));
     function toPosixPath(pth) {
       return pth.replace(/[\\]/g, "/");
     }
@@ -18788,7 +18788,7 @@ var require_path_utils = __commonJS({
     }
     exports2.toWin32Path = toWin32Path;
     function toPlatformPath(pth) {
-      return pth.replace(/[/\\]/g, path4.sep);
+      return pth.replace(/[/\\]/g, path2.sep);
     }
     exports2.toPlatformPath = toPlatformPath;
   }
@@ -18859,7 +18859,7 @@ var require_core = __commonJS({
     var file_command_1 = require_file_command();
     var utils_1 = require_utils();
     var os = __importStar(require("os"));
-    var path4 = __importStar(require("path"));
+    var path2 = __importStar(require("path"));
     var oidc_utils_1 = require_oidc_utils();
     var ExitCode;
     (function(ExitCode2) {
@@ -18887,7 +18887,7 @@ var require_core = __commonJS({
       } else {
         command_1.issueCommand("add-path", {}, inputPath);
       }
-      process.env["PATH"] = `${inputPath}${path4.delimiter}${process.env["PATH"]}`;
+      process.env["PATH"] = `${inputPath}${path2.delimiter}${process.env["PATH"]}`;
     }
     exports2.addPath = addPath;
     function getInput3(name, options) {
@@ -18959,10 +18959,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports2.notice = notice;
-    function info3(message) {
+    function info2(message) {
       process.stdout.write(message + os.EOL);
     }
-    exports2.info = info3;
+    exports2.info = info2;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -19061,19 +19061,21 @@ var require_dist = __commonJS({
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
       getOptInput: () => getOptInput2,
-      gitAdd: () => gitAdd2,
+      gitAdd: () => gitAdd,
       gitCheckoutBranch: () => gitCheckoutBranch,
-      gitCommit: () => gitCommit2,
-      gitHasChanges: () => gitHasChanges2,
-      gitPushBranch: () => gitPushBranch2,
-      moveFile: () => moveFile2,
+      gitCommit: () => gitCommit,
+      gitHasChanges: () => gitHasChanges,
+      gitPushBranch: () => gitPushBranch,
+      inDir: () => inDir,
+      moveFile: () => moveFile,
       readJsonFile: () => readJsonFile2,
-      writeJsonFile: () => writeJsonFile2
+      writeJsonFile: () => writeJsonFile2,
+      zip: () => zip2
     });
     module2.exports = __toCommonJS2(src_exports);
-    var import_child_process2 = require("child_process");
+    var import_child_process = require("child_process");
     function exec(command) {
-      return (0, import_child_process2.execSync)(command).toString();
+      return (0, import_child_process.execSync)(command).toString();
     }
     var ALPHANUM = "abcdefghijklmnopqrstuvwxyz0123456789";
     function generateRandomSuffix(length) {
@@ -19083,14 +19085,20 @@ var require_dist = __commonJS({
       }
       return result;
     }
-    var import_node_fs2 = __toESM2(require("node:fs"));
-    function moveFile2(src, dest) {
-      import_node_fs2.default.renameSync(src, dest);
+    function inDir(dir, fn) {
+      const currentDir = process.cwd();
+      process.chdir(dir);
+      fn();
+      process.chdir(currentDir);
     }
-    function gitAdd2() {
+    var import_node_fs = __toESM2(require("node:fs"));
+    function moveFile(src, dest) {
+      import_node_fs.default.renameSync(src, dest);
+    }
+    function gitAdd() {
       exec(`git add .`);
     }
-    function gitCommit2(message, authorName, authorEmail) {
+    function gitCommit(message, authorName, authorEmail) {
       exec(`git config user.name "${authorName}"`);
       exec(`git config user.email "${authorEmail}"`);
       exec(`git commit -m "${message}"`);
@@ -19098,19 +19106,19 @@ var require_dist = __commonJS({
     function gitCheckoutBranch(branch) {
       exec(`git checkout -b ${branch}`);
     }
-    function gitPushBranch2(branch) {
+    function gitPushBranch(branch) {
       exec(`git push -u origin ${branch}`);
     }
-    function gitHasChanges2() {
+    function gitHasChanges() {
       const output = exec("git status --porcelain");
       return output.trim().length > 0;
     }
-    var core3 = __toESM2(require_core());
+    var core2 = __toESM2(require_core());
     function getInput22(name) {
-      return core3.getInput(name, { required: true, trimWhitespace: true });
+      return core2.getInput(name, { required: true, trimWhitespace: true });
     }
     function getOptInput2(name, defaultValue) {
-      return core3.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
+      return core2.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
     }
     function getNumberInput(name) {
       const input = getInput22(name);
@@ -19122,15 +19130,15 @@ var require_dist = __commonJS({
       }
       return numberInput;
     }
-    var import_node_fs22 = __toESM2(require("node:fs"));
+    var import_node_fs2 = __toESM2(require("node:fs"));
     var core22 = __toESM2(require_core());
     function writeJsonFile2(filePath, data) {
       const json = JSON.stringify(data, null, 2) + "\n";
-      import_node_fs22.default.writeFileSync(filePath, json, "utf8");
+      import_node_fs2.default.writeFileSync(filePath, json, "utf8");
     }
     function readJsonFile2(filePath) {
       try {
-        const raw = import_node_fs22.default.readFileSync(filePath, "utf8");
+        const raw = import_node_fs2.default.readFileSync(filePath, "utf8");
         return JSON.parse(raw);
       } catch (err) {
         core22.info(
@@ -19139,38 +19147,46 @@ var require_dist = __commonJS({
         return null;
       }
     }
+    var import_node_path2 = __toESM2(require("node:path"));
+    function zip2(srcPath, destPath) {
+      const zipPath = import_node_path2.default.join(destPath, `${srcPath}.zip`);
+      exec(`zip -r "${zipPath}" "${srcPath}"`);
+    }
   }
 });
 
 // src/main.ts
-var import_node_path3 = __toESM(require("node:path"));
-var core2 = __toESM(require_core());
+var import_node_path = __toESM(require("node:path"));
+var core = __toESM(require_core());
 var import_action_utils2 = __toESM(require_dist());
 
 // src/upsert-versions-json.ts
-var import_node_path = __toESM(require("node:path"));
 var import_action_utils = __toESM(require_dist());
+
+// src/versions.ts
 var LATEST_VERSION_NAME = "latest";
-var VERSIONS_JSON_FILE_NAME = "versions.json";
+var VALID_TAGS = ["latest", "beta", "dev", "next", "nightly", "canary"];
+var VALID_VERSION_FORMATS = ["vX", "vX.Y", "vX.Y.Z", ...VALID_TAGS];
+var VALID_VERSION_PATTERNS = new RegExp(
+  `^(?:vd+(?:.d+(?:.d+)?)?|${VALID_TAGS.join("|")})$`
+);
+var ALLOWED_VERSIONS_MESSAGE = `Allowed values: ${VALID_VERSION_FORMATS.join(" | ")}`;
+function isVersionListedInVersionsJson(version2) {
+  return version2.startsWith("v") || version2 === LATEST_VERSION_NAME;
+}
+function isValidVersion(version2) {
+  return VALID_VERSION_PATTERNS.test(version2);
+}
+
+// src/upsert-versions-json.ts
 async function upsertVersionsJson(params) {
-  const { zipFiles, docsVersionLabel, latestVersionLabel } = params;
-  const versionsPath = import_node_path.default.resolve(process.cwd(), VERSIONS_JSON_FILE_NAME);
-  let versions = (0, import_action_utils.readJsonFile)(versionsPath) || [];
-  for (const zipFile of zipFiles) {
-    const versionName = import_node_path.default.basename(zipFile, ".zip");
-    const isLatest = versionName === LATEST_VERSION_NAME;
-    const existing = versions.find((v) => v.path === versionName);
-    if (existing) {
-      if (isLatest && latestVersionLabel) {
-        existing.label = latestVersionLabel;
-      }
-      if (!isLatest && docsVersionLabel) {
-        existing.label = docsVersionLabel;
-      }
-    } else {
-      const label = isLatest ? latestVersionLabel : docsVersionLabel || versionName;
-      versions.push({ path: versionName, label });
-    }
+  const { versionsJsonPath, version: version2, versionLabel } = params;
+  let versions = (0, import_action_utils.readJsonFile)(versionsJsonPath) || [];
+  const versionEntry = versions.find((v) => v.path === version2);
+  if (versionEntry) {
+    versionEntry.label = versionLabel;
+  } else {
+    versions.push({ path: version2, label: versionLabel });
   }
   versions = versions.sort((a, b) => {
     if (a.path === LATEST_VERSION_NAME && b.path !== LATEST_VERSION_NAME) {
@@ -19181,125 +19197,39 @@ async function upsertVersionsJson(params) {
     }
     return b.path.localeCompare(a.path);
   });
-  (0, import_action_utils.writeJsonFile)(versionsPath, versions);
+  (0, import_action_utils.writeJsonFile)(versionsJsonPath, versions);
 }
-
-// src/zip-docs-folders.ts
-var import_node_fs = __toESM(require("node:fs"));
-var import_node_path2 = __toESM(require("node:path"));
-var import_child_process = require("child_process");
-var core = __toESM(require_core());
-var LATEST_FOLDER_NAME = "latest";
-function zipFolder(params) {
-  const { absDir, folderName } = params;
-  const folderPath = import_node_path2.default.join(absDir, folderName);
-  if (!import_node_fs.default.existsSync(folderPath)) {
-    throw new Error(`Folder does not exist: ${folderPath}`);
-  }
-  const zipName = `${folderName}.zip`;
-  const zipPath = import_node_path2.default.join(absDir, zipName);
-  core.info(`Zipping ${folderPath} -> ${zipPath}`);
-  (0, import_child_process.execSync)(`zip -rqX ${zipPath} .`, {
-    cwd: folderPath
-  });
-  return zipPath;
-}
-async function zipDocsFolders(docsOutputDir, docsVersionFolderName) {
-  const absDir = import_node_path2.default.resolve(process.cwd(), docsOutputDir);
-  if (!import_node_fs.default.existsSync(absDir)) {
-    throw new Error(`docs_output_dir does not exist: ${absDir}`);
-  }
-  const zippedFoldersPaths = [];
-  const versionZipPath = zipFolder({
-    absDir,
-    folderName: docsVersionFolderName
-  });
-  zippedFoldersPaths.push(versionZipPath);
-  if (import_node_fs.default.existsSync(import_node_path2.default.join(absDir, LATEST_FOLDER_NAME))) {
-    const latestZipPath = zipFolder({
-      absDir,
-      folderName: LATEST_FOLDER_NAME
-    });
-    zippedFoldersPaths.push(latestZipPath);
-  }
-  return zippedFoldersPaths;
-}
-
-// src/versions.ts
-var VALID_VERSION_FORMATS = [
-  "vX",
-  "vX.Y",
-  "vX.Y.Z",
-  "beta",
-  "dev",
-  "next",
-  "nightly"
-];
-var VALID_VERSION_PATTERNS = /^(?:v\d+(?:\.\d+(?:\.\d+)?)?|beta|dev|next|nightly)$/;
-var ALLOWED_VERSIONS_MESSAGE = `Allowed values: ${VALID_VERSION_FORMATS.join(" | ")}`;
-var isStableVersion = (version2) => {
-  return version2.startsWith("v");
-};
-var isValidVersion = (version2) => {
-  return VALID_VERSION_PATTERNS.test(version2);
-};
 
 // src/main.ts
-var ICP_PAGES_BRANCH_NAME = "icp-pages";
-var ICP_PAGES_FOLDER_NAME = "icp-pages";
-var DEFAULT_LATEST_VERSION_LABEL = "latest";
+var VERSIONS_JSON_FILE_NAME = "versions.json";
 async function run() {
   try {
-    const docsOutputDir = (0, import_action_utils2.getInput)("docs_output_dir");
-    const docsVersion = (0, import_action_utils2.getInput)("docs_version");
-    const docsVersionLabel = (0, import_action_utils2.getOptInput)("docs_version_label", void 0);
-    const latestVersionLabel = (0, import_action_utils2.getOptInput)(
-      "latest_version_label",
-      DEFAULT_LATEST_VERSION_LABEL
-    );
-    const icpPagesFolderName = (0, import_action_utils2.getOptInput)(
-      "icp_pages_dir",
-      ICP_PAGES_FOLDER_NAME
-    );
-    if (!isValidVersion(docsVersion)) {
+    const assetsDir = (0, import_action_utils2.getInput)("assets_dir");
+    const version2 = (0, import_action_utils2.getInput)("version");
+    const versionLabel = (0, import_action_utils2.getOptInput)("version_label", version2);
+    const targetDir = (0, import_action_utils2.getInput)("target_dir");
+    const zipTargetPath = import_node_path.default.join(process.cwd(), targetDir, `${version2}.zip`);
+    if (!isValidVersion(version2)) {
       throw new Error(
-        `Invalid docs_version '${docsVersion}'. ${ALLOWED_VERSIONS_MESSAGE}`
+        `Invalid version '${version2}'. ${ALLOWED_VERSIONS_MESSAGE}`
       );
     }
-    const zipsPaths = await zipDocsFolders(docsOutputDir, docsVersion);
-    const zipFiles = [];
-    for (const zipPath of zipsPaths) {
-      const zipName = import_node_path3.default.basename(zipPath);
-      (0, import_action_utils2.moveFile)(zipPath, `${icpPagesFolderName}/${zipName}`);
-      zipFiles.push(zipName);
-    }
-    process.chdir(icpPagesFolderName);
-    if (isStableVersion(docsVersion)) {
+    (0, import_action_utils2.zip)(assetsDir, zipTargetPath);
+    const versionsJsonPath = import_node_path.default.resolve(
+      process.cwd(),
+      VERSIONS_JSON_FILE_NAME
+    );
+    if (isVersionListedInVersionsJson(version2)) {
       await upsertVersionsJson({
-        zipFiles,
-        docsVersionLabel,
-        latestVersionLabel
+        versionsJsonPath,
+        version: version2,
+        versionLabel
       });
     }
-    if (!(0, import_action_utils2.gitHasChanges)()) {
-      core2.info(
-        `No changes to commit. Docs are already up to date for version ${docsVersion}.`
-      );
-      if (latestVersionLabel) {
-        core2.info(`Latest version is already set to ${latestVersionLabel}.`);
-      }
-      return;
-    }
-    (0, import_action_utils2.gitAdd)();
-    (0, import_action_utils2.gitCommit)(
-      `Update static assets for docs version ${docsVersion}`,
-      "github-actions[bot]",
-      "41898282+github-actions[bot]@users.noreply.github.com"
-    );
-    (0, import_action_utils2.gitPushBranch)(ICP_PAGES_BRANCH_NAME);
+    core.info(`Docs assembled for version ${version2}.`);
   } catch (error) {
     if (error instanceof Error) {
-      core2.setFailed(error.message);
+      core.setFailed(error.message);
     }
   }
 }

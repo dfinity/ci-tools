@@ -1,10 +1,24 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { getInput, getOptInput } from '@dfinity/action-utils';
+import {
+  getInput,
+  getOptInput,
+  gitAdd,
+  gitCommit,
+  gitHasChanges,
+  gitPushBranch,
+  inDir,
+} from '@dfinity/action-utils';
 import { createRepositoryDispatch } from './dispatch';
 
 const DEFAULT_DESTINATION_REPO = 'dfinity/icp-js-sdk-docs';
 const DEFAULT_EVENT_TYPE = 'submit-project-docs';
+
+const DEFAULT_TARGET_BRANCH = 'icp-pages';
+
+const GITHUB_ACTIONS_BOT_NAME = 'github-actions[bot]';
+const GITHUB_ACTIONS_BOT_EMAIL =
+  '41898282+github-actions[bot]@users.noreply.github.com';
 
 type SubmitDocsActionPayload = {
   project_repository: string;
@@ -18,6 +32,22 @@ export async function run(): Promise<void> {
     );
     const eventType = getOptInput('event_type', DEFAULT_EVENT_TYPE);
     const token = getInput('token');
+    const targetDir = getInput('target_dir');
+    const targetBranch = getOptInput('target_branch', DEFAULT_TARGET_BRANCH);
+
+    inDir(targetDir, () => {
+      if (gitHasChanges()) {
+        gitAdd();
+        gitCommit(
+          `Update static assets`,
+          GITHUB_ACTIONS_BOT_NAME,
+          GITHUB_ACTIONS_BOT_EMAIL,
+        );
+        gitPushBranch(targetBranch);
+      } else {
+        core.info(`No changes to commit. Skipping push.`);
+      }
+    });
 
     const [destOwner, destRepo] = destinationRepo.split('/');
     if (!destOwner || !destRepo) {
