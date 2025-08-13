@@ -4,11 +4,13 @@ This action triggers the `pull-projects-docs` workflow on a destination reposito
 
 ## Action inputs
 
-| Input              | Description                                                                      | Default                     |
-| ------------------ | -------------------------------------------------------------------------------- | --------------------------- |
-| `destination_repo` | The destination repository to trigger the workflow on                            | `'dfinity/icp-js-sdk-docs'` |
-| `event_type`       | The event type to trigger on the destination repository                          | `'submit-project-docs'`     |
-| `token`            | GitHub token with permissions to trigger workflows on the destination repository | _required_                  |
+| Input              | Description                                                                                                                  | Default                     |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `destination_repo` | The destination repository to trigger the workflow on                                                                        | `'dfinity/icp-js-sdk-docs'` |
+| `event_type`       | The event type to trigger on the destination repository                                                                      | `'submit-project-docs'`     |
+| `token`            | GitHub token with permissions to trigger workflows on the destination repository                                             | _required_                  |
+| `target_dir`       | The folder where the assembled docs have been saved. The `{inputs.target_branch}` branch must be checked out in this folder. | _required_                  |
+| `target_branch`    | The branch where to push the assembled docs. Must match the `ref` in the checkout step.                                      | `'icp-pages'`               |
 
 ## Example usage
 

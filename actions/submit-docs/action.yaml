@@ -13,6 +13,13 @@ inputs:
   token:
     description: 'GitHub token with permissions to trigger workflows on the destination repository'
     required: true
+  target_dir:
+    description: 'The folder where the assembled docs have been saved. The `{inputs.target_branch}` branch must be checked out in this folder.'
+    required: true
+  target_branch:
+    description: 'The branch where to push the assembled docs'
+    required: false
+    default: 'icp-pages'
 
 runs:
   using: node20
