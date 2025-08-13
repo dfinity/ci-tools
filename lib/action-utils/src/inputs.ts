@@ -4,6 +4,16 @@ export function getInput(name: string): string {
   return core.getInput(name, { required: true, trimWhitespace: true });
 }
 
+export function getOptInput<T = string>(
+  name: string,
+  defaultValue: T,
+): string | T {
+  return (
+    core.getInput(name, { required: false, trimWhitespace: true }) ||
+    defaultValue
+  );
+}
+
 export function getNumberInput(name: string): number {
   const input = getInput(name);
   const numberInput = Number(input);
