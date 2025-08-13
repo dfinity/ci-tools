@@ -23135,16 +23135,22 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
+      deleteFile: () => deleteFile,
       exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
       getOptInput: () => getOptInput2,
-      gitAdd: () => gitAdd,
+      gitAdd: () => gitAdd2,
       gitCheckoutBranch: () => gitCheckoutBranch,
-      gitCommit: () => gitCommit,
-      gitHasChanges: () => gitHasChanges,
-      gitPushBranch: () => gitPushBranch
+      gitCommit: () => gitCommit2,
+      gitHasChanges: () => gitHasChanges2,
+      gitPushBranch: () => gitPushBranch2,
+      inDir: () => inDir2,
+      moveFile: () => moveFile,
+      readJsonFile: () => readJsonFile,
+      writeJsonFile: () => writeJsonFile,
+      zip: () => zip
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -23159,10 +23165,26 @@ var require_dist = __commonJS({
       }
       return result;
     }
-    function gitAdd() {
+    function inDir2(dir, fn) {
+      const currentDir = process.cwd();
+      process.chdir(dir);
+      fn();
+      process.chdir(currentDir);
+    }
+    var import_node_fs = __toESM2(require("node:fs"));
+    function moveFile(src, dest) {
+      import_node_fs.default.renameSync(src, dest);
+    }
+    function deleteFile(path) {
+      try {
+        import_node_fs.default.rmSync(path);
+      } catch {
+      }
+    }
+    function gitAdd2() {
       exec(`git add .`);
     }
-    function gitCommit(message, authorName, authorEmail) {
+    function gitCommit2(message, authorName, authorEmail) {
       exec(`git config user.name "${authorName}"`);
       exec(`git config user.email "${authorEmail}"`);
       exec(`git commit -m "${message}"`);
@@ -23170,10 +23192,10 @@ var require_dist = __commonJS({
     function gitCheckoutBranch(branch) {
       exec(`git checkout -b ${branch}`);
     }
-    function gitPushBranch(branch) {
+    function gitPushBranch2(branch) {
       exec(`git push -u origin ${branch}`);
     }
-    function gitHasChanges() {
+    function gitHasChanges2() {
       const output = exec("git status --porcelain");
       return output.trim().length > 0;
     }
@@ -23193,6 +23215,31 @@ var require_dist = __commonJS({
         );
       }
       return numberInput;
+    }
+    var import_node_fs2 = __toESM2(require("node:fs"));
+    var core22 = __toESM2(require_core());
+    function writeJsonFile(filePath, data) {
+      const json = JSON.stringify(data, null, 2) + "\n";
+      import_node_fs2.default.writeFileSync(filePath, json, "utf8");
+    }
+    function readJsonFile(filePath) {
+      try {
+        const raw = import_node_fs2.default.readFileSync(filePath, "utf8");
+        return JSON.parse(raw);
+      } catch (err) {
+        core22.info(
+          `Could not read or parse JSON file ${filePath}. Reason: ${err.message}`
+        );
+        return null;
+      }
+    }
+    function zip({
+      absoluteSrcPath,
+      absoluteDestPath
+    }) {
+      inDir2(absoluteSrcPath, () => {
+        exec(`zip -r "${absoluteDestPath}" .`);
+      });
     }
   }
 });
@@ -23223,6 +23270,9 @@ async function createRepositoryDispatch({
 // src/main.ts
 var DEFAULT_DESTINATION_REPO = "dfinity/icp-js-sdk-docs";
 var DEFAULT_EVENT_TYPE = "submit-project-docs";
+var DEFAULT_TARGET_BRANCH = "icp-pages";
+var GITHUB_ACTIONS_BOT_NAME = "github-actions[bot]";
+var GITHUB_ACTIONS_BOT_EMAIL = "41898282+github-actions[bot]@users.noreply.github.com";
 async function run() {
   try {
     const destinationRepo = (0, import_action_utils.getOptInput)(
@@ -23231,6 +23281,21 @@ async function run() {
     );
     const eventType = (0, import_action_utils.getOptInput)("event_type", DEFAULT_EVENT_TYPE);
     const token = (0, import_action_utils.getInput)("token");
+    const targetDir = (0, import_action_utils.getInput)("target_dir");
+    const targetBranch = (0, import_action_utils.getOptInput)("target_branch", DEFAULT_TARGET_BRANCH);
+    (0, import_action_utils.inDir)(targetDir, () => {
+      if ((0, import_action_utils.gitHasChanges)()) {
+        (0, import_action_utils.gitAdd)();
+        (0, import_action_utils.gitCommit)(
+          `Update static assets`,
+          GITHUB_ACTIONS_BOT_NAME,
+          GITHUB_ACTIONS_BOT_EMAIL
+        );
+        (0, import_action_utils.gitPushBranch)(targetBranch);
+      } else {
+        core2.info(`No changes to commit. Skipping push.`);
+      }
+    });
     const [destOwner, destRepo] = destinationRepo.split("/");
     if (!destOwner || !destRepo) {
       throw new Error(

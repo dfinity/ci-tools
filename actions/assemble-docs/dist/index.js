@@ -519,7 +519,7 @@ var require_file_command = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.prepareKeyValueMessage = exports2.issueFileCommand = void 0;
-    var fs2 = __importStar(require("fs"));
+    var fs = __importStar(require("fs"));
     var os = __importStar(require("os"));
     var uuid_1 = (init_esm_node(), __toCommonJS(esm_node_exports));
     var utils_1 = require_utils();
@@ -528,10 +528,10 @@ var require_file_command = __commonJS({
       if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
       }
-      if (!fs2.existsSync(filePath)) {
+      if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs2.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -17926,12 +17926,12 @@ var require_lib = __commonJS({
             throw new Error("Client has already been disposed.");
           }
           const parsedUrl = new URL(requestUrl);
-          let info = this._prepareRequest(verb, parsedUrl, headers);
+          let info2 = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
           let response;
           do {
-            response = yield this.requestRaw(info, data);
+            response = yield this.requestRaw(info2, data);
             if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
@@ -17941,7 +17941,7 @@ var require_lib = __commonJS({
                 }
               }
               if (authenticationHandler) {
-                return authenticationHandler.handleAuthentication(this, info, data);
+                return authenticationHandler.handleAuthentication(this, info2, data);
               } else {
                 return response;
               }
@@ -17964,8 +17964,8 @@ var require_lib = __commonJS({
                   }
                 }
               }
-              info = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info, data);
+              info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+              response = yield this.requestRaw(info2, data);
               redirectsRemaining--;
             }
             if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
@@ -17994,7 +17994,7 @@ var require_lib = __commonJS({
        * @param info
        * @param data
        */
-      requestRaw(info, data) {
+      requestRaw(info2, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => {
             function callbackForResult(err, res) {
@@ -18006,7 +18006,7 @@ var require_lib = __commonJS({
                 resolve(res);
               }
             }
-            this.requestRawWithCallback(info, data, callbackForResult);
+            this.requestRawWithCallback(info2, data, callbackForResult);
           });
         });
       }
@@ -18016,12 +18016,12 @@ var require_lib = __commonJS({
        * @param data
        * @param onResult
        */
-      requestRawWithCallback(info, data, onResult) {
+      requestRawWithCallback(info2, data, onResult) {
         if (typeof data === "string") {
-          if (!info.options.headers) {
-            info.options.headers = {};
+          if (!info2.options.headers) {
+            info2.options.headers = {};
           }
-          info.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         function handleResult(err, res) {
@@ -18030,7 +18030,7 @@ var require_lib = __commonJS({
             onResult(err, res);
           }
         }
-        const req = info.httpModule.request(info.options, (msg) => {
+        const req = info2.httpModule.request(info2.options, (msg) => {
           const res = new HttpClientResponse(msg);
           handleResult(void 0, res);
         });
@@ -18042,7 +18042,7 @@ var require_lib = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error(`Request timeout: ${info.options.path}`));
+          handleResult(new Error(`Request timeout: ${info2.options.path}`));
         });
         req.on("error", function(err) {
           handleResult(err);
@@ -18078,27 +18078,27 @@ var require_lib = __commonJS({
         return this._getProxyAgentDispatcher(parsedUrl, proxyUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info = {};
-        info.parsedUrl = requestUrl;
-        const usingSsl = info.parsedUrl.protocol === "https:";
-        info.httpModule = usingSsl ? https : http;
+        const info2 = {};
+        info2.parsedUrl = requestUrl;
+        const usingSsl = info2.parsedUrl.protocol === "https:";
+        info2.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info.options = {};
-        info.options.host = info.parsedUrl.hostname;
-        info.options.port = info.parsedUrl.port ? parseInt(info.parsedUrl.port) : defaultPort;
-        info.options.path = (info.parsedUrl.pathname || "") + (info.parsedUrl.search || "");
-        info.options.method = method;
-        info.options.headers = this._mergeHeaders(headers);
+        info2.options = {};
+        info2.options.host = info2.parsedUrl.hostname;
+        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
+        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
+        info2.options.method = method;
+        info2.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info.options.headers["user-agent"] = this.userAgent;
+          info2.options.headers["user-agent"] = this.userAgent;
         }
-        info.options.agent = this._getAgent(info.parsedUrl);
+        info2.options.agent = this._getAgent(info2.parsedUrl);
         if (this.handlers) {
           for (const handler of this.handlers) {
-            handler.prepareRequest(info.options);
+            handler.prepareRequest(info2.options);
           }
         }
-        return info;
+        return info2;
       }
       _mergeHeaders(headers) {
         if (this.requestOptions && this.requestOptions.headers) {
@@ -18890,7 +18890,7 @@ var require_core = __commonJS({
       process.env["PATH"] = `${inputPath}${path2.delimiter}${process.env["PATH"]}`;
     }
     exports2.addPath = addPath;
-    function getInput2(name, options) {
+    function getInput3(name, options) {
       const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
       if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
@@ -18900,9 +18900,9 @@ var require_core = __commonJS({
       }
       return val.trim();
     }
-    exports2.getInput = getInput2;
+    exports2.getInput = getInput3;
     function getMultilineInput(name, options) {
-      const inputs = getInput2(name, options).split("\n").filter((x) => x !== "");
+      const inputs = getInput3(name, options).split("\n").filter((x) => x !== "");
       if (options && options.trimWhitespace === false) {
         return inputs;
       }
@@ -18912,7 +18912,7 @@ var require_core = __commonJS({
     function getBooleanInput(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
-      const val = getInput2(name, options);
+      const val = getInput3(name, options);
       if (trueValue.includes(val))
         return true;
       if (falseValue.includes(val))
@@ -18921,7 +18921,7 @@ var require_core = __commonJS({
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports2.getBooleanInput = getBooleanInput;
-    function setOutput2(name, value) {
+    function setOutput(name, value) {
       const filePath = process.env["GITHUB_OUTPUT"] || "";
       if (filePath) {
         return file_command_1.issueFileCommand("OUTPUT", file_command_1.prepareKeyValueMessage(name, value));
@@ -18929,7 +18929,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       process.stdout.write(os.EOL);
       command_1.issueCommand("set-output", { name }, utils_1.toCommandValue(value));
     }
-    exports2.setOutput = setOutput2;
+    exports2.setOutput = setOutput;
     function setCommandEcho(enabled) {
       command_1.issue("echo", enabled ? "on" : "off");
     }
@@ -18959,10 +18959,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports2.notice = notice;
-    function info(message) {
+    function info2(message) {
       process.stdout.write(message + os.EOL);
     }
-    exports2.info = info;
+    exports2.info = info2;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -19056,10 +19056,10 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
-      deleteFile: () => deleteFile,
-      exec: () => exec2,
+      deleteFile: () => deleteFile2,
+      exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix,
-      getInput: () => getInput2,
+      getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
       getOptInput: () => getOptInput2,
       gitAdd: () => gitAdd,
@@ -19070,12 +19070,12 @@ var require_dist = __commonJS({
       inDir: () => inDir,
       moveFile: () => moveFile,
       readJsonFile: () => readJsonFile2,
-      writeJsonFile: () => writeJsonFile,
-      zip: () => zip
+      writeJsonFile: () => writeJsonFile2,
+      zip: () => zip2
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
-    function exec2(command) {
+    function exec(command) {
       return (0, import_child_process.execSync)(command).toString();
     }
     var ALPHANUM = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -19092,43 +19092,43 @@ var require_dist = __commonJS({
       fn();
       process.chdir(currentDir);
     }
-    var import_node_fs2 = __toESM2(require("node:fs"));
+    var import_node_fs = __toESM2(require("node:fs"));
     function moveFile(src, dest) {
-      import_node_fs2.default.renameSync(src, dest);
+      import_node_fs.default.renameSync(src, dest);
     }
-    function deleteFile(path2) {
+    function deleteFile2(path2) {
       try {
-        import_node_fs2.default.rmSync(path2);
+        import_node_fs.default.rmSync(path2);
       } catch {
       }
     }
     function gitAdd() {
-      exec2(`git add .`);
+      exec(`git add .`);
     }
     function gitCommit(message, authorName, authorEmail) {
-      exec2(`git config user.name "${authorName}"`);
-      exec2(`git config user.email "${authorEmail}"`);
-      exec2(`git commit -m "${message}"`);
+      exec(`git config user.name "${authorName}"`);
+      exec(`git config user.email "${authorEmail}"`);
+      exec(`git commit -m "${message}"`);
     }
     function gitCheckoutBranch(branch) {
-      exec2(`git checkout -b ${branch}`);
+      exec(`git checkout -b ${branch}`);
     }
     function gitPushBranch(branch) {
-      exec2(`git push -u origin ${branch}`);
+      exec(`git push -u origin ${branch}`);
     }
     function gitHasChanges() {
-      const output = exec2("git status --porcelain");
+      const output = exec("git status --porcelain");
       return output.trim().length > 0;
     }
     var core2 = __toESM2(require_core());
-    function getInput2(name) {
+    function getInput22(name) {
       return core2.getInput(name, { required: true, trimWhitespace: true });
     }
     function getOptInput2(name, defaultValue) {
       return core2.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
     }
     function getNumberInput(name) {
-      const input = getInput2(name);
+      const input = getInput22(name);
       const numberInput = Number(input);
       if (isNaN(numberInput)) {
         throw new Error(
@@ -19137,15 +19137,15 @@ var require_dist = __commonJS({
       }
       return numberInput;
     }
-    var import_node_fs22 = __toESM2(require("node:fs"));
+    var import_node_fs2 = __toESM2(require("node:fs"));
     var core22 = __toESM2(require_core());
-    function writeJsonFile(filePath, data) {
+    function writeJsonFile2(filePath, data) {
       const json = JSON.stringify(data, null, 2) + "\n";
-      import_node_fs22.default.writeFileSync(filePath, json, "utf8");
+      import_node_fs2.default.writeFileSync(filePath, json, "utf8");
     }
     function readJsonFile2(filePath) {
       try {
-        const raw = import_node_fs22.default.readFileSync(filePath, "utf8");
+        const raw = import_node_fs2.default.readFileSync(filePath, "utf8");
         return JSON.parse(raw);
       } catch (err) {
         core22.info(
@@ -19154,87 +19154,96 @@ var require_dist = __commonJS({
         return null;
       }
     }
-    function zip({
+    function zip2({
       absoluteSrcPath,
       absoluteDestPath
     }) {
       inDir(absoluteSrcPath, () => {
-        exec2(`zip -r "${absoluteDestPath}" .`);
+        exec(`zip -r "${absoluteDestPath}" .`);
       });
     }
   }
 });
 
 // src/main.ts
-var core = __toESM(require_core());
-var import_action_utils = __toESM(require_dist());
-var import_node_fs = __toESM(require("node:fs"));
 var import_node_path = __toESM(require("node:path"));
-function readTextFile(filePath) {
-  try {
-    return import_node_fs.default.readFileSync(filePath, "utf8");
-  } catch {
-    return null;
-  }
+var core = __toESM(require_core());
+var import_action_utils2 = __toESM(require_dist());
+
+// src/upsert-versions-json.ts
+var import_action_utils = __toESM(require_dist());
+
+// src/versions.ts
+var LATEST_VERSION_NAME = "latest";
+var VALID_TAGS = ["latest", "beta", "dev", "next", "nightly", "canary"];
+var VALID_VERSION_FORMATS = ["vX", "vX.Y", "vX.Y.Z", ...VALID_TAGS];
+var VALID_VERSION_PATTERNS = new RegExp(
+  `^(?:v\\d+(?:\\.\\d+(?:\\.\\d+)?)?|${VALID_TAGS.join("|")})$`
+);
+var ALLOWED_VERSIONS_MESSAGE = `Allowed values: ${VALID_VERSION_FORMATS.join(" | ")}`;
+function isVersionListedInVersionsJson(version2) {
+  return version2.startsWith("v") || version2 === LATEST_VERSION_NAME;
 }
-function parseSemver(version2) {
-  const match = version2.trim().match(/^(\d+)\.(\d+)\.(\d+)([-+].+)?$/);
-  if (!match) {
-    throw new Error(`Invalid version: ${version2}`);
-  }
-  const [, major, minor, patch, prerelease] = match;
-  return {
-    major,
-    minor,
-    patch,
-    prerelease: prerelease || null
-  };
+function isValidVersion(version2) {
+  return VALID_VERSION_PATTERNS.test(version2);
 }
-function extractFromPackageJson(filePath) {
-  const json = (0, import_action_utils.readJsonFile)(filePath);
-  if (!json?.version) {
-    return null;
+
+// src/upsert-versions-json.ts
+async function upsertVersionsJson(params) {
+  const { versionsJsonPath, version: version2, versionLabel } = params;
+  let versions = (0, import_action_utils.readJsonFile)(versionsJsonPath) || [];
+  const versionEntry = versions.find((v) => v.path === version2);
+  if (versionEntry) {
+    versionEntry.label = versionLabel;
+  } else {
+    versions.push({ path: version2, label: versionLabel });
   }
-  return parseSemver(json.version);
+  versions = versions.sort((a, b) => {
+    if (a.path === LATEST_VERSION_NAME && b.path !== LATEST_VERSION_NAME) {
+      return -1;
+    }
+    if (b.path === LATEST_VERSION_NAME && a.path !== LATEST_VERSION_NAME) {
+      return 1;
+    }
+    return b.path.localeCompare(a.path);
+  });
+  (0, import_action_utils.writeJsonFile)(versionsJsonPath, versions);
 }
-function extractFromCargoToml(filePath) {
-  const text = readTextFile(filePath);
-  if (!text) {
-    return null;
-  }
-  const match = text.match(/^version\s*=\s*["'](?<version>[^"']+)["']/m);
-  if (!match?.groups?.version) {
-    return null;
-  }
-  return parseSemver(match.groups.version);
-}
+
+// src/main.ts
+var VERSIONS_JSON_FILE_NAME = "versions.json";
 async function run() {
   try {
-    const fileInput = (0, import_action_utils.getOptInput)("file", "");
-    let parts = null;
-    if (fileInput) {
-      const filePath = import_node_path.default.resolve(process.cwd(), fileInput);
-      const lowerFilename = import_node_path.default.basename(filePath).toLowerCase();
-      if (lowerFilename === "package.json") {
-        parts = extractFromPackageJson(filePath);
-      } else if (lowerFilename === "cargo.toml") {
-        parts = extractFromCargoToml(filePath);
-      }
-    } else {
-      try {
-        const output = (0, import_action_utils.exec)("cz version -p").trim();
-        parts = parseSemver(output);
-      } catch (err) {
-        throw new Error(`Failed to execute 'cz version -p': ${err}`);
-      }
+    const assetsDir = (0, import_action_utils2.getInput)("assets_dir");
+    const version2 = (0, import_action_utils2.getInput)("version");
+    const versionLabel = (0, import_action_utils2.getOptInput)("version_label", version2);
+    const targetDir = (0, import_action_utils2.getInput)("target_dir");
+    const targetZipFile = import_node_path.default.join(process.cwd(), targetDir, `${version2}.zip`);
+    if (!isValidVersion(version2)) {
+      throw new Error(
+        `Invalid version '${version2}'. ${ALLOWED_VERSIONS_MESSAGE}`
+      );
     }
-    if (!parts) {
-      throw new Error("Could not extract a semantic version.");
+    core.info(`Cleaning up ${targetZipFile}`);
+    (0, import_action_utils2.deleteFile)(targetZipFile);
+    core.info(`Zipping ${assetsDir} to ${targetZipFile}`);
+    (0, import_action_utils2.zip)({
+      absoluteSrcPath: assetsDir,
+      absoluteDestPath: targetZipFile
+    });
+    const versionsJsonPath = import_node_path.default.resolve(
+      process.cwd(),
+      VERSIONS_JSON_FILE_NAME
+    );
+    if (isVersionListedInVersionsJson(version2)) {
+      core.info(`Upserting versions.json for version ${version2}`);
+      await upsertVersionsJson({
+        versionsJsonPath,
+        version: version2,
+        versionLabel
+      });
     }
-    core.setOutput("major", parts.major);
-    core.setOutput("minor", parts.minor);
-    core.setOutput("patch", parts.patch);
-    core.setOutput("prerelease", parts.prerelease || "");
+    core.info(`Docs assembled for version ${version2}.`);
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);

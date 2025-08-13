@@ -1,0 +1,20 @@
+name: Assemble docs
+description: 'Zips documentation folders and updates versions.json on the icp-pages branch.'
+
+inputs:
+  assets_dir:
+    description: 'Path to the directory containing the documentation assets to be assembled.'
+    required: true
+  version:
+    description: 'The subpath at which the assembled docs will be published. Allowed values: `vX` | `vX.Y` | `vX.Y.Z` | `latest` | `beta` | `dev` | `next` | `nightly` | `canary`.'
+    required: true
+  version_label:
+    description: "Optional label value to set for this version's option in the website sidebar version dropdown. Defaults to the value of the `version` input."
+    required: false
+  target_dir:
+    description: 'The folder where the assembled docs must be saved.'
+    required: true
+
+runs:
+  using: node20
+  main: dist/index.js

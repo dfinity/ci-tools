@@ -1,16 +1,20 @@
-# Submit Documentation Action
+# Assemble docs action
 
-This action triggers the `pull-projects-docs` workflow on a destination repository to sync the documentation files. It is typically used in conjunction with the [assemble-docs](../assemble-docs/README.md) action.
+This action packages documentation assets for a specific version and updates the `versions.json` file on the `icp-pages` branch. It is typically used in conjunction with the [submit-docs](../submit-docs/README.md) action.
+
+This action:
+
+- Zips the `assets_dir` directory into `{target_dir}/{version}.zip`
+- Upserts the entry to `versions.json` for the `version`
 
 ## Action inputs
 
-| Input              | Description                                                                                                                  | Default                     |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `destination_repo` | The destination repository to trigger the workflow on                                                                        | `'dfinity/icp-js-sdk-docs'` |
-| `event_type`       | The event type to trigger on the destination repository                                                                      | `'submit-project-docs'`     |
-| `token`            | GitHub token with permissions to trigger workflows on the destination repository                                             | _required_                  |
-| `target_dir`       | The folder where the assembled docs have been saved. The `{inputs.target_branch}` branch must be checked out in this folder. | _required_                  |
-| `target_branch`    | The branch where to push the assembled docs. Must match the `ref` in the checkout step.                                      | `'icp-pages'`               |
+| Input           | Description                                                                                                                                                      | Default            |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `assets_dir`    | Path to the directory containing the documentation assets to be assembled.                                                                                       | _required_         |
+| `version`       | The subpath at which the assembled docs will be published. Allowed values: `vX` , `vX.Y` , `vX.Y.Z` , `latest` , `beta` , `dev` , `next` , `nightly` , `canary`. | _required_         |
+| `version_label` | Optional label value to set for this version's option in the website sidebar version dropdown.                                                                   | `{inputs.version}` |
+| `target_dir`    | The folder where the assembled docs must be saved.                                                                                                               | _required_         |
 
 ## Example usage
 
