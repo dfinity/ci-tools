@@ -23226,10 +23226,8 @@ var require_dist = __commonJS({
         return null;
       }
     }
-    var import_node_path = __toESM2(require("node:path"));
     function zip(srcPath, destPath) {
-      const zipPath = import_node_path.default.join(destPath, `${srcPath}.zip`);
-      exec(`zip -r "${zipPath}" "${srcPath}"`);
+      exec(`zip -r "${destPath}" "${srcPath}"`);
     }
   }
 });
