@@ -19056,7 +19056,7 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
-      exec: () => exec,
+      exec: () => exec2,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
@@ -19068,7 +19068,7 @@ var require_dist = __commonJS({
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
-    function exec(command) {
+    function exec2(command) {
       return (0, import_child_process.execSync)(command).toString();
     }
     var ALPHANUM = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -19080,21 +19080,21 @@ var require_dist = __commonJS({
       return result;
     }
     function gitAdd() {
-      exec(`git add .`);
+      exec2(`git add .`);
     }
     function gitCommit(message, authorName, authorEmail) {
-      exec(`git config user.name "${authorName}"`);
-      exec(`git config user.email "${authorEmail}"`);
-      exec(`git commit -m "${message}"`);
+      exec2(`git config user.name "${authorName}"`);
+      exec2(`git config user.email "${authorEmail}"`);
+      exec2(`git commit -m "${message}"`);
     }
     function gitCheckoutBranch(branch) {
-      exec(`git checkout -b ${branch}`);
+      exec2(`git checkout -b ${branch}`);
     }
     function gitPushBranch(branch) {
-      exec(`git push -u origin ${branch}`);
+      exec2(`git push -u origin ${branch}`);
     }
     function gitHasChanges() {
-      const output = exec("git status --porcelain");
+      const output = exec2("git status --porcelain");
       return output.trim().length > 0;
     }
     var core2 = __toESM2(require_core());
@@ -19135,61 +19135,66 @@ function readTextFile(filePath) {
   }
 }
 function parseSemver(version2) {
-  const match = version2.trim().match(/^(\d+)\.(\d+)\.(\d+)/);
-  if (!match)
-    return null;
-  const [, major, minor, patch] = match;
-  return { major, minor, patch };
+  const match = version2.trim().match(/^(\d+)\.(\d+)\.(\d+)([-+].+)?$/);
+  if (!match) {
+    throw new Error(`Invalid version: ${version2}`);
+  }
+  const [, major, minor, patch, prerelease] = match;
+  return {
+    major,
+    minor,
+    patch,
+    prerelease: prerelease || null
+  };
 }
-function extractFromPackageJson(cwd) {
-  const file = import_node_path.default.resolve(cwd, "package.json");
-  const json = readJsonFile(file);
-  if (!json?.version)
+function extractFromPackageJson(filePath) {
+  const json = readJsonFile(filePath);
+  if (!json?.version) {
     return null;
+  }
   return parseSemver(json.version);
 }
-function extractFromCargoToml(cwd) {
-  const file = import_node_path.default.resolve(cwd, "Cargo.toml");
-  const text = readTextFile(file);
-  if (!text)
+function extractFromCargoToml(filePath) {
+  const text = readTextFile(filePath);
+  if (!text) {
     return null;
+  }
   const match = text.match(/^version\s*=\s*["'](?<version>[^"']+)["']/m);
-  if (!match?.groups?.version)
+  if (!match?.groups?.version) {
     return null;
+  }
   return parseSemver(match.groups.version);
-}
-function extractFromCzJson(cwd) {
-  const file = import_node_path.default.resolve(cwd, "cz.json");
-  const json = readJsonFile(file);
-  if (!json?.commitizen?.version)
-    return null;
-  return parseSemver(json.commitizen.version);
 }
 async function run() {
   try {
-    const fileInput = (0, import_action_utils.getInput)("file");
-    const filePath = import_node_path.default.resolve(process.cwd(), fileInput);
-    const parts = (() => {
-      const lower = import_node_path.default.basename(filePath).toLowerCase();
-      if (lower === "package.json")
-        return extractFromPackageJson(import_node_path.default.dirname(filePath));
-      if (lower === "cargo.toml")
-        return extractFromCargoToml(import_node_path.default.dirname(filePath));
-      if (lower === "cz.json")
-        return extractFromCzJson(import_node_path.default.dirname(filePath));
-      return null;
-    })();
-    if (!parts) {
-      throw new Error(
-        `Could not extract a semantic version from '${fileInput}'. Supported files: package.json, Cargo.toml, cz.json`
-      );
+    const fileInput = core.getInput("file", {
+      required: false,
+      trimWhitespace: true
+    });
+    let parts = null;
+    if (fileInput && fileInput !== "") {
+      const filePath = import_node_path.default.resolve(process.cwd(), fileInput);
+      const lowerFilename = import_node_path.default.basename(filePath).toLowerCase();
+      if (lowerFilename === "package.json") {
+        parts = extractFromPackageJson(filePath);
+      } else if (lowerFilename === "cargo.toml") {
+        parts = extractFromCargoToml(filePath);
+      }
+    } else {
+      try {
+        const output = (0, import_action_utils.exec)("cz version -p").trim();
+        parts = parseSemver(output);
+      } catch (err) {
+        throw new Error(`Failed to execute 'cz version -p': ${err}`);
+      }
     }
-    const major = parts.major;
-    const majorMinor = `${parts.major}.${parts.minor}`;
-    const majorMinorPatch = `${parts.major}.${parts.minor}.${parts.patch}`;
-    core.setOutput("major", major);
-    core.setOutput("major_minor", majorMinor);
-    core.setOutput("major_minor_patch", majorMinorPatch);
+    if (!parts) {
+      throw new Error("Could not extract a semantic version.");
+    }
+    core.setOutput("major", parts.major);
+    core.setOutput("minor", parts.minor);
+    core.setOutput("patch", parts.patch);
+    core.setOutput("prerelease", parts.prerelease || "");
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);

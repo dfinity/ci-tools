@@ -1,26 +1,26 @@
 # Extract version action
 
-This action extracts version parts from a specified file and exposes them as outputs.
+This action extracts semantic version parts using the Commitizen CLI, or directly from a supported file if provided.
 
-Supported files:
+Supported files when `file` is provided:
 
 - `package.json` (`version`)
 - `Cargo.toml` (`version = "x.y.z"`)
-- `cz.json` (`commitizen.version`)
+
+If `file` is omitted, the action runs `cz version -p` to obtain the version. This requires `cz` to be installed and available in `PATH`.
 
 ## Action inputs
 
-| Input  | Description                                                                               | Default    |
-| ------ | ----------------------------------------------------------------------------------------- | ---------- |
-| `file` | Path to the file to parse. Supported file types: `package.json`, `Cargo.toml`, `cz.json`. | _required_ |
+| Input  | Description                                                                      | Default |
+| ------ | -------------------------------------------------------------------------------- | ------- |
+| `file` | Optional path to a file to parse. Supported files: `package.json`, `Cargo.toml`. | `''`    |
 
 ## Action outputs
 
 - `major`: The major version (e.g., `1`).
-- `major_minor`: The major.minor version (e.g., `1.2`).
-- `major_minor_patch`: The major.minor.patch version (e.g., `1.2.3`).
-
-> **Note**: Semver prerelease (`-beta.1`) and build labels (`+meta`) are ignored when extracting the version from the specified file.
+- `minor`: The minor version (e.g., `2`).
+- `patch`: The patch version (e.g., `3`).
+- `prerelease`: Everything after the patch (may include pre-release and/or build), e.g., `-beta.1`, `+build.5`, or `-rc.1+build.sha`.
 
 ## Example usage
 
@@ -48,6 +48,19 @@ jobs:
       - name: Print
         run: |
           echo "major=${{ steps.ver.outputs.major }}"
-          echo "major_minor=${{ steps.ver.outputs.major_minor }}"
-          echo "major_minor_patch=${{ steps.ver.outputs.major_minor_patch }}"
+          echo "minor=${{ steps.ver.outputs.minor }}"
+          echo "patch=${{ steps.ver.outputs.patch }}"
+          echo "prerelease=${{ steps.ver.outputs.prerelease }}"
+
+      # Or, if there's a Commitizen config file in the repo:
+      - name: Extract version using Commitizen (cz)
+        id: ver_cz
+        uses: dfinity/ci-tools/actions/extract-version@main
+
+      - name: Print (cz)
+        run: |
+          echo "major=${{ steps.ver_cz.outputs.major }}"
+          echo "minor=${{ steps.ver_cz.outputs.minor }}"
+          echo "patch=${{ steps.ver_cz.outputs.patch }}"
+          echo "prerelease=${{ steps.ver_cz.outputs.prerelease }}"
 ```

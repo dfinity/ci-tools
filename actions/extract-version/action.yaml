@@ -1,18 +1,20 @@
 name: Extract version
-description: 'Extracts major, major.minor, and major.minor.patch versions from Cargo.toml, package.json, or cz.json.'
+description: 'Extract semantic version parts using the Commitizen (cz) CLI or by parsing a supported file.'
 
 inputs:
   file:
-    description: 'Path to the file to parse. Supported file types: package.json, Cargo.toml, cz.json'
-    required: true
+    description: 'Optional path to a file to parse. Supported files: package.json, Cargo.toml.'
+    required: false
 
 outputs:
   major:
     description: 'The major version.'
-  major_minor:
-    description: 'The major.minor version.'
-  major_minor_patch:
-    description: 'The major.minor.patch version.'
+  minor:
+    description: 'The minor version.'
+  patch:
+    description: 'The patch version.'
+  prerelease:
+    description: 'Everything after the patch (pre-release and/or build metadata).'
 
 runs:
   using: node20

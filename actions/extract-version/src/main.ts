@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { getInput } from '@dfinity/action-utils';
+import { exec } from '@dfinity/action-utils';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -7,8 +7,10 @@ type VersionParts = {
   major: string;
   minor: string;
   patch: string;
+  prerelease: string | null;
 };
 
+// TODO: use readJsonFile from @dfinity/action-utils once #46 is merged
 function readJsonFile<T = unknown>(filePath: string): T | null {
   try {
     const data = fs.readFileSync(filePath, 'utf8');
@@ -27,65 +29,76 @@ function readTextFile(filePath: string): string | null {
 }
 
 function parseSemver(version: string): VersionParts | null {
-  // Accept versions like 1.2.3, 1.2.3-beta.1, 1.2.3+build
-  // and only capture the numeric major.minor.patch
-  const match = version.trim().match(/^(\d+)\.(\d+)\.(\d+)/);
-  if (!match) return null;
-  const [, major, minor, patch] = match;
-  return { major, minor, patch };
+  // Accept versions like 1.2.3, 1.2.3-beta.1, 1.2.3+build, etc.
+  const match = version.trim().match(/^(\d+)\.(\d+)\.(\d+)([-+].+)?$/);
+  if (!match) {
+    throw new Error(`Invalid version: ${version}`);
+  }
+  const [, major, minor, patch, prerelease] = match;
+  return {
+    major,
+    minor,
+    patch,
+    prerelease: prerelease || null,
+  };
 }
 
-function extractFromPackageJson(cwd: string): VersionParts | null {
-  const file = path.resolve(cwd, 'package.json');
-  const json = readJsonFile<{ version?: string }>(file);
-  if (!json?.version) return null;
+function extractFromPackageJson(filePath: string): VersionParts | null {
+  const json = readJsonFile<{ version?: string }>(filePath);
+  if (!json?.version) {
+    return null;
+  }
   return parseSemver(json.version);
 }
 
-function extractFromCargoToml(cwd: string): VersionParts | null {
-  const file = path.resolve(cwd, 'Cargo.toml');
-  const text = readTextFile(file);
-  if (!text) return null;
+function extractFromCargoToml(filePath: string): VersionParts | null {
+  const text = readTextFile(filePath);
+  if (!text) {
+    return null;
+  }
   const match = text.match(/^version\s*=\s*["'](?<version>[^"']+)["']/m);
-  if (!match?.groups?.version) return null;
+  if (!match?.groups?.version) {
+    return null;
+  }
   return parseSemver(match.groups.version);
-}
-
-function extractFromCzJson(cwd: string): VersionParts | null {
-  const file = path.resolve(cwd, 'cz.json');
-  const json = readJsonFile<{ commitizen?: { version?: string } }>(file);
-  if (!json?.commitizen?.version) return null;
-  return parseSemver(json.commitizen.version);
 }
 
 export async function run(): Promise<void> {
   try {
-    const fileInput = getInput('file');
-    const filePath = path.resolve(process.cwd(), fileInput);
+    // TODO: use getOptInput from @dfinity/action-utils once #47 is merged
+    const fileInput = core.getInput('file', {
+      required: false,
+      trimWhitespace: true,
+    });
 
-    const parts = (() => {
-      const lower = path.basename(filePath).toLowerCase();
-      if (lower === 'package.json')
-        return extractFromPackageJson(path.dirname(filePath));
-      if (lower === 'cargo.toml')
-        return extractFromCargoToml(path.dirname(filePath));
-      if (lower === 'cz.json') return extractFromCzJson(path.dirname(filePath));
-      return null;
-    })();
+    let parts: VersionParts | null = null;
 
-    if (!parts) {
-      throw new Error(
-        `Could not extract a semantic version from '${fileInput}'. Supported files: package.json, Cargo.toml, cz.json`,
-      );
+    if (fileInput && fileInput !== '') {
+      const filePath = path.resolve(process.cwd(), fileInput);
+      const lowerFilename = path.basename(filePath).toLowerCase();
+
+      if (lowerFilename === 'package.json') {
+        parts = extractFromPackageJson(filePath);
+      } else if (lowerFilename === 'cargo.toml') {
+        parts = extractFromCargoToml(filePath);
+      }
+    } else {
+      try {
+        const output = exec('cz version -p').trim();
+        parts = parseSemver(output);
+      } catch (err) {
+        throw new Error(`Failed to execute 'cz version -p': ${err}`);
+      }
     }
 
-    const major = parts.major;
-    const majorMinor = `${parts.major}.${parts.minor}`;
-    const majorMinorPatch = `${parts.major}.${parts.minor}.${parts.patch}`;
+    if (!parts) {
+      throw new Error('Could not extract a semantic version.');
+    }
 
-    core.setOutput('major', major);
-    core.setOutput('major_minor', majorMinor);
-    core.setOutput('major_minor_patch', majorMinorPatch);
+    core.setOutput('major', parts.major);
+    core.setOutput('minor', parts.minor);
+    core.setOutput('patch', parts.patch);
+    core.setOutput('prerelease', parts.prerelease || '');
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);
