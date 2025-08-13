@@ -41,6 +41,7 @@ jobs:
       # Add your own steps to build doc assets and output them to dist/docs/v1.2.3
       # (and optionally dist/docs/latest if you want to publish docs under the latest URL)
 
+      # Checkout a dedicated branch to update the prepared assets
       - name: Checkout icp-pages branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
