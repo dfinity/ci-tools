@@ -19168,7 +19168,7 @@ var LATEST_VERSION_NAME = "latest";
 var VALID_TAGS = ["latest", "beta", "dev", "next", "nightly", "canary"];
 var VALID_VERSION_FORMATS = ["vX", "vX.Y", "vX.Y.Z", ...VALID_TAGS];
 var VALID_VERSION_PATTERNS = new RegExp(
-  `^(?:vd+(?:.d+(?:.d+)?)?|${VALID_TAGS.join("|")})$`
+  `^(?:v\\d+(?:\\.\\d+(?:\\.\\d+)?)?|${VALID_TAGS.join("|")})$`
 );
 var ALLOWED_VERSIONS_MESSAGE = `Allowed values: ${VALID_VERSION_FORMATS.join(" | ")}`;
 function isVersionListedInVersionsJson(version2) {
