@@ -12,9 +12,9 @@ export async function upsertVersionsJson(params: {
 
   let versions = readJsonFile<VersionEntry[]>(versionsJsonPath) || [];
 
-  const versionEntry = versions.find(v => v.path === version);
-  if (versionEntry) {
-    versionEntry.label = versionLabel;
+  const versionEntryIndex = versions.findIndex(v => v.path === version);
+  if (versionEntryIndex !== -1) {
+    versions[versionEntryIndex].label = versionLabel;
   } else {
     versions.push({ path: version, label: versionLabel });
   }
