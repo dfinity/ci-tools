@@ -23226,8 +23226,13 @@ var require_dist = __commonJS({
         return null;
       }
     }
-    function zip(srcPath, destPath) {
-      exec(`zip -r "${destPath}" "${srcPath}"`);
+    function zip({
+      absoluteSrcPath,
+      absoluteDestPath
+    }) {
+      inDir2(absoluteSrcPath, () => {
+        exec(`zip -r "${absoluteDestPath}" .`);
+      });
     }
   }
 });

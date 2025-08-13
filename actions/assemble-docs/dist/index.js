@@ -19147,8 +19147,13 @@ var require_dist = __commonJS({
         return null;
       }
     }
-    function zip2(srcPath, destPath) {
-      exec(`zip -r "${destPath}" "${srcPath}"`);
+    function zip2({
+      absoluteSrcPath,
+      absoluteDestPath
+    }) {
+      inDir(absoluteSrcPath, () => {
+        exec(`zip -r "${absoluteDestPath}" .`);
+      });
     }
   }
 });
@@ -19213,7 +19218,10 @@ async function run() {
       );
     }
     core.info(`Zipping ${assetsDir} to ${zipTargetPath}`);
-    (0, import_action_utils2.zip)(assetsDir, zipTargetPath);
+    (0, import_action_utils2.zip)({
+      absoluteSrcPath: assetsDir,
+      absoluteDestPath: zipTargetPath
+    });
     const versionsJsonPath = import_node_path.default.resolve(
       process.cwd(),
       VERSIONS_JSON_FILE_NAME

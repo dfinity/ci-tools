@@ -1,5 +1,13 @@
-import { exec } from './command';
+import { exec, inDir } from './command';
 
-export function zip(srcPath: string, destPath: string) {
-  exec(`zip -r "${destPath}" "${srcPath}"`);
+export function zip({
+  absoluteSrcPath,
+  absoluteDestPath,
+}: {
+  absoluteSrcPath: string;
+  absoluteDestPath: string;
+}) {
+  inDir(absoluteSrcPath, () => {
+    exec(`zip -r "${absoluteDestPath}" .`);
+  });
 }

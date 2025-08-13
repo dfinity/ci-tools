@@ -25,7 +25,10 @@ export async function run(): Promise<void> {
     }
 
     core.info(`Zipping ${assetsDir} to ${zipTargetPath}`);
-    zip(assetsDir, zipTargetPath);
+    zip({
+      absoluteSrcPath: assetsDir,
+      absoluteDestPath: zipTargetPath,
+    });
 
     const versionsJsonPath = path.resolve(
       process.cwd(),
