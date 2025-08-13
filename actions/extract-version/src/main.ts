@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { exec, getOptInput } from '@dfinity/action-utils';
+import { exec, getOptInput, readJsonFile } from '@dfinity/action-utils';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -9,16 +9,6 @@ type VersionParts = {
   patch: string;
   prerelease: string | null;
 };
-
-// TODO: use readJsonFile from @dfinity/action-utils once #46 is merged
-function readJsonFile<T = unknown>(filePath: string): T | null {
-  try {
-    const data = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(data) as T;
-  } catch {
-    return null;
-  }
-}
 
 function readTextFile(filePath: string): string | null {
   try {

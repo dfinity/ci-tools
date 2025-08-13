@@ -19065,7 +19065,12 @@ var require_dist = __commonJS({
       gitCheckoutBranch: () => gitCheckoutBranch,
       gitCommit: () => gitCommit,
       gitHasChanges: () => gitHasChanges,
-      gitPushBranch: () => gitPushBranch
+      gitPushBranch: () => gitPushBranch,
+      inDir: () => inDir,
+      moveFile: () => moveFile,
+      readJsonFile: () => readJsonFile2,
+      writeJsonFile: () => writeJsonFile,
+      zip: () => zip
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -19079,6 +19084,16 @@ var require_dist = __commonJS({
         result += ALPHANUM.charAt(Math.floor(Math.random() * ALPHANUM.length));
       }
       return result;
+    }
+    function inDir(dir, fn) {
+      const currentDir = process.cwd();
+      process.chdir(dir);
+      fn();
+      process.chdir(currentDir);
+    }
+    var import_node_fs2 = __toESM2(require("node:fs"));
+    function moveFile(src, dest) {
+      import_node_fs2.default.renameSync(src, dest);
     }
     function gitAdd() {
       exec2(`git add .`);
@@ -19115,6 +19130,26 @@ var require_dist = __commonJS({
       }
       return numberInput;
     }
+    var import_node_fs22 = __toESM2(require("node:fs"));
+    var core22 = __toESM2(require_core());
+    function writeJsonFile(filePath, data) {
+      const json = JSON.stringify(data, null, 2) + "\n";
+      import_node_fs22.default.writeFileSync(filePath, json, "utf8");
+    }
+    function readJsonFile2(filePath) {
+      try {
+        const raw = import_node_fs22.default.readFileSync(filePath, "utf8");
+        return JSON.parse(raw);
+      } catch (err) {
+        core22.info(
+          `Could not read or parse JSON file ${filePath}. Reason: ${err.message}`
+        );
+        return null;
+      }
+    }
+    function zip(srcPath, destPath) {
+      exec2(`zip -r "${destPath}" "${srcPath}"`);
+    }
   }
 });
 
@@ -19123,14 +19158,6 @@ var core = __toESM(require_core());
 var import_action_utils = __toESM(require_dist());
 var import_node_fs = __toESM(require("node:fs"));
 var import_node_path = __toESM(require("node:path"));
-function readJsonFile(filePath) {
-  try {
-    const data = import_node_fs.default.readFileSync(filePath, "utf8");
-    return JSON.parse(data);
-  } catch {
-    return null;
-  }
-}
 function readTextFile(filePath) {
   try {
     return import_node_fs.default.readFileSync(filePath, "utf8");
@@ -19152,7 +19179,7 @@ function parseSemver(version2) {
   };
 }
 function extractFromPackageJson(filePath) {
-  const json = readJsonFile(filePath);
+  const json = (0, import_action_utils.readJsonFile)(filePath);
   if (!json?.version) {
     return null;
   }
