@@ -17926,12 +17926,12 @@ var require_lib = __commonJS({
             throw new Error("Client has already been disposed.");
           }
           const parsedUrl = new URL(requestUrl);
-          let info4 = this._prepareRequest(verb, parsedUrl, headers);
+          let info3 = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
           let response;
           do {
-            response = yield this.requestRaw(info4, data);
+            response = yield this.requestRaw(info3, data);
             if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
@@ -17941,7 +17941,7 @@ var require_lib = __commonJS({
                 }
               }
               if (authenticationHandler) {
-                return authenticationHandler.handleAuthentication(this, info4, data);
+                return authenticationHandler.handleAuthentication(this, info3, data);
               } else {
                 return response;
               }
@@ -17964,8 +17964,8 @@ var require_lib = __commonJS({
                   }
                 }
               }
-              info4 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info4, data);
+              info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+              response = yield this.requestRaw(info3, data);
               redirectsRemaining--;
             }
             if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
@@ -17994,7 +17994,7 @@ var require_lib = __commonJS({
        * @param info
        * @param data
        */
-      requestRaw(info4, data) {
+      requestRaw(info3, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => {
             function callbackForResult(err, res) {
@@ -18006,7 +18006,7 @@ var require_lib = __commonJS({
                 resolve(res);
               }
             }
-            this.requestRawWithCallback(info4, data, callbackForResult);
+            this.requestRawWithCallback(info3, data, callbackForResult);
           });
         });
       }
@@ -18016,12 +18016,12 @@ var require_lib = __commonJS({
        * @param data
        * @param onResult
        */
-      requestRawWithCallback(info4, data, onResult) {
+      requestRawWithCallback(info3, data, onResult) {
         if (typeof data === "string") {
-          if (!info4.options.headers) {
-            info4.options.headers = {};
+          if (!info3.options.headers) {
+            info3.options.headers = {};
           }
-          info4.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         function handleResult(err, res) {
@@ -18030,7 +18030,7 @@ var require_lib = __commonJS({
             onResult(err, res);
           }
         }
-        const req = info4.httpModule.request(info4.options, (msg) => {
+        const req = info3.httpModule.request(info3.options, (msg) => {
           const res = new HttpClientResponse(msg);
           handleResult(void 0, res);
         });
@@ -18042,7 +18042,7 @@ var require_lib = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error(`Request timeout: ${info4.options.path}`));
+          handleResult(new Error(`Request timeout: ${info3.options.path}`));
         });
         req.on("error", function(err) {
           handleResult(err);
@@ -18078,27 +18078,27 @@ var require_lib = __commonJS({
         return this._getProxyAgentDispatcher(parsedUrl, proxyUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info4 = {};
-        info4.parsedUrl = requestUrl;
-        const usingSsl = info4.parsedUrl.protocol === "https:";
-        info4.httpModule = usingSsl ? https : http;
+        const info3 = {};
+        info3.parsedUrl = requestUrl;
+        const usingSsl = info3.parsedUrl.protocol === "https:";
+        info3.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info4.options = {};
-        info4.options.host = info4.parsedUrl.hostname;
-        info4.options.port = info4.parsedUrl.port ? parseInt(info4.parsedUrl.port) : defaultPort;
-        info4.options.path = (info4.parsedUrl.pathname || "") + (info4.parsedUrl.search || "");
-        info4.options.method = method;
-        info4.options.headers = this._mergeHeaders(headers);
+        info3.options = {};
+        info3.options.host = info3.parsedUrl.hostname;
+        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
+        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
+        info3.options.method = method;
+        info3.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info4.options.headers["user-agent"] = this.userAgent;
+          info3.options.headers["user-agent"] = this.userAgent;
         }
-        info4.options.agent = this._getAgent(info4.parsedUrl);
+        info3.options.agent = this._getAgent(info3.parsedUrl);
         if (this.handlers) {
           for (const handler of this.handlers) {
-            handler.prepareRequest(info4.options);
+            handler.prepareRequest(info3.options);
           }
         }
-        return info4;
+        return info3;
       }
       _mergeHeaders(headers) {
         if (this.requestOptions && this.requestOptions.headers) {
@@ -18921,7 +18921,7 @@ var require_core = __commonJS({
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports2.getBooleanInput = getBooleanInput;
-    function setOutput2(name, value) {
+    function setOutput(name, value) {
       const filePath = process.env["GITHUB_OUTPUT"] || "";
       if (filePath) {
         return file_command_1.issueFileCommand("OUTPUT", file_command_1.prepareKeyValueMessage(name, value));
@@ -18929,7 +18929,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       process.stdout.write(os.EOL);
       command_1.issueCommand("set-output", { name }, utils_1.toCommandValue(value));
     }
-    exports2.setOutput = setOutput2;
+    exports2.setOutput = setOutput;
     function setCommandEcho(enabled) {
       command_1.issue("echo", enabled ? "on" : "off");
     }
@@ -18959,10 +18959,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports2.notice = notice;
-    function info4(message) {
+    function info3(message) {
       process.stdout.write(message + os.EOL);
     }
-    exports2.info = info4;
+    exports2.info = info3;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -23136,18 +23136,15 @@ var require_dist = __commonJS({
     var src_exports = {};
     __export2(src_exports, {
       exec: () => exec,
-      generateRandomSuffix: () => generateRandomSuffix2,
+      generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
-      getOptInput: () => getOptInput,
-      gitAdd: () => gitAdd2,
-      gitCheckoutBranch: () => gitCheckoutBranch2,
-      gitCommit: () => gitCommit2,
-      gitHasChanges: () => gitHasChanges2,
-      gitPushBranch: () => gitPushBranch2,
-      moveFile: () => moveFile,
-      readJsonFile: () => readJsonFile,
-      writeJsonFile: () => writeJsonFile
+      getOptInput: () => getOptInput2,
+      gitAdd: () => gitAdd,
+      gitCheckoutBranch: () => gitCheckoutBranch,
+      gitCommit: () => gitCommit,
+      gitHasChanges: () => gitHasChanges,
+      gitPushBranch: () => gitPushBranch
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_child_process = require("child_process");
@@ -23155,41 +23152,37 @@ var require_dist = __commonJS({
       return (0, import_child_process.execSync)(command).toString();
     }
     var ALPHANUM = "abcdefghijklmnopqrstuvwxyz0123456789";
-    function generateRandomSuffix2(length) {
+    function generateRandomSuffix(length) {
       let result = "";
       for (let i = 0; i < length; i++) {
         result += ALPHANUM.charAt(Math.floor(Math.random() * ALPHANUM.length));
       }
       return result;
     }
-    var import_node_fs = __toESM2(require("node:fs"));
-    function moveFile(src, dest) {
-      import_node_fs.default.renameSync(src, dest);
-    }
-    function gitAdd2() {
+    function gitAdd() {
       exec(`git add .`);
     }
-    function gitCommit2(message, authorName, authorEmail) {
+    function gitCommit(message, authorName, authorEmail) {
       exec(`git config user.name "${authorName}"`);
       exec(`git config user.email "${authorEmail}"`);
       exec(`git commit -m "${message}"`);
     }
-    function gitCheckoutBranch2(branch) {
+    function gitCheckoutBranch(branch) {
       exec(`git checkout -b ${branch}`);
     }
-    function gitPushBranch2(branch) {
+    function gitPushBranch(branch) {
       exec(`git push -u origin ${branch}`);
     }
-    function gitHasChanges2() {
+    function gitHasChanges() {
       const output = exec("git status --porcelain");
       return output.trim().length > 0;
     }
-    var core4 = __toESM2(require_core());
+    var core3 = __toESM2(require_core());
     function getInput22(name) {
-      return core4.getInput(name, { required: true, trimWhitespace: true });
+      return core3.getInput(name, { required: true, trimWhitespace: true });
     }
-    function getOptInput(name, defaultValue) {
-      return core4.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
+    function getOptInput2(name, defaultValue) {
+      return core3.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
     }
     function getNumberInput(name) {
       const input = getInput22(name);
@@ -23201,112 +23194,72 @@ var require_dist = __commonJS({
       }
       return numberInput;
     }
-    var import_node_fs2 = __toESM2(require("node:fs"));
-    var core22 = __toESM2(require_core());
-    function writeJsonFile(filePath, data) {
-      const json = JSON.stringify(data, null, 2) + "\n";
-      import_node_fs2.default.writeFileSync(filePath, json, "utf8");
-    }
-    function readJsonFile(filePath) {
-      try {
-        const raw = import_node_fs2.default.readFileSync(filePath, "utf8");
-        return JSON.parse(raw);
-      } catch (err) {
-        core22.info(
-          `Could not read or parse JSON file ${filePath}. Reason: ${err.message}`
-        );
-        return null;
-      }
-    }
   }
 });
 
 // src/main.ts
-var core3 = __toESM(require_core());
+var core2 = __toESM(require_core());
 var github = __toESM(require_github());
-var import_action_utils2 = __toESM(require_dist());
+var import_action_utils = __toESM(require_dist());
 
-// src/create-pull-request.ts
+// src/dispatch.ts
 var core = __toESM(require_core());
-async function createPullRequest({
+async function createRepositoryDispatch({
   octokit,
   owner,
   repo,
-  head,
-  base,
-  title,
-  body
+  eventType,
+  clientPayload
 }) {
-  const res = await octokit.rest.pulls.create({
+  await octokit.rest.repos.createDispatchEvent({
     owner,
     repo,
-    title,
-    head,
-    base,
-    body
+    event_type: eventType,
+    client_payload: clientPayload
   });
-  core.info(`Created pull request #${res.data.number}`);
-  return {
-    number: res.data.number
-  };
-}
-
-// src/create-commit.ts
-var core2 = __toESM(require_core());
-var import_action_utils = __toESM(require_dist());
-function createCommit({
-  message,
-  head,
-  authorName,
-  authorEmail
-}) {
-  (0, import_action_utils.gitCheckoutBranch)(head);
-  (0, import_action_utils.gitAdd)();
-  (0, import_action_utils.gitCommit)(message, authorName, authorEmail);
-  (0, import_action_utils.gitPushBranch)(head);
-  core2.info(`Created git commit on branch ${head}`);
+  core.info(`Created dispatch event ${eventType} on ${owner}/${repo}`);
 }
 
 // src/main.ts
+var DEFAULT_DESTINATION_REPO = "dfinity/icp-js-sdk-docs";
+var DEFAULT_EVENT_TYPE = "submit-project-docs";
 async function run() {
   try {
-    const authorName = (0, import_action_utils2.getInput)("author_name");
-    const authorEmail = (0, import_action_utils2.getInput)("author_email");
-    const head = `${(0, import_action_utils2.getInput)("branch_name")}-${(0, import_action_utils2.generateRandomSuffix)(6)}`;
-    const base = (0, import_action_utils2.getInput)("base_branch_name");
-    const message = (0, import_action_utils2.getInput)("commit_message");
-    const title = (0, import_action_utils2.getInput)("pull_request_title");
-    const body = (0, import_action_utils2.getInput)("pull_request_body");
-    const token = (0, import_action_utils2.getInput)("token");
+    const destinationRepo = (0, import_action_utils.getOptInput)(
+      "destination_repo",
+      DEFAULT_DESTINATION_REPO
+    );
+    const eventType = (0, import_action_utils.getOptInput)("event_type", DEFAULT_EVENT_TYPE);
+    const token = (0, import_action_utils.getInput)("token");
+    const [destOwner, destRepo] = destinationRepo.split("/");
+    if (!destOwner || !destRepo) {
+      throw new Error(
+        `Invalid destination repository format: ${destinationRepo}. Expected format: "owner/repo"`
+      );
+    }
     const octokit = github.getOctokit(token);
     const { owner, repo } = github.context.repo;
-    if (!(0, import_action_utils2.gitHasChanges)()) {
-      core3.info(
-        "No changes detected, skipping commit and pull request creation"
-      );
-      core3.setOutput("pull_request_created", false);
-      return;
-    }
-    createCommit({
-      authorEmail,
-      authorName,
-      head,
-      message
-    });
-    const res = await createPullRequest({
+    const clientPayload = {
+      project_repository: `${owner}/${repo}`
+    };
+    core2.info(
+      `Triggering repository_dispatch event on ${destinationRepo}. Event type: ${eventType}. Payload: ${JSON.stringify(
+        clientPayload
+      )}`
+    );
+    await createRepositoryDispatch({
       octokit,
-      owner,
-      repo,
-      head,
-      base,
-      title,
-      body
+      owner: destOwner,
+      repo: destRepo,
+      eventType,
+      clientPayload
     });
-    core3.setOutput("pull_request_number", res.number);
-    core3.setOutput("pull_request_created", true);
+    core2.info(
+      `Successfully triggered pull-projects-docs workflow on ${destinationRepo}`
+    );
   } catch (error) {
     if (error instanceof Error) {
-      core3.setFailed(error.message);
+      core2.setFailed(error.message);
     }
   }
 }
