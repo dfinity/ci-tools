@@ -19219,6 +19219,11 @@ async function run() {
     const versionLabel = (0, import_action_utils2.getOptInput)("version_label", version2);
     const targetDir = (0, import_action_utils2.getInput)("target_dir");
     const targetZipFile = import_node_path.default.join(process.cwd(), targetDir, `${version2}.zip`);
+    const targetVersionsJsonFile = import_node_path.default.join(
+      process.cwd(),
+      targetDir,
+      VERSIONS_JSON_FILE_NAME
+    );
     if (!isValidVersion(version2)) {
       throw new Error(
         `Invalid version '${version2}'. ${ALLOWED_VERSIONS_MESSAGE}`
@@ -19231,14 +19236,10 @@ async function run() {
       absoluteSrcPath: assetsDir,
       absoluteDestPath: targetZipFile
     });
-    const versionsJsonPath = import_node_path.default.resolve(
-      process.cwd(),
-      VERSIONS_JSON_FILE_NAME
-    );
     if (isVersionListedInVersionsJson(version2)) {
       core.info(`Upserting versions.json for version ${version2}`);
       await upsertVersionsJson({
-        versionsJsonPath,
+        versionsJsonPath: targetVersionsJsonFile,
         version: version2,
         versionLabel
       });

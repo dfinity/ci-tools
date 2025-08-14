@@ -17,6 +17,11 @@ export async function run(): Promise<void> {
     const versionLabel = getOptInput('version_label', version);
     const targetDir = getInput('target_dir');
     const targetZipFile = path.join(process.cwd(), targetDir, `${version}.zip`);
+    const targetVersionsJsonFile = path.join(
+      process.cwd(),
+      targetDir,
+      VERSIONS_JSON_FILE_NAME,
+    );
 
     if (!isValidVersion(version)) {
       throw new Error(
@@ -33,15 +38,10 @@ export async function run(): Promise<void> {
       absoluteDestPath: targetZipFile,
     });
 
-    const versionsJsonPath = path.resolve(
-      process.cwd(),
-      VERSIONS_JSON_FILE_NAME,
-    );
-
     if (isVersionListedInVersionsJson(version)) {
       core.info(`Upserting versions.json for version ${version}`);
       await upsertVersionsJson({
-        versionsJsonPath,
+        versionsJsonPath: targetVersionsJsonFile,
         version,
         versionLabel,
       });
