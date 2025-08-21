@@ -35,7 +35,7 @@ runs:
         cmd="deno i --frozen=true"
 
         if [ -n "$INSTALL_ALLOW_SCRIPTS" ]; then
-          cmd="$cmd --allow-scripts=\"$INSTALL_ALLOW_SCRIPTS\""
+          cmd="$cmd --allow-scripts=$INSTALL_ALLOW_SCRIPTS"
         fi
 
         $cmd
