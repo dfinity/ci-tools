@@ -13,9 +13,9 @@ inputs:
     default: 'v2.x'
 
   install_allow_scripts:
-    description: 'Whether to add `--allow-scripts` to the `deno install` command.'
+    description: 'Comma-separated list of scripts to allow when running the `deno i --allow-scripts` command.'
     required: false
-    default: false
+    default: ''
 
 runs:
   using: composite
@@ -34,8 +34,8 @@ runs:
       run: |
         cmd="deno i --frozen=true"
 
-        if [ "$INPUT_INSTALL_ALLOW_SCRIPTS" = "true" ]; then
-          cmd="$cmd --allow-scripts"
+        if [ -n "$INSTALL_ALLOW_SCRIPTS" ]; then
+          cmd="$cmd --allow-scripts=\"$INSTALL_ALLOW_SCRIPTS\""
         fi
 
         $cmd
