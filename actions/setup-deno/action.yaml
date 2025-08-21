@@ -12,6 +12,11 @@ inputs:
     required: false
     default: 'v2.x'
 
+  install_allow_scripts:
+    description: 'Whether to add `--allow-scripts` to the `deno install` command.'
+    required: false
+    default: false
+
 runs:
   using: composite
   steps:
@@ -24,4 +29,13 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: deno i --frozen=true
+      env:
+        INSTALL_ALLOW_SCRIPTS: ${{ inputs.install_allow_scripts }}
+      run: |
+        cmd="deno i --frozen=true"
+
+        if [ "$INPUT_INSTALL_ALLOW_SCRIPTS" = "true" ]; then
+          cmd="$cmd --allow-scripts"
+        fi
+
+        $cmd
