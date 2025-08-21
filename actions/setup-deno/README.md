@@ -5,10 +5,11 @@ This action sets up [Deno](https://deno.com/) for use in actions. The version of
 
 ## Action inputs
 
-| Input               | Description                                              | Default  |
-| ------------------- | -------------------------------------------------------- | -------- |
-| `deno_version_file` | The path to the file containing the Deno version to use. | `''`     |
-| `deno_version`      | The specific Deno version to use.                        | `'v2.x'` |
+| Input                   | Description                                                                                                                                                               | Default  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `deno_version_file`     | The path to the file containing the Deno version to use.                                                                                                                  | `''`     |
+| `deno_version`          | The specific Deno version to use.                                                                                                                                         | `'v2.x'` |
+| `install_allow_scripts` | Comma-separated list of scripts to allow when running the [`deno i --allow-scripts`](https://docs.deno.com/runtime/reference/cli/install/#options-allow-scripts) command. | `''`     |
 
 ## Example usage
 

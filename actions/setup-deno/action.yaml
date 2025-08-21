@@ -12,6 +12,11 @@ inputs:
     required: false
     default: 'v2.x'
 
+  install_allow_scripts:
+    description: 'Comma-separated list of scripts to allow when running the `deno i --allow-scripts` command.'
+    required: false
+    default: ''
+
 runs:
   using: composite
   steps:
@@ -24,4 +29,13 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: deno i --frozen=true
+      env:
+        INSTALL_ALLOW_SCRIPTS: ${{ inputs.install_allow_scripts }}
+      run: |
+        cmd="deno i --frozen=true"
+
+        if [ -n "$INSTALL_ALLOW_SCRIPTS" ]; then
+          cmd="$cmd --allow-scripts=$INSTALL_ALLOW_SCRIPTS"
+        fi
+
+        $cmd
