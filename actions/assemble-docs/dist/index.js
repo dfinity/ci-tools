@@ -19194,12 +19194,14 @@ async function upsertVersionsJson(params) {
   let versions = (0, import_action_utils.readJsonFile)(versionsJsonPath) || [];
   const versionEntryIndex = versions.findIndex((v) => v.path === version2);
   if (versionEntryIndex !== -1) {
-    versions[versionEntryIndex].label = versionLabel;
+    const versionEntry = versions[versionEntryIndex];
+    versionEntry.label = versionLabel;
     if (versionInTitle) {
-      versions[versionEntryIndex].versionInTitle = versionInTitle;
+      versionEntry.versionInTitle = versionInTitle;
     } else {
-      delete versions[versionEntryIndex].versionInTitle;
+      delete versionEntry.versionInTitle;
     }
+    versions[versionEntryIndex] = versionEntry;
   } else {
     versions.push({ path: version2, label: versionLabel, versionInTitle });
   }

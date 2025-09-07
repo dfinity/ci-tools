@@ -15,12 +15,14 @@ export async function upsertVersionsJson(params: {
 
   const versionEntryIndex = versions.findIndex(v => v.path === version);
   if (versionEntryIndex !== -1) {
-    versions[versionEntryIndex].label = versionLabel;
+    const versionEntry = versions[versionEntryIndex];
+    versionEntry.label = versionLabel;
     if (versionInTitle) {
-      versions[versionEntryIndex].versionInTitle = versionInTitle;
+      versionEntry.versionInTitle = versionInTitle;
     } else {
-      delete versions[versionEntryIndex].versionInTitle;
+      delete versionEntry.versionInTitle;
     }
+    versions[versionEntryIndex] = versionEntry;
   } else {
     versions.push({ path: version, label: versionLabel, versionInTitle });
   }
