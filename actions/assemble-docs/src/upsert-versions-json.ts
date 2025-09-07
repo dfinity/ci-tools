@@ -1,22 +1,28 @@
 import { writeJsonFile, readJsonFile } from '@dfinity/action-utils';
 import { LATEST_VERSION_NAME } from './versions';
 
-type VersionEntry = { path: string; label: string };
+type VersionEntry = { path: string; label: string; versionInTitle?: string };
 
 export async function upsertVersionsJson(params: {
   versionsJsonPath: string;
   version: string;
   versionLabel: string;
+  versionInTitle?: string;
 }): Promise<void> {
-  const { versionsJsonPath, version, versionLabel } = params;
+  const { versionsJsonPath, version, versionLabel, versionInTitle } = params;
 
   let versions = readJsonFile<VersionEntry[]>(versionsJsonPath) || [];
 
   const versionEntryIndex = versions.findIndex(v => v.path === version);
   if (versionEntryIndex !== -1) {
     versions[versionEntryIndex].label = versionLabel;
+    if (versionInTitle) {
+      versions[versionEntryIndex].versionInTitle = versionInTitle;
+    } else {
+      delete versions[versionEntryIndex].versionInTitle;
+    }
   } else {
-    versions.push({ path: version, label: versionLabel });
+    versions.push({ path: version, label: versionLabel, versionInTitle });
   }
 
   // Sort versions: latest first, then reverse alphabetically by path

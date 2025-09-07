@@ -15,6 +15,7 @@ export async function run(): Promise<void> {
     const assetsDir = getInput('assets_dir');
     const version = getInput('version');
     const versionLabel = getOptInput('version_label', version);
+    const versionInTitle = getOptInput('version_in_title', '');
     const targetDir = getInput('target_dir');
     const targetZipFile = path.join(process.cwd(), targetDir, `${version}.zip`);
     const targetVersionsJsonFile = path.join(
@@ -44,6 +45,7 @@ export async function run(): Promise<void> {
         versionsJsonPath: targetVersionsJsonFile,
         version,
         versionLabel,
+        versionInTitle,
       });
     }
 

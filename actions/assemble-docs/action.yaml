@@ -11,6 +11,9 @@ inputs:
   version_label:
     description: "Optional label value to set for this version's option in the website sidebar version dropdown. Defaults to the value of the `version` input."
     required: false
+  version_in_title:
+    description: 'Optional version label to show on top of the website sidebar version dropdown.'
+    required: false
   target_dir:
     description: 'The folder where the assembled docs must be saved.'
     required: true

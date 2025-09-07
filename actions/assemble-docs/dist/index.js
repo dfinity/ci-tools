@@ -19190,13 +19190,18 @@ function isValidVersion(version2) {
 
 // src/upsert-versions-json.ts
 async function upsertVersionsJson(params) {
-  const { versionsJsonPath, version: version2, versionLabel } = params;
+  const { versionsJsonPath, version: version2, versionLabel, versionInTitle } = params;
   let versions = (0, import_action_utils.readJsonFile)(versionsJsonPath) || [];
   const versionEntryIndex = versions.findIndex((v) => v.path === version2);
   if (versionEntryIndex !== -1) {
     versions[versionEntryIndex].label = versionLabel;
+    if (versionInTitle) {
+      versions[versionEntryIndex].versionInTitle = versionInTitle;
+    } else {
+      delete versions[versionEntryIndex].versionInTitle;
+    }
   } else {
-    versions.push({ path: version2, label: versionLabel });
+    versions.push({ path: version2, label: versionLabel, versionInTitle });
   }
   versions = versions.sort((a, b) => {
     if (a.path === LATEST_VERSION_NAME && b.path !== LATEST_VERSION_NAME) {
@@ -19217,6 +19222,7 @@ async function run() {
     const assetsDir = (0, import_action_utils2.getInput)("assets_dir");
     const version2 = (0, import_action_utils2.getInput)("version");
     const versionLabel = (0, import_action_utils2.getOptInput)("version_label", version2);
+    const versionInTitle = (0, import_action_utils2.getOptInput)("version_in_title", "");
     const targetDir = (0, import_action_utils2.getInput)("target_dir");
     const targetZipFile = import_node_path.default.join(process.cwd(), targetDir, `${version2}.zip`);
     const targetVersionsJsonFile = import_node_path.default.join(
@@ -19241,7 +19247,8 @@ async function run() {
       await upsertVersionsJson({
         versionsJsonPath: targetVersionsJsonFile,
         version: version2,
-        versionLabel
+        versionLabel,
+        versionInTitle
       });
     }
     core.info(`Docs assembled for version ${version2}.`);
