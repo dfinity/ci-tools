@@ -5,9 +5,9 @@ export function moveFile(src: string, dest: string): void {
   fs.renameSync(src, dest);
 }
 
-export function deleteFile(path: string): void {
+export function deleteFile(filePath: string): void {
   try {
-    fs.rmSync(path);
+    fs.rmSync(filePath);
   } catch {
     // ignore if file does not exist
   }

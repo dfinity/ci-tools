@@ -19098,9 +19098,9 @@ var require_dist = __commonJS({
     function moveFile(src, dest) {
       import_node_fs.default.renameSync(src, dest);
     }
-    function deleteFile2(path2) {
+    function deleteFile2(filePath) {
       try {
-        import_node_fs.default.rmSync(path2);
+        import_node_fs.default.rmSync(filePath);
       } catch {
       }
     }
