@@ -9,12 +9,13 @@ This action:
 
 ## Action inputs
 
-| Input           | Description                                                                                                                                                      | Default            |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `assets_dir`    | Path to the directory containing the documentation assets to be assembled.                                                                                       | _required_         |
-| `version`       | The subpath at which the assembled docs will be published. Allowed values: `vX` , `vX.Y` , `vX.Y.Z` , `latest` , `beta` , `dev` , `next` , `nightly` , `canary`. | _required_         |
-| `version_label` | Optional label value to set for this version's option in the website sidebar version dropdown.                                                                   | `{inputs.version}` |
-| `target_dir`    | The folder where the assembled docs must be saved.                                                                                                               | _required_         |
+| Input              | Description                                                                                                                                                      | Default            |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `assets_dir`       | Path to the directory containing the documentation assets to be assembled.                                                                                       | _required_         |
+| `version`          | The subpath at which the assembled docs will be published. Allowed values: `vX` , `vX.Y` , `vX.Y.Z` , `latest` , `beta` , `dev` , `next` , `nightly` , `canary`. | _required_         |
+| `version_label`    | Optional label value to set for this version's option in the website sidebar version dropdown.                                                                   | `{inputs.version}` |
+| `version_in_title` | Optional version label to show on top of the website sidebar version dropdown.                                                                                   | `''`               |
+| `target_dir`       | The folder where the assembled docs must be saved.                                                                                                               | _required_         |
 
 ## Example usage
 
