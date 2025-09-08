@@ -19056,6 +19056,7 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
+      absolutePath: () => absolutePath2,
       deleteFile: () => deleteFile2,
       exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix,
@@ -19093,6 +19094,7 @@ var require_dist = __commonJS({
       process.chdir(currentDir);
     }
     var import_node_fs = __toESM2(require("node:fs"));
+    var import_node_path2 = __toESM2(require("node:path"));
     function moveFile(src, dest) {
       import_node_fs.default.renameSync(src, dest);
     }
@@ -19101,6 +19103,9 @@ var require_dist = __commonJS({
         import_node_fs.default.rmSync(path2);
       } catch {
       }
+    }
+    function absolutePath2(p) {
+      return p.startsWith("/") ? p : import_node_path2.default.join(process.cwd(), p);
     }
     function gitAdd() {
       exec(`git add .`);
@@ -19226,10 +19231,11 @@ async function run() {
     const versionLabel = (0, import_action_utils2.getOptInput)("version_label", version2);
     const versionInTitle = (0, import_action_utils2.getOptInput)("version_in_title", "");
     const targetDir = (0, import_action_utils2.getInput)("target_dir");
-    const targetZipFile = import_node_path.default.join(process.cwd(), targetDir, `${version2}.zip`);
+    const absoluteAssetsDir = (0, import_action_utils2.absolutePath)(assetsDir);
+    const absoluteTargetDir = (0, import_action_utils2.absolutePath)(targetDir);
+    const targetZipFile = import_node_path.default.join(absoluteTargetDir, `${version2}.zip`);
     const targetVersionsJsonFile = import_node_path.default.join(
-      process.cwd(),
-      targetDir,
+      absoluteTargetDir,
       VERSIONS_JSON_FILE_NAME
     );
     if (!isValidVersion(version2)) {
@@ -19239,9 +19245,9 @@ async function run() {
     }
     core.info(`Cleaning up ${targetZipFile}`);
     (0, import_action_utils2.deleteFile)(targetZipFile);
-    core.info(`Zipping ${assetsDir} to ${targetZipFile}`);
+    core.info(`Zipping ${absoluteAssetsDir} to ${targetZipFile}`);
     (0, import_action_utils2.zip)({
-      absoluteSrcPath: assetsDir,
+      absoluteSrcPath: absoluteAssetsDir,
       absoluteDestPath: targetZipFile
     });
     if (isVersionListedInVersionsJson(version2)) {

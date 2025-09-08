@@ -23135,6 +23135,7 @@ var require_dist = __commonJS({
     var __toCommonJS2 = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
     var src_exports = {};
     __export2(src_exports, {
+      absolutePath: () => absolutePath,
       deleteFile: () => deleteFile,
       exec: () => exec,
       generateRandomSuffix: () => generateRandomSuffix2,
@@ -23172,14 +23173,18 @@ var require_dist = __commonJS({
       process.chdir(currentDir);
     }
     var import_node_fs = __toESM2(require("node:fs"));
+    var import_node_path = __toESM2(require("node:path"));
     function moveFile(src, dest) {
       import_node_fs.default.renameSync(src, dest);
     }
-    function deleteFile(path) {
+    function deleteFile(path2) {
       try {
-        import_node_fs.default.rmSync(path);
+        import_node_fs.default.rmSync(path2);
       } catch {
       }
+    }
+    function absolutePath(p) {
+      return p.startsWith("/") ? p : import_node_path.default.join(process.cwd(), p);
     }
     function gitAdd2() {
       exec(`git add .`);
