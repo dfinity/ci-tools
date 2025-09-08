@@ -1,6 +1,12 @@
 import path from 'node:path';
 import * as core from '@actions/core';
-import { deleteFile, getInput, getOptInput, zip } from '@dfinity/action-utils';
+import {
+  absolutePath,
+  deleteFile,
+  getInput,
+  getOptInput,
+  zip,
+} from '@dfinity/action-utils';
 import { upsertVersionsJson } from './upsert-versions-json';
 import {
   ALLOWED_VERSIONS_MESSAGE,
@@ -17,10 +23,12 @@ export async function run(): Promise<void> {
     const versionLabel = getOptInput('version_label', version);
     const versionInTitle = getOptInput('version_in_title', '');
     const targetDir = getInput('target_dir');
-    const targetZipFile = path.join(process.cwd(), targetDir, `${version}.zip`);
+
+    const absoluteAssetsDir = absolutePath(assetsDir);
+    const absoluteTargetDir = absolutePath(targetDir);
+    const targetZipFile = path.join(absoluteTargetDir, `${version}.zip`);
     const targetVersionsJsonFile = path.join(
-      process.cwd(),
-      targetDir,
+      absoluteTargetDir,
       VERSIONS_JSON_FILE_NAME,
     );
 
@@ -33,9 +41,9 @@ export async function run(): Promise<void> {
     core.info(`Cleaning up ${targetZipFile}`);
     deleteFile(targetZipFile);
 
-    core.info(`Zipping ${assetsDir} to ${targetZipFile}`);
+    core.info(`Zipping ${absoluteAssetsDir} to ${targetZipFile}`);
     zip({
-      absoluteSrcPath: assetsDir,
+      absoluteSrcPath: absoluteAssetsDir,
       absoluteDestPath: targetZipFile,
     });
 
