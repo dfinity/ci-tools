@@ -24,7 +24,14 @@ export async function upsertVersionsJson(params: {
     }
     versions[versionEntryIndex] = versionEntry;
   } else {
-    versions.push({ path: version, label: versionLabel, versionInTitle });
+    const newVersionEntry: VersionEntry = {
+      path: version,
+      label: versionLabel,
+    };
+    if (versionInTitle) {
+      newVersionEntry.versionInTitle = versionInTitle;
+    }
+    versions.push(newVersionEntry);
   }
 
   // Sort versions: latest first, then reverse alphabetically by path
