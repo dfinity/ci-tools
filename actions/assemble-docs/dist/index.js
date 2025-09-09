@@ -19208,7 +19208,14 @@ async function upsertVersionsJson(params) {
     }
     versions[versionEntryIndex] = versionEntry;
   } else {
-    versions.push({ path: version2, label: versionLabel, versionInTitle });
+    const newVersionEntry = {
+      path: version2,
+      label: versionLabel
+    };
+    if (versionInTitle) {
+      newVersionEntry.versionInTitle = versionInTitle;
+    }
+    versions.push(newVersionEntry);
   }
   versions = versions.sort((a, b) => {
     if (a.path === LATEST_VERSION_NAME && b.path !== LATEST_VERSION_NAME) {
