@@ -9,10 +9,14 @@ concurrency:
   group: main-${{ github.workflow }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+
 jobs:
   generate_changelog:
     uses: ./.github/workflows/generate-changelog.yaml
     with:
       token_app_id: ${{ vars.PR_AUTOMATION_BOT_PUBLIC_APP_ID }}
+      environment: create-prs
     secrets:
       token_private_key: ${{ secrets.PR_AUTOMATION_BOT_PUBLIC_PRIVATE_KEY }}
