@@ -53,6 +53,11 @@ on:
         required: true
         type: string
 
+      environment:
+        description: 'The name of the environment to use for the generate_changelog job.'
+        required: true
+        type: string
+
     secrets:
       token_private_key:
         description: 'A GitHub App private key used to generate an access token to create a pull request.'
@@ -60,6 +65,7 @@ on:
 jobs:
   generate_changelog:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - name: Create GitHub App Token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
