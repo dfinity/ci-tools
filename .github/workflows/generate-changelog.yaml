@@ -58,6 +58,18 @@ on:
         required: true
         type: string
 
+      owner:
+        description: 'The owner of the repository to create the pull request in.'
+        required: false
+        default: '${{ github.repository_owner }}'
+        type: string
+
+      repository:
+        description: 'The repository to create the pull request in.'
+        required: false
+        default: '${{ github.event.repository.name }}'
+        type: string
+
     secrets:
       token_private_key:
         description: 'A GitHub App private key used to generate an access token to create a pull request.'
@@ -73,6 +85,8 @@ jobs:
         with:
           app-id: ${{ inputs.token_app_id }}
           private-key: ${{ secrets.token_private_key }}
+          owner: ${{ inputs.owner }}
+          repositories: ${{ inputs.repository }}
 
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
