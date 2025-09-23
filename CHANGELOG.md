@@ -29,6 +29,7 @@
 
 ### Fix
 
+- MAJOR_VERSION_ZERO boolean check (#60)
 - only add `versionInTitle` to new entry if it's not empty (#54)
 - the self-generate-changelog workflow (#56)
 - make sure path is absolute in assemble-docs zip (#53)
