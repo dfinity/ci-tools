@@ -33,7 +33,7 @@ runs:
           cmd="$cmd --prerelease $PRERELEASE"
         fi
 
-        if [ -n "$MAJOR_VERSION_ZERO" ]; then
+        if [ "$MAJOR_VERSION_ZERO" = "true" ]; then
           cmd="$cmd --major-version-zero"
         fi
 
@@ -52,7 +52,7 @@ runs:
           cmd="$cmd --prerelease $PRERELEASE"
         fi
 
-        if [ -n "$MAJOR_VERSION_ZERO" ]; then
+        if [ "$MAJOR_VERSION_ZERO" = "true" ]; then
           cmd="$cmd --major-version-zero"
         fi
 
