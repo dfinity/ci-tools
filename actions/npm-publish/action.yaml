@@ -4,7 +4,7 @@ description: 'This action publishes a package to the npm registry.'
 inputs:
   token:
     description: 'The npm token to use for authentication.'
-    required: true
+    required: false
   is_beta:
     description: 'A stringified boolean indicating whether to publish the package as a beta version.'
     required: false
