@@ -14,7 +14,7 @@ inputs:
     required: false
     default: 'npm'
   enable_provenance:
-    description: 'Enable the generation and publication of NPM`s package provenance statements.'
+    description: 'Enable the generation and publication of NPM''s package provenance statements.'
     required: false
     default: 'true'
 
