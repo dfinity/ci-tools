@@ -13,6 +13,11 @@ inputs:
     description: 'The package manager to use for publishing.'
     required: false
     default: 'npm'
+  enable_provenance:
+    description: 'Enable package provenance.'
+    required: false
+    default: 'true'
+
 
 outputs:
   artifact_filepath:
@@ -27,6 +32,7 @@ runs:
       env:
         NODE_AUTH_TOKEN: ${{ inputs.token }}
         IS_BETA: ${{ inputs.is_beta }}
+        NPM_CONFIG_PROVENANCE: ${{ inputs.enable_provenance }}
       shell: bash
       run: |
         artifact_filepath=$(pwd)/$(${{ inputs.package_manager }} pack --json | jq -r '.[0].filename')

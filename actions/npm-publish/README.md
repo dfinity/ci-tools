@@ -1,14 +1,15 @@
 # NPM publish
 
-This action publishes a package to the npm registry. It assumes that `npm` and `pnpm` is already setup, see the [setup PNPM action](../setup-pnpm/README.md) for a ready to use action to do this.
+This action publishes a package to the npm registry. It assumes that `npm` and `pnpm` is already setup, see the [setup PNPM action](../setup-pnpm/README.md) for a ready to use action to do this. Starting from npm version 11.5.1, OIDC is supported 
 
 ## Action inputs
 
-| Input             | Description                                                           | Default    |
-| ----------------- | --------------------------------------------------------------------- | ---------- |
-| `token`           | The npm token to authenticate with the npm registry.                  | _required_ |
-| `is_beta`         | Publish the package as a beta version. Expects a stringified boolean. | `'false'`  |
-| `package_manager` | The package manager to use for publishing.                            | `'npm'`    |
+| Input               | Description                                                           | Default    |
+| ------------------- | --------------------------------------------------------------------- | ---------- |
+| `token`             | The npm token to authenticate with the npm registry.                  | `''`       |
+| `is_beta`           | Publish the package as a beta version. Expects a stringified boolean. | `'false'`  |
+| `package_manager`   | The package manager to use for publishing.                            | `'npm'`    |
+| `enable_provenance` | Enable package provenance.                                            | `'true'`   |
 
 ## Action outputs
 
