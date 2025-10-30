@@ -2,7 +2,7 @@
   "name": "@dfinity/ci-tools",
   "private": true,
   "engines": {
-    "node": "^20",
+    "node": "^24",
     "pnpm": "^10",
     "npm": "please use pnpm"
   },
@@ -17,11 +17,11 @@
     "@actions/github": "^6.0.0"
   },
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.4",
-    "@types/node": "^20.12.7",
+    "@tsconfig/node24": "^24.0.1",
+    "@types/node": "^24.9.2",
     "esbuild": "^0.20.2",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
-    "typescript": "^5.4.5"
+    "typescript": "^5.9.3"
   }
 }

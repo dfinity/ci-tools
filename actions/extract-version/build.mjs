@@ -6,5 +6,5 @@ await esbuild.build({
   outfile: path.resolve(import.meta.dirname, 'dist', 'index.js'),
   bundle: true,
   platform: 'node',
-  target: 'node20',
+  target: 'node24',
 });
