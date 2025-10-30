@@ -17,5 +17,5 @@ outputs:
     description: 'Everything after the patch (pre-release and/or build metadata).'
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.js
