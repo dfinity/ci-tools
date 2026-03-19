@@ -1,14 +1,5 @@
 ## Unreleased
 
-### Build
-
-- upgrade dependencies to fix vulnerabilities (#65)
-  - `@actions/core` ^1.10.1 → ^3.0.0
-  - `@actions/github` ^6.0.0 → ^9.0.0
-  - `esbuild` ^0.20.2 → ^0.25.0
-  - `rimraf` ^5.0.5 → ^6.0.0
-- add `conditions: ['import']` to esbuild configs for ESM-only `@actions/core` v3
-
 ### Feat
 
 - support `versionInTitle` input in assemble-docs action (#52)
@@ -38,6 +29,7 @@
 
 ### Fix
 
+- upgrade dependencies to fix vulnerabilities (#65)
 - MAJOR_VERSION_ZERO boolean check (#60)
 - only add `versionInTitle` to new entry if it's not empty (#54)
 - the self-generate-changelog workflow (#56)
