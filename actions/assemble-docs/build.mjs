@@ -7,4 +7,5 @@ await esbuild.build({
   bundle: true,
   platform: 'node',
   target: 'node24',
+  conditions: ['import'],
 });
