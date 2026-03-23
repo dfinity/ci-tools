@@ -27,7 +27,7 @@ runs:
         PRERELEASE: ${{ inputs.prerelease }}
         MAJOR_VERSION_ZERO: ${{ inputs.major_version_zero }}
       run: |
-        cmd="cz bump --get-next --yes --version-scheme semver"
+        cmd="cz bump --get-next --yes --version-scheme semver2"
 
         if [ -n "$PRERELEASE" ]; then
           cmd="$cmd --prerelease $PRERELEASE"
@@ -46,7 +46,7 @@ runs:
         PRERELEASE: ${{ inputs.prerelease }}
         MAJOR_VERSION_ZERO: ${{ inputs.major_version_zero }}
       run: |
-        cmd="cz bump --files-only --changelog --yes --version-scheme semver"
+        cmd="cz bump --files-only --changelog --yes --version-scheme semver2"
 
         if [ -n "$PRERELEASE" ]; then
           cmd="$cmd --prerelease $PRERELEASE"
