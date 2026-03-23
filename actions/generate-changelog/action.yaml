@@ -14,4 +14,4 @@ runs:
       shell: bash
       env:
         FILE_NAME: ${{ inputs.file_name }}
-      run: cz changelog --incremental --merge-prerelease --file-name="$FILE_NAME" --version-scheme semver
+      run: cz changelog --incremental --merge-prerelease --file-name="$FILE_NAME" --version-scheme semver2
