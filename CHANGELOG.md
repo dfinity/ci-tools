@@ -29,6 +29,8 @@
 
 ### Fix
 
+- use semver2 version scheme and fetch tags for pre-release compatibility (#71)
+- cz bump changed to semver (#69)
 - cz bump changed to semver (#67)
 - upgrade dependencies to fix vulnerabilities (#65)
 - MAJOR_VERSION_ZERO boolean check (#60)
