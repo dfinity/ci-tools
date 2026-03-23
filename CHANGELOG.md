@@ -29,6 +29,7 @@
 
 ### Fix
 
+- cz bump changed to semver (#67)
 - upgrade dependencies to fix vulnerabilities (#65)
 - MAJOR_VERSION_ZERO boolean check (#60)
 - only add `versionInTitle` to new entry if it's not empty (#54)
