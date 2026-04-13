@@ -19,12 +19,12 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: dfinity/ci-tools/actions/setup-python@main
+        uses: dfinity/ci-tools/actions/setup-python@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
 
       - name: Setup Commitizen
-        uses: dfinity/ci-tools/actions/setup-commitizen@main
+        uses: dfinity/ci-tools/actions/setup-commitizen@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
 
       - name: Check commit messages
-        uses: dfinity/ci-tools/actions/check-commit-messages@main
+        uses: dfinity/ci-tools/actions/check-commit-messages@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
         with:
           target_branch: ${{ inputs.target_branch }}
