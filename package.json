@@ -19,7 +19,7 @@
   "devDependencies": {
     "@tsconfig/node24": "^24.0.1",
     "@types/node": "^24.9.2",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.1",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.0",
     "typescript": "^5.9.3"
