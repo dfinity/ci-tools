@@ -14,4 +14,17 @@ runs:
       shell: bash
       env:
         FILE_NAME: ${{ inputs.file_name }}
-      run: cz changelog --incremental --merge-prerelease --file-name="$FILE_NAME" --version-scheme semver2
+      run: |
+        set +e
+        cz changelog --incremental --merge-prerelease --file-name="$FILE_NAME" --version-scheme semver2
+        exit_code=$?
+        set -e
+
+        # Commitizen exits 3 when it finds no commits to add to the changelog. That is a
+        # no-op rather than a failure, so it must not fail the job.
+        if [ "$exit_code" -eq 3 ]; then
+          echo "::notice::No commits to add to the changelog; nothing to do."
+          exit 0
+        fi
+
+        exit "$exit_code"
