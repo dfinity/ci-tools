@@ -19,6 +19,11 @@ on:
         required: false
         default: 'main'
         type: string
+      reuse_branch:
+        description: 'Keep a single self-updating changelog pull request instead of opening a new one on every run.'
+        required: false
+        default: true
+        type: boolean
 
       pull_request_title:
         description: 'The title of the pull request.'
@@ -110,6 +115,7 @@ jobs:
         with:
           branch_name: ${{ inputs.branch_name }}
           base_branch_name: ${{ inputs.base_branch_name }}
+          reuse_branch: ${{ inputs.reuse_branch }}
           pull_request_title: ${{ inputs.pull_request_title }}
           pull_request_body: ${{ inputs.pull_request_body }}
           author_name: ${{ inputs.author_name }}
