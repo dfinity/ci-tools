@@ -49,6 +49,18 @@ Example:
 name: my_action:required
 ```
 
+### Generated files
+
+A JavaScript action (`using: node24`) is executed by GitHub straight from the committed file its `main` points at, with no install or build step beforehand. Its dependencies therefore have to be committed too, which is why they are bundled into a single `dist/index.js`.
+
+Mark that output as generated so it collapses in pull request diffs instead of burying the source changes:
+
+```gitattributes
+actions/*/dist/** linguist-generated=true
+```
+
+Pair it with a job that rebuilds the bundles and fails on any difference. That check is what makes collapsing the diff safe, because it proves the committed output is exactly what the reviewed source compiles to.
+
 ## Locking Versions
 
 When referencing 3rd party actions, use a specific commit SHA to lock the version. This ensures that the action will not change unexpectedly, which could lead to breaking changes in your workflows.
