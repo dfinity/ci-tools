@@ -48,6 +48,12 @@ on:
         default: 'chore: generate changelog'
         type: string
 
+      release_commit_pattern:
+        description: 'Skip changelog generation when the head commit subject matches this extended regular expression. Set to an empty string to disable the check.'
+        required: false
+        default: '^chore:[[:space:]]release([[:space:]]|$)'
+        type: string
+
       token_app_id:
         description: 'A GitHub App ID used to generate an access token to create a pull request.'
         required: true
@@ -94,18 +100,40 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
+      - name: Check for release commit
+        id: release_commit
+        shell: bash
+        env:
+          RELEASE_COMMIT_PATTERN: ${{ inputs.release_commit_pattern }}
+        run: |
+          subject=$(git log -1 --format=%s)
+
+          # A release commit bumps the project version, and the matching tag is usually not
+          # pushed yet when this workflow runs. Commitizen then has nothing to changelog and
+          # exits non-zero, failing the job. Skip those commits entirely.
+          if [ -n "$RELEASE_COMMIT_PATTERN" ] && [[ "$subject" =~ $RELEASE_COMMIT_PATTERN ]]; then
+            echo 'skip=true' >> "$GITHUB_OUTPUT"
+            echo "::notice::Head commit is a release commit ('$subject'); skipping changelog generation."
+          else
+            echo 'skip=false' >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Python
+        if: steps.release_commit.outputs.skip != 'true'
         uses: dfinity/ci-tools/actions/setup-python@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
 
       - name: Setup Commitizen
+        if: steps.release_commit.outputs.skip != 'true'
         uses: dfinity/ci-tools/actions/setup-commitizen@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
 
       - name: Generate changelog
+        if: steps.release_commit.outputs.skip != 'true'
         uses: dfinity/ci-tools/actions/generate-changelog@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
         with:
           file_name: ${{ inputs.file_name }}
 
       - name: Create pull request
+        if: steps.release_commit.outputs.skip != 'true'
         uses: dfinity/ci-tools/actions/create-pr@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
         with:
           branch_name: ${{ inputs.branch_name }}
