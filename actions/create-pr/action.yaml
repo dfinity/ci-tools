@@ -11,6 +11,10 @@ inputs:
     description: 'The name of the base branch to create a pull request against.'
     required: false
     default: 'main'
+  reuse_branch:
+    description: 'Reuse branch_name as-is and update the pull request already open for it, instead of creating a new randomly suffixed branch on every run. When there is nothing left to propose, the open pull request is closed.'
+    required: false
+    default: 'false'
 
   pull_request_title:
     description: 'The title of the pull request.'
@@ -45,6 +49,8 @@ outputs:
     description: 'The number of the created pull request.'
   pull_request_created:
     description: 'Whether the pull request was created.'
+  pull_request_updated:
+    description: 'Whether an already open pull request was updated instead of a new one being created. Only ever true when reuse_branch is enabled.'
 
 runs:
   using: node24

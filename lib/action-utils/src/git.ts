@@ -14,12 +14,30 @@ export function gitCommit(
   exec(`git commit -m "${message}"`);
 }
 
-export function gitCheckoutBranch(branch: string): void {
-  exec(`git checkout -b ${branch}`);
+export interface GitCheckoutBranchOptions {
+  /**
+   * Reset the branch to the current commit if it already exists, instead of
+   * failing. Required when reusing a long-lived branch.
+   */
+  reset?: boolean;
 }
 
-export function gitPushBranch(branch: string): void {
-  exec(`git push -u origin ${branch}`);
+export function gitCheckoutBranch(
+  branch: string,
+  { reset = false }: GitCheckoutBranchOptions = {},
+): void {
+  exec(`git checkout ${reset ? '-B' : '-b'} ${branch}`);
+}
+
+export interface GitPushBranchOptions {
+  force?: boolean;
+}
+
+export function gitPushBranch(
+  branch: string,
+  { force = false }: GitPushBranchOptions = {},
+): void {
+  exec(`git push ${force ? '--force ' : ''}-u origin ${branch}`);
 }
 
 export function gitHasChanges(): boolean {

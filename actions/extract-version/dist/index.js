@@ -21269,11 +21269,11 @@ var require_dist = __commonJS({
       exec3(`git config user.email "${authorEmail}"`);
       exec3(`git commit -m "${message}"`);
     }
-    function gitCheckoutBranch(branch) {
-      exec3(`git checkout -b ${branch}`);
+    function gitCheckoutBranch(branch, { reset = false } = {}) {
+      exec3(`git checkout ${reset ? "-B" : "-b"} ${branch}`);
     }
-    function gitPushBranch(branch) {
-      exec3(`git push -u origin ${branch}`);
+    function gitPushBranch(branch, { force = false } = {}) {
+      exec3(`git push ${force ? "--force " : ""}-u origin ${branch}`);
     }
     function gitHasChanges() {
       const output = exec3("git status --porcelain");

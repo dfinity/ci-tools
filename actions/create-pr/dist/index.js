@@ -22084,7 +22084,7 @@ var require_dist = __commonJS({
       generateRandomSuffix: () => generateRandomSuffix2,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
-      getOptInput: () => getOptInput,
+      getOptInput: () => getOptInput2,
       gitAdd: () => gitAdd2,
       gitCheckoutBranch: () => gitCheckoutBranch2,
       gitCommit: () => gitCommit2,
@@ -22137,11 +22137,11 @@ var require_dist = __commonJS({
       exec2(`git config user.email "${authorEmail}"`);
       exec2(`git commit -m "${message}"`);
     }
-    function gitCheckoutBranch2(branch) {
-      exec2(`git checkout -b ${branch}`);
+    function gitCheckoutBranch2(branch, { reset = false } = {}) {
+      exec2(`git checkout ${reset ? "-B" : "-b"} ${branch}`);
     }
-    function gitPushBranch2(branch) {
-      exec2(`git push -u origin ${branch}`);
+    function gitPushBranch2(branch, { force = false } = {}) {
+      exec2(`git push ${force ? "--force " : ""}-u origin ${branch}`);
     }
     function gitHasChanges2() {
       const output = exec2("git status --porcelain");
@@ -22151,7 +22151,7 @@ var require_dist = __commonJS({
     function getInput22(name) {
       return core.getInput(name, { required: true, trimWhitespace: true });
     }
-    function getOptInput(name, defaultValue) {
+    function getOptInput2(name, defaultValue) {
       return core.getInput(name, { required: false, trimWhitespace: true }) || defaultValue;
     }
     function getNumberInput(name) {
@@ -25933,6 +25933,37 @@ async function createPullRequest({
     number: res.data.number
   };
 }
+async function findOpenPullRequest({
+  octokit,
+  owner,
+  repo,
+  head,
+  base
+}) {
+  const res = await octokit.rest.pulls.list({
+    owner,
+    repo,
+    base,
+    head: `${owner}:${head}`,
+    state: "open"
+  });
+  const [pullRequest] = res.data;
+  return pullRequest ? { number: pullRequest.number } : void 0;
+}
+async function closePullRequest({
+  octokit,
+  owner,
+  repo,
+  number
+}) {
+  await octokit.rest.pulls.update({
+    owner,
+    repo,
+    pull_number: number,
+    state: "closed"
+  });
+  info(`Closed pull request #${number}`);
+}
 
 // src/create-commit.ts
 init_core();
@@ -25941,12 +25972,13 @@ function createCommit({
   message,
   head,
   authorName,
-  authorEmail
+  authorEmail,
+  reuseBranch = false
 }) {
-  (0, import_action_utils.gitCheckoutBranch)(head);
+  (0, import_action_utils.gitCheckoutBranch)(head, { reset: reuseBranch });
   (0, import_action_utils.gitAdd)();
   (0, import_action_utils.gitCommit)(message, authorName, authorEmail);
-  (0, import_action_utils.gitPushBranch)(head);
+  (0, import_action_utils.gitPushBranch)(head, { force: reuseBranch });
   info(`Created git commit on branch ${head}`);
 }
 
@@ -25955,7 +25987,9 @@ async function run() {
   try {
     const authorName = (0, import_action_utils2.getInput)("author_name");
     const authorEmail = (0, import_action_utils2.getInput)("author_email");
-    const head = `${(0, import_action_utils2.getInput)("branch_name")}-${(0, import_action_utils2.generateRandomSuffix)(6)}`;
+    const reuseBranch = (0, import_action_utils2.getOptInput)("reuse_branch", "false") === "true";
+    const branchName = (0, import_action_utils2.getInput)("branch_name");
+    const head = reuseBranch ? branchName : `${branchName}-${(0, import_action_utils2.generateRandomSuffix)(6)}`;
     const base = (0, import_action_utils2.getInput)("base_branch_name");
     const message = (0, import_action_utils2.getInput)("commit_message");
     const title = (0, import_action_utils2.getInput)("pull_request_title");
@@ -25968,14 +26002,42 @@ async function run() {
         "No changes detected, skipping commit and pull request creation"
       );
       setOutput("pull_request_created", false);
+      setOutput("pull_request_updated", false);
+      if (reuseBranch) {
+        const obsolete = await findOpenPullRequest({
+          octokit,
+          owner,
+          repo,
+          head,
+          base
+        });
+        if (obsolete) {
+          await closePullRequest({
+            octokit,
+            owner,
+            repo,
+            number: obsolete.number
+          });
+          setOutput("pull_request_number", obsolete.number);
+        }
+      }
       return;
     }
     createCommit({
       authorEmail,
       authorName,
       head,
-      message
+      message,
+      reuseBranch
     });
+    const existing = reuseBranch ? await findOpenPullRequest({ octokit, owner, repo, head, base }) : void 0;
+    if (existing) {
+      info(`Updated pull request #${existing.number}`);
+      setOutput("pull_request_number", existing.number);
+      setOutput("pull_request_created", false);
+      setOutput("pull_request_updated", true);
+      return;
+    }
     const res = await createPullRequest({
       octokit,
       owner,
@@ -25987,6 +26049,7 @@ async function run() {
     });
     setOutput("pull_request_number", res.number);
     setOutput("pull_request_created", true);
+    setOutput("pull_request_updated", false);
   } catch (error2) {
     if (error2 instanceof Error) {
       setFailed(error2.message);
