@@ -119,3 +119,15 @@ pnpm build
 ```
 
 The GitHub actions pipeline will attempt to build the actions and check if there are any differences between the built files and those that are committed to the repository. If there are any differences, the pipeline will fail.
+
+### Why the bundles are committed
+
+GitHub runs a JavaScript action (`using: node24`) straight from its committed `dist/index.js`. It does not install dependencies or run a build first, so every runtime dependency is bundled into that one file.
+
+This has a consequence that is easy to miss: updating a bundled dependency in `package.json` and `pnpm-lock.yaml` changes nothing about what actually runs until the bundles are rebuilt. A dependency fix that is not accompanied by rebuilt bundles is not applied.
+
+The bundles are marked as generated in `.gitattributes`, so they are collapsed in pull request diffs. Review the source changes rather than the bundled output; the `check_dist:required` job is what guarantees the committed bundles are exactly what that source compiles to.
+
+### When an automated dependency update fails the check
+
+Automated dependency updates change `package.json` and `pnpm-lock.yaml` but cannot rebuild the bundles, so `check_dist:required` fails on those pull requests. Check the branch out, run `pnpm build`, and commit the rebuilt bundles to it.
