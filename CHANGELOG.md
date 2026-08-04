@@ -29,6 +29,8 @@
 
 ### Fix
 
+- **deps**: raise brace-expansion to 5.0.9 for GHSA-rgw5-rvv9-x895 (#83)
+- **deps**: resolve 7 audit advisories in undici and brace-expansion (#79)
 - use semver2 version scheme and fetch tags for pre-release compatibility (#71)
 - cz bump changed to semver (#69)
 - cz bump changed to semver (#67)
