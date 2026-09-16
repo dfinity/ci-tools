@@ -21346,11 +21346,44 @@ function isVersionListedInVersionsJson(version) {
 function isValidVersion(version) {
   return VALID_VERSION_PATTERNS.test(version);
 }
+var VERSION_PATH_PATTERN = /^v(\d+)(?:\.(\d+))?(?:\.(\d+))?$/;
+function parseVersionPath(versionPath) {
+  const match = VERSION_PATH_PATTERN.exec(versionPath);
+  return match ? [match[1], match[2], match[3]].map((part) => Number(part ?? 0)) : null;
+}
+function compareVersionPaths(a, b) {
+  if (a === b) {
+    return 0;
+  }
+  if (a === LATEST_VERSION_NAME) {
+    return -1;
+  }
+  if (b === LATEST_VERSION_NAME) {
+    return 1;
+  }
+  const parsedA = parseVersionPath(a);
+  const parsedB = parseVersionPath(b);
+  if (!parsedA || !parsedB) {
+    if (parsedA) {
+      return -1;
+    }
+    if (parsedB) {
+      return 1;
+    }
+    return a.localeCompare(b);
+  }
+  for (let i = 0; i < parsedA.length; i++) {
+    if (parsedA[i] !== parsedB[i]) {
+      return parsedB[i] - parsedA[i];
+    }
+  }
+  return a.localeCompare(b);
+}
 
 // src/upsert-versions-json.ts
 async function upsertVersionsJson(params) {
   const { versionsJsonPath, version, versionLabel, versionInTitle } = params;
-  let versions = (0, import_action_utils.readJsonFile)(versionsJsonPath) || [];
+  const versions = (0, import_action_utils.readJsonFile)(versionsJsonPath) || [];
   const versionEntryIndex = versions.findIndex((v) => v.path === version);
   if (versionEntryIndex !== -1) {
     const versionEntry = versions[versionEntryIndex];
@@ -21371,15 +21404,7 @@ async function upsertVersionsJson(params) {
     }
     versions.push(newVersionEntry);
   }
-  versions = versions.sort((a, b) => {
-    if (a.path === LATEST_VERSION_NAME && b.path !== LATEST_VERSION_NAME) {
-      return -1;
-    }
-    if (b.path === LATEST_VERSION_NAME && a.path !== LATEST_VERSION_NAME) {
-      return 1;
-    }
-    return b.path.localeCompare(a.path);
-  });
+  versions.sort((a, b) => compareVersionPaths(a.path, b.path));
   (0, import_action_utils.writeJsonFile)(versionsJsonPath, versions);
 }
 
