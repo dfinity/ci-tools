@@ -1,7 +1,8 @@
 {
   "name": "@dfinity/assemble-docs-action",
   "scripts": {
-    "build": "tsc && node ./build.mjs"
+    "build": "tsc && node ./build.mjs",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'src/**/*.test.ts'"
   },
   "dependencies": {
     "@dfinity/action-utils": "workspace:*"

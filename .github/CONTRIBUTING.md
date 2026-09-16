@@ -119,3 +119,13 @@ pnpm build
 ```
 
 The GitHub actions pipeline will attempt to build the actions and check if there are any differences between the built files and those that are committed to the repository. If there are any differences, the pipeline will fail.
+
+## Testing
+
+Tests run on Node's built-in test runner, which strips the TypeScript types itself, so no build step is needed. To run every test in the workspace:
+
+```bash
+pnpm test
+```
+
+Tests live next to the code they cover, as `*.test.ts`.

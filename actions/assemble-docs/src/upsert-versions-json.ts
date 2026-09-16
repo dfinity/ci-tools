@@ -1,5 +1,5 @@
 import { writeJsonFile, readJsonFile } from '@dfinity/action-utils';
-import { LATEST_VERSION_NAME } from './versions';
+import { compareVersionPaths } from './versions';
 
 type VersionEntry = { path: string; label: string; versionInTitle?: string };
 
@@ -11,7 +11,7 @@ export async function upsertVersionsJson(params: {
 }): Promise<void> {
   const { versionsJsonPath, version, versionLabel, versionInTitle } = params;
 
-  let versions = readJsonFile<VersionEntry[]>(versionsJsonPath) || [];
+  const versions = readJsonFile<VersionEntry[]>(versionsJsonPath) || [];
 
   const versionEntryIndex = versions.findIndex(v => v.path === version);
   if (versionEntryIndex !== -1) {
@@ -34,16 +34,7 @@ export async function upsertVersionsJson(params: {
     versions.push(newVersionEntry);
   }
 
-  // Sort versions: latest first, then reverse alphabetically by path
-  versions = versions.sort((a, b) => {
-    if (a.path === LATEST_VERSION_NAME && b.path !== LATEST_VERSION_NAME) {
-      return -1;
-    }
-    if (b.path === LATEST_VERSION_NAME && a.path !== LATEST_VERSION_NAME) {
-      return 1;
-    }
-    return b.path.localeCompare(a.path);
-  });
+  versions.sort((a, b) => compareVersionPaths(a.path, b.path));
 
   writeJsonFile(versionsJsonPath, versions);
 }

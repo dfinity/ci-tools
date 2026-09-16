@@ -6,6 +6,7 @@ This action:
 
 - Zips the `assets_dir` directory into `{target_dir}/{version}.zip`
 - Upserts the entry to `versions.json` for the `version`
+- Reorders `versions.json` with `latest` first, followed by the remaining versions in descending numeric order (e.g. `v10.0` before `v9.0`)
 
 ## Action inputs
 
