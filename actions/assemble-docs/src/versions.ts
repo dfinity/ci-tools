@@ -2,8 +2,14 @@ export const LATEST_VERSION_NAME = 'latest';
 
 const VALID_TAGS = ['latest', 'beta', 'dev', 'next', 'nightly', 'canary'];
 const VALID_VERSION_FORMATS = ['vX', 'vX.Y', 'vX.Y.Z', ...VALID_TAGS];
-const VALID_VERSION_PATTERNS = new RegExp(
-  `^(?:v\\d+(?:\\.\\d+(?:\\.\\d+)?)?|${VALID_TAGS.join('|')})$`,
+
+/** Number of parts in a fully qualified `vX.Y.Z` version. */
+const VERSION_PART_COUNT = 3;
+
+const NUMERIC_VERSION_SOURCE = `v\\d+(?:\\.\\d+){0,${VERSION_PART_COUNT - 1}}`;
+const NUMERIC_VERSION_PATTERN = new RegExp(`^${NUMERIC_VERSION_SOURCE}$`);
+const VALID_VERSION_PATTERN = new RegExp(
+  `^(?:${NUMERIC_VERSION_SOURCE}|${VALID_TAGS.join('|')})$`,
 );
 
 export const ALLOWED_VERSIONS_MESSAGE = `Allowed values: ${VALID_VERSION_FORMATS.join(' | ')}`;
@@ -13,23 +19,29 @@ export function isVersionListedInVersionsJson(version: string): boolean {
 }
 
 export function isValidVersion(version: string): boolean {
-  return VALID_VERSION_PATTERNS.test(version);
-}
-
-const VERSION_PATH_PATTERN = /^v(\d+)(?:\.(\d+))?(?:\.(\d+))?$/;
-
-function parseVersionPath(versionPath: string): number[] | null {
-  const match = VERSION_PATH_PATTERN.exec(versionPath);
-
-  return match
-    ? [match[1], match[2], match[3]].map(part => Number(part ?? 0))
-    : null;
+  return VALID_VERSION_PATTERN.test(version);
 }
 
 /**
- * Orders version paths for the sidebar version dropdown: `latest` first, then
- * numerically descending so that `v10.0` precedes `v9.0`. Paths that are not
- * numeric versions are placed last and ordered alphabetically.
+ * Splits a `vX`, `vX.Y` or `vX.Y.Z` path into exactly `VERSION_PART_COUNT`
+ * numbers, padding the parts that are left out so that `v10` and `v10.0.0`
+ * compare as equal. Returns `null` for any other path, such as a `beta` tag.
+ */
+function parseVersionPath(versionPath: string): number[] | null {
+  if (!NUMERIC_VERSION_PATTERN.test(versionPath)) {
+    return null;
+  }
+
+  const parts = versionPath.slice(1).split('.').map(Number);
+  const omittedParts = Array<number>(VERSION_PART_COUNT - parts.length).fill(0);
+
+  return [...parts, ...omittedParts];
+}
+
+/**
+ * Orders `versions.json` entries the way the sidebar version dropdown reads
+ * them: `latest` first, then the numeric versions from newest to oldest, then
+ * any remaining path alphabetically.
  */
 export function compareVersionPaths(a: string, b: string): number {
   if (a === b) {
@@ -42,25 +54,26 @@ export function compareVersionPaths(a: string, b: string): number {
     return 1;
   }
 
-  const parsedA = parseVersionPath(a);
-  const parsedB = parseVersionPath(b);
+  const partsA = parseVersionPath(a);
+  const partsB = parseVersionPath(b);
 
-  if (!parsedA || !parsedB) {
-    if (parsedA) {
+  if (partsA === null || partsB === null) {
+    if (partsA !== null) {
       return -1;
     }
-    if (parsedB) {
+    if (partsB !== null) {
       return 1;
     }
 
     return a.localeCompare(b);
   }
 
-  for (let i = 0; i < parsedA.length; i++) {
-    if (parsedA[i] !== parsedB[i]) {
-      return parsedB[i] - parsedA[i];
+  for (let i = 0; i < VERSION_PART_COUNT; i++) {
+    if (partsA[i] !== partsB[i]) {
+      return partsB[i] - partsA[i];
     }
   }
 
+  // Different paths for the same version, such as `v10` and `v10.0`.
   return a.localeCompare(b);
 }

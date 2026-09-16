@@ -21336,20 +21336,26 @@ var import_action_utils = __toESM(require_dist());
 var LATEST_VERSION_NAME = "latest";
 var VALID_TAGS = ["latest", "beta", "dev", "next", "nightly", "canary"];
 var VALID_VERSION_FORMATS = ["vX", "vX.Y", "vX.Y.Z", ...VALID_TAGS];
-var VALID_VERSION_PATTERNS = new RegExp(
-  `^(?:v\\d+(?:\\.\\d+(?:\\.\\d+)?)?|${VALID_TAGS.join("|")})$`
+var VERSION_PART_COUNT = 3;
+var NUMERIC_VERSION_SOURCE = `v\\d+(?:\\.\\d+){0,${VERSION_PART_COUNT - 1}}`;
+var NUMERIC_VERSION_PATTERN = new RegExp(`^${NUMERIC_VERSION_SOURCE}$`);
+var VALID_VERSION_PATTERN = new RegExp(
+  `^(?:${NUMERIC_VERSION_SOURCE}|${VALID_TAGS.join("|")})$`
 );
 var ALLOWED_VERSIONS_MESSAGE = `Allowed values: ${VALID_VERSION_FORMATS.join(" | ")}`;
 function isVersionListedInVersionsJson(version) {
   return version.startsWith("v") || version === LATEST_VERSION_NAME;
 }
 function isValidVersion(version) {
-  return VALID_VERSION_PATTERNS.test(version);
+  return VALID_VERSION_PATTERN.test(version);
 }
-var VERSION_PATH_PATTERN = /^v(\d+)(?:\.(\d+))?(?:\.(\d+))?$/;
 function parseVersionPath(versionPath) {
-  const match = VERSION_PATH_PATTERN.exec(versionPath);
-  return match ? [match[1], match[2], match[3]].map((part) => Number(part ?? 0)) : null;
+  if (!NUMERIC_VERSION_PATTERN.test(versionPath)) {
+    return null;
+  }
+  const parts = versionPath.slice(1).split(".").map(Number);
+  const omittedParts = Array(VERSION_PART_COUNT - parts.length).fill(0);
+  return [...parts, ...omittedParts];
 }
 function compareVersionPaths(a, b) {
   if (a === b) {
@@ -21361,20 +21367,20 @@ function compareVersionPaths(a, b) {
   if (b === LATEST_VERSION_NAME) {
     return 1;
   }
-  const parsedA = parseVersionPath(a);
-  const parsedB = parseVersionPath(b);
-  if (!parsedA || !parsedB) {
-    if (parsedA) {
+  const partsA = parseVersionPath(a);
+  const partsB = parseVersionPath(b);
+  if (partsA === null || partsB === null) {
+    if (partsA !== null) {
       return -1;
     }
-    if (parsedB) {
+    if (partsB !== null) {
       return 1;
     }
     return a.localeCompare(b);
   }
-  for (let i = 0; i < parsedA.length; i++) {
-    if (parsedA[i] !== parsedB[i]) {
-      return parsedB[i] - parsedA[i];
+  for (let i = 0; i < VERSION_PART_COUNT; i++) {
+    if (partsA[i] !== partsB[i]) {
+      return partsB[i] - partsA[i];
     }
   }
   return a.localeCompare(b);
