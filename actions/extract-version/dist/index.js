@@ -21280,7 +21280,7 @@ var require_dist = __commonJS({
       git(["checkout", reset ? "-B" : "-b", branch]);
     }
     function gitPushBranch(branch, { force = false } = {}) {
-      git(["push", ...force ? ["--force"] : [], "-u", "origin", branch]);
+      git(["push", ...force ? ["--force"] : [], "-u", "origin", "--", branch]);
     }
     function gitHasChanges() {
       const output = git(["status", "--porcelain"]);

@@ -41,7 +41,10 @@ export function gitPushBranch(
   branch: string,
   { force = false }: GitPushBranchOptions = {},
 ): void {
-  git(['push', ...(force ? ['--force'] : []), '-u', 'origin', branch]);
+  // `--` keeps a branch name that begins with a dash from being read as an
+  // option: `git push origin --mirror` pushes every ref rather than a branch.
+  // `git checkout -B` needs no equivalent, and rejects such a name itself.
+  git(['push', ...(force ? ['--force'] : []), '-u', 'origin', '--', branch]);
 }
 
 export function gitHasChanges(): boolean {
