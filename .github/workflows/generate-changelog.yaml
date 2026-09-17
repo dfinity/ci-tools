@@ -85,11 +85,13 @@ on:
       token_private_key:
         description: 'A GitHub App private key used to generate an access token to create a pull request.'
 
-# The changelog branch is reused and force pushed, so two runs racing on the same
-# branch would leave the pull request holding whichever finished last rather than
-# the newest state of the base branch.
+# The changelog branch is reused and force pushed, so two runs racing on it would
+# leave the pull request holding whichever finished last rather than the newest
+# state of the base branch. The branch being pushed is what has to be serialised,
+# so it is the key: a triggering ref would put runs that share one branch_name
+# into separate groups and let them race anyway.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: generate-changelog-${{ inputs.branch_name }}
   cancel-in-progress: true
 
 jobs:
