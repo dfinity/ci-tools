@@ -2,7 +2,7 @@
 
 This action creates a pull request from a branch to a target branch.
 
-Any pull requests created as a result of actions that use the default token (`${{ GITHUB_TOKEN }}`) will not trigger any pipeline events. To ensure that any pipelines are triggered, a different token must be used.
+Any pull requests created as a result of actions that use the default token (`${{ github.token }}`) will not trigger any pipeline events. To ensure that any pipelines are triggered, a different token must be used.
 
 Any files that will be changed and committed to the pull request must be listed in the `.github/repo_policies/BOT_APPROVED_FILES` file of the repository. For example:
 
@@ -24,7 +24,7 @@ packages/some-package/package.json
 | `author_name`        | The name of the author of the pull request and commit.                                                                                                                                                              | `${{ github.actor }}`                                                 |
 | `author_email`       | The email of the author of the pull request and commit.                                                                                                                                                             | `${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com` |
 | `commit_message`     | The message of the commit.                                                                                                                                                                                          | `'chore: automated by GitHub actions'`                                |
-| `token`              | Access token to manage the pull request.                                                                                                                                                                            | `${{ GITHUB_TOKEN }}`                                                 |
+| `token`              | Access token to manage the pull request.                                                                                                                                                                            | `${{ github.token }}`                                                 |
 
 ## Action outputs
 
