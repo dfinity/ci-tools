@@ -29,7 +29,7 @@ packages/some-package/package.json
 ## Action outputs
 
 - `pull_request_number`: The number of the pull request that was created, updated or closed. Empty when there was nothing to propose and no pull request was open.
-- `pull_request_created`: A boolean indicating whether the pull request was created. This will be `false` is there are no changes to commit.
+- `pull_request_created`: A boolean indicating whether the pull request was created. This will be `false` if there are no changes to commit.
 - `pull_request_updated`: A boolean indicating whether an already open pull request was updated instead of a new one being created. Only ever `true` when `reuse_branch` is enabled.
 
 ## Example usage

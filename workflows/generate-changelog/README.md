@@ -10,7 +10,7 @@ CHANGELOG.md
 
 Release commits are skipped. A release bumps the project version without adding anything a changelog entry could be generated from, so Commitizen has nothing to do and exits non-zero. Both that and an empty changelog are treated as a no-op rather than a failure.
 
-Only one run per branch happens at a time: the changelog branch is reused and force pushed, so concurrent runs are cancelled in favour of the most recent one.
+Only one run per branch happens at a time. Concurrent runs are cancelled in favour of the most recent one, so that runs cannot race each other when `reuse_branch` has them sharing one branch.
 
 ## Workflow inputs
 
