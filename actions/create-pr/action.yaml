@@ -12,7 +12,7 @@ inputs:
     required: false
     default: 'main'
   reuse_branch:
-    description: 'Reuse branch_name as-is and update the pull request already open for it, instead of creating a new randomly suffixed branch on every run. When there is nothing left to propose, the open pull request is closed.'
+    description: 'Reuse branch_name as-is instead of creating a new randomly suffixed branch on every run. The branch is reset to the current commit and force pushed, and the pull request already open for it is updated rather than duplicated; when there is nothing left to propose that pull request is closed. Enable this only for a branch owned by automation, since whatever is already on it is overwritten.'
     required: false
     default: 'false'
 
