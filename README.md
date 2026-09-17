@@ -80,6 +80,8 @@ The cost is that those pins do not move when an action changes, which leaves a w
   run: script/bump-self-refs
 ```
 
+Run that job on pushes to the default branch rather than on pull requests. While an action is being changed there is no commit yet to pin to, so the pin can only be moved in a follow-up change, which also means the job cannot serve as a required status check.
+
 ## Managing Concurrency
 
 For workflows that run on pull requests, use the `concurrency` key to ensure that only one workflow runs at a time for a given pull request. This prevents multiple workflows from running simultaneously and potentially causing conflicts.

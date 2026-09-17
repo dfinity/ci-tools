@@ -140,4 +140,8 @@ The workflows in this repository reference its own actions by commit SHA, exactl
 script/bump-self-refs --fix
 ```
 
-Commit the result and open a pull request. The check only compares a pin against the history of the action's own directory, so repointing the workflows does not itself make them stale again.
+Commit the result and open a pull request. The check only compares a pin against the history of the action's own directory, so repointing the workflows does not itself make them stale again, even though merging the bump moves `main` to a new commit.
+
+Keep a bump in a pull request of its own. `--fix` can only pin to a commit that already exists, so a bump bundled with a change to an action pins to the commit before that change, and the check fails again as soon as it merges. Change the action first, then bump.
+
+The check runs on pushes to `main` rather than on pull requests, because while an action is being changed there is no commit yet to pin to. It reports after a merge, not before, so do not add `check_self_refs` to the repository's required status checks: it never reports on a pull request, and a pull request waiting on it would never be mergeable.

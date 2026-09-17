@@ -11,6 +11,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Deliberately not suffixed with `:required`. This job only runs after a merge,
+  # because while an action is being changed there is no commit yet to pin to, so
+  # it never reports on a pull request and cannot be a required status check.
   check_self_refs:
     name: check_self_refs
     runs-on: ubuntu-latest
