@@ -16,6 +16,7 @@ This workflow sets its own `concurrency`, keyed on `branch_name`, so callers do 
 
 | Input                    | Description                                                                                                                                                                                                          | Default                                                                                    |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `file_name`              | The name of the file to write the changelog to.                                                                                                                                                                      | `'CHANGELOG.md'`                                                                           |
 | `branch_name`            | The name of the branch to create the pull request from.                                                                                                                                                              | `'chore/generate-changelog'`                                                               |
 | `base_branch_name`       | The name of the base branch to create a pull request against.                                                                                                                                                        | `'main'`                                                                                   |
 | `reuse_branch`           | Keep a single self-updating changelog pull request instead of opening a new one on every run. The changelog branch is reset and force pushed each run, so it must not hold anything but generated changelog commits. | `true`                                                                                     |
@@ -26,6 +27,9 @@ This workflow sets its own `concurrency`, keyed on `branch_name`, so callers do 
 | `commit_message`         | The message of the commit.                                                                                                                                                                                           | `'chore: generate changelog'`                                                              |
 | `release_commit_pattern` | Skip changelog generation when the head commit subject matches this extended regular expression. Set to an empty string to disable the check.                                                                        | `'^chore:[[:space:]]release([[:space:]]\|$)'`                                              |
 | `token_app_id`           | A GitHub App ID used to generate an access token to create a pull request.                                                                                                                                           | _required_                                                                                 |
+| `environment`            | The name of the environment to use for the generate_changelog job.                                                                                                                                                   | _required_                                                                                 |
+| `owner`                  | The owner of the repository to create the pull request in.                                                                                                                                                           | `${{ github.repository_owner }}`                                                           |
+| `repository`             | The repository to create the pull request in.                                                                                                                                                                        | `${{ github.event.repository.name }}`                                                      |
 
 ## Workflow secrets
 
@@ -43,15 +47,12 @@ on:
     branches:
       - main
 
-concurrency:
-  group: main-${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
   generate_changelog:
     uses: dfinity/ci-tools/.github/workflows/generate-changelog.yaml@main
     with:
       token_app_id: ${{ vars.PR_AUTOMATION_BOT_PUBLIC_APP_ID }}
+      environment: release
     secrets:
       token_private_key: ${{ secrets.PR_AUTOMATION_BOT_PUBLIC_PRIVATE_KEY }}
 ```
