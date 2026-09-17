@@ -107,16 +107,31 @@ jobs:
           RELEASE_COMMIT_PATTERN: ${{ inputs.release_commit_pattern }}
         run: |
           subject=$(git log -1 --format=%s)
+          skip=false
 
           # A release commit bumps the project version, and the matching tag is usually not
           # pushed yet when this workflow runs. Commitizen then has nothing to changelog and
           # exits non-zero, failing the job. Skip those commits entirely.
-          if [ -n "$RELEASE_COMMIT_PATTERN" ] && [[ "$subject" =~ $RELEASE_COMMIT_PATTERN ]]; then
-            echo 'skip=true' >> "$GITHUB_OUTPUT"
-            echo "::notice::Head commit is a release commit ('$subject'); skipping changelog generation."
-          else
-            echo 'skip=false' >> "$GITHUB_OUTPUT"
+          if [ -n "$RELEASE_COMMIT_PATTERN" ]; then
+            set +e
+            [[ "$subject" =~ $RELEASE_COMMIT_PATTERN ]]
+            match=$?
+            set -e
+
+            # A malformed pattern returns 2 rather than 1. Treated as "no match" it would
+            # disable the check while the job stayed green, so fail on it instead.
+            if [ "$match" -eq 2 ]; then
+              echo "::error::release_commit_pattern is not a valid extended regular expression: $RELEASE_COMMIT_PATTERN"
+              exit 1
+            fi
+
+            if [ "$match" -eq 0 ]; then
+              skip=true
+              echo "::notice::Head commit is a release commit ('$subject'); skipping changelog generation."
+            fi
           fi
+
+          echo "skip=$skip" >> "$GITHUB_OUTPUT"
 
       - name: Setup Python
         if: steps.release_commit.outputs.skip != 'true'
