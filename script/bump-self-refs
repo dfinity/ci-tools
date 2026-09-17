@@ -18,7 +18,7 @@
 # Usage:
 #
 # script/bump-self-refs          report stale references
-# script/bump-self-refs --fix    repoint every self reference at HEAD
+# script/bump-self-refs --fix    repoint them when at least one has fallen behind
 
 set -euo pipefail
 
@@ -111,12 +111,29 @@ EOF
   exit 1
 fi
 
-# Repoint every self reference, not only the stale ones, so that one SHA
-# describes the whole tree the way a consuming repository pins it.
-REPO="$REPO" HEAD_SHA="$head_sha" perl -pi -e '
+# A pin has to name a commit that stays reachable. Squash and rebase merges
+# rewrite a branch's commits, so the default branch is the only safe target;
+# HEAD would leave a reference to a commit that never lands.
+default_ref=$(git symbolic-ref -q --short refs/remotes/origin/HEAD || echo 'origin/main')
+target_sha=$(git rev-parse --verify -q "${default_ref}^{commit}" || true)
+
+if [ -z "$target_sha" ]; then
+  echo "Cannot resolve ${default_ref}, so there is no safe commit to pin. Fetch it first." >&2
+  exit 2
+fi
+
+if [ "$target_sha" != "$head_sha" ]; then
+  echo
+  echo "Pinning at ${default_ref} (${target_sha:0:8}) rather than HEAD, which is not on it."
+fi
+
+# Once one pin has fallen behind, every self reference is repointed rather than
+# only the stale ones, so that a single SHA describes the whole tree the way a
+# consuming repository pins it.
+REPO="$REPO" TARGET_SHA="$target_sha" perl -pi -e '
   my $repo = quotemeta $ENV{REPO};
-  s/($repo\/[A-Za-z0-9._\/-]+\@)[0-9a-f]{40}/$1$ENV{HEAD_SHA}/g;
+  s/($repo\/[A-Za-z0-9._\/-]+\@)[0-9a-f]{40}/$1$ENV{TARGET_SHA}/g;
 ' "${workflows[@]}"
 
 echo
-echo "Repointed every $REPO self reference at ${head_sha:0:8}."
+echo "Repointed every $REPO self reference at ${target_sha:0:8}."
