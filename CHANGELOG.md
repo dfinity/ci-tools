@@ -2,6 +2,7 @@
 
 ### Feat
 
+- **create-pr**: add reuse_branch to keep one self-updating pull request (#80)
 - support `versionInTitle` input in assemble-docs action (#52)
 - `install_allow_scripts` input in `setup-deno` action (#50)
 - assemble-docs action (#46)
@@ -29,6 +30,7 @@
 
 ### Fix
 
+- **generate-changelog**: do not fail on release commits or empty changelogs (#78)
 - **assemble-docs**: sort versions.json numerically (#85)
 - **deps**: raise brace-expansion to 5.0.9 for GHSA-rgw5-rvv9-x895 (#83)
 - **deps**: resolve 7 audit advisories in undici and brace-expansion (#79)
