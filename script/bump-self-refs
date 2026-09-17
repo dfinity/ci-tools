@@ -36,6 +36,20 @@ fi
 
 cd "$(git rev-parse --show-toplevel)"
 
+# Every pin is resolved against local history, which a shallow clone does not
+# have. Without this the pins all report as unknown commits, which looks like a
+# problem with the references rather than with the checkout.
+if [ "$(git rev-parse --is-shallow-repository)" = 'true' ]; then
+  cat >&2 <<'EOF'
+This repository is a shallow clone, so the commits the workflows pin cannot be
+resolved. Fetch the full history first:
+
+  git fetch --unshallow          locally
+  actions/checkout fetch-depth 0 in a workflow
+EOF
+  exit 2
+fi
+
 # Built with a read loop rather than mapfile, which the bash 3.2 that ships with
 # macOS does not have.
 workflows=()
