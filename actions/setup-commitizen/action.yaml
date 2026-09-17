@@ -4,6 +4,8 @@ description: 'This action sets up Commitizen for use in actions.'
 runs:
   using: composite
   steps:
-    - name: Install Commitzen
+    # Pinned rather than upgraded on every run: the changelog workflow relies on
+    # Commitizen's exit codes to tell a no-op apart from a real failure.
+    - name: Install Commitizen
       shell: bash
-      run: pip install -U Commitizen
+      run: pip install 'commitizen==4.18.1'
