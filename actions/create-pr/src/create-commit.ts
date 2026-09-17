@@ -11,6 +11,11 @@ export interface CreateCommitOptions {
   head: string;
   authorName: string;
   authorEmail: string;
+  /**
+   * Reuse a long-lived branch rather than a fresh one, resetting it to the
+   * current commit and force pushing it.
+   */
+  reuseBranch?: boolean;
 }
 
 export function createCommit({
@@ -18,11 +23,12 @@ export function createCommit({
   head,
   authorName,
   authorEmail,
+  reuseBranch = false,
 }: CreateCommitOptions): void {
-  gitCheckoutBranch(head);
+  gitCheckoutBranch(head, { reset: reuseBranch });
   gitAdd();
   gitCommit(message, authorName, authorEmail);
-  gitPushBranch(head);
+  gitPushBranch(head, { force: reuseBranch });
 
   core.info(`Created git commit on branch ${head}`);
 }

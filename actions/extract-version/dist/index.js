@@ -21213,6 +21213,7 @@ var require_dist = __commonJS({
       absolutePath: () => absolutePath,
       deleteFile: () => deleteFile,
       exec: () => exec3,
+      execFile: () => execFile,
       generateRandomSuffix: () => generateRandomSuffix,
       getInput: () => getInput22,
       getNumberInput: () => getNumberInput,
@@ -21232,6 +21233,9 @@ var require_dist = __commonJS({
     var import_child_process = require("child_process");
     function exec3(command) {
       return (0, import_child_process.execSync)(command).toString();
+    }
+    function execFile(file, args) {
+      return (0, import_child_process.execFileSync)(file, args).toString();
     }
     var ALPHANUM = "abcdefghijklmnopqrstuvwxyz0123456789";
     function generateRandomSuffix(length) {
@@ -21261,22 +21265,25 @@ var require_dist = __commonJS({
     function absolutePath(p) {
       return p.startsWith("/") ? p : import_node_path2.default.join(process.cwd(), p);
     }
+    function git(args) {
+      return execFile("git", args);
+    }
     function gitAdd() {
-      exec3(`git add .`);
+      git(["add", "."]);
     }
     function gitCommit(message, authorName, authorEmail) {
-      exec3(`git config user.name "${authorName}"`);
-      exec3(`git config user.email "${authorEmail}"`);
-      exec3(`git commit -m "${message}"`);
+      git(["config", "user.name", authorName]);
+      git(["config", "user.email", authorEmail]);
+      git(["commit", "-m", message]);
     }
-    function gitCheckoutBranch(branch) {
-      exec3(`git checkout -b ${branch}`);
+    function gitCheckoutBranch(branch, { reset = false } = {}) {
+      git(["checkout", reset ? "-B" : "-b", branch]);
     }
-    function gitPushBranch(branch) {
-      exec3(`git push -u origin ${branch}`);
+    function gitPushBranch(branch, { force = false } = {}) {
+      git(["push", ...force ? ["--force"] : [], "-u", "origin", "--", branch]);
     }
     function gitHasChanges() {
-      const output = exec3("git status --porcelain");
+      const output = git(["status", "--porcelain"]);
       return output.trim().length > 0;
     }
     var core = __toESM2((init_core(), __toCommonJS(core_exports)));
