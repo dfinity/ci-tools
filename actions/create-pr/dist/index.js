@@ -26002,6 +26002,11 @@ async function run() {
     const title = (0, import_action_utils2.getInput)("pull_request_title");
     const body = (0, import_action_utils2.getInput)("pull_request_body");
     const token = (0, import_action_utils2.getInput)("token");
+    if (head === base) {
+      throw new Error(
+        `branch_name resolves to the base branch '${base}'. Set branch_name to a different branch.`
+      );
+    }
     const octokit = getOctokit(token);
     const { owner, repo } = context2.repo;
     if (!(0, import_action_utils2.gitHasChanges)()) {

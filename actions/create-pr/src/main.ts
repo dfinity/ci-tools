@@ -31,6 +31,14 @@ export async function run(): Promise<void> {
     const body = getInput('pull_request_body');
     const token = getInput('token');
 
+    // Reusing a branch resets and force pushes it, so a branch_name that
+    // resolves to the base branch would overwrite the base branch's history.
+    if (head === base) {
+      throw new Error(
+        `branch_name resolves to the base branch '${base}'. Set branch_name to a different branch.`,
+      );
+    }
+
     const octokit = github.getOctokit(token);
     const { owner, repo } = github.context.repo;
 
