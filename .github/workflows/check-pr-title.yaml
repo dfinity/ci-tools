@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Python
-        uses: dfinity/ci-tools/actions/setup-python@059c18686a7318d8b67fb361bc2d939b16b3959f # main
+        uses: dfinity/ci-tools/actions/setup-python@28f8eefc873d714eed3de4c1b79375cce6b93d46 # main
 
       - name: Setup Commitizen
-        uses: dfinity/ci-tools/actions/setup-commitizen@059c18686a7318d8b67fb361bc2d939b16b3959f # main
+        uses: dfinity/ci-tools/actions/setup-commitizen@28f8eefc873d714eed3de4c1b79375cce6b93d46 # main
 
       - name: Check pull request title
-        uses: dfinity/ci-tools/actions/check-pr-title@059c18686a7318d8b67fb361bc2d939b16b3959f # main
+        uses: dfinity/ci-tools/actions/check-pr-title@28f8eefc873d714eed3de4c1b79375cce6b93d46 # main
