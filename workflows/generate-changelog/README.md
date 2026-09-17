@@ -8,18 +8,21 @@ Any files that will be changed and committed to the pull request must be listed 
 CHANGELOG.md
 ```
 
+Release commits are skipped. A release bumps the project version without adding anything a changelog entry could be generated from, so Commitizen has nothing to do and exits non-zero. Both that and an empty changelog are treated as a no-op rather than a failure.
+
 ## Workflow inputs
 
-| Input                | Description                                                                | Default                                                               |
-| -------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `branch_name`        | The name of the branch to create the pull request from.                    | `'patch'`                                                             |
-| `base_branch_name`   | The name of the base branch to create a pull request against.              | `'main'`                                                              |
-| `pull_request_title` | The title of the pull request.                                             | `'chore: automated by GitHub actions'`                                |
-| `pull_request_body`  | The body of the pull request.                                              | `'This pull request was automatically created by a GitHub Action.'`   |
-| `author_name`        | The name of the author of the pull request and commit.                     | `${{ github.actor }}`                                                 |
-| `author_email`       | The email of the author of the pull request and commit.                    | `${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com` |
-| `commit_message`     | The message of the commit.                                                 | `'chore: automated by GitHub actions'`                                |
-| `token_app_id`       | A GitHub App ID used to generate an access token to create a pull request. | _required_                                                            |
+| Input                    | Description                                                                                                                                   | Default                                                               |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `branch_name`            | The name of the branch to create the pull request from.                                                                                       | `'patch'`                                                             |
+| `base_branch_name`       | The name of the base branch to create a pull request against.                                                                                 | `'main'`                                                              |
+| `pull_request_title`     | The title of the pull request.                                                                                                                | `'chore: automated by GitHub actions'`                                |
+| `pull_request_body`      | The body of the pull request.                                                                                                                 | `'This pull request was automatically created by a GitHub Action.'`   |
+| `author_name`            | The name of the author of the pull request and commit.                                                                                        | `${{ github.actor }}`                                                 |
+| `author_email`           | The email of the author of the pull request and commit.                                                                                       | `${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com` |
+| `commit_message`         | The message of the commit.                                                                                                                    | `'chore: automated by GitHub actions'`                                |
+| `release_commit_pattern` | Skip changelog generation when the head commit subject matches this extended regular expression. Set to an empty string to disable the check. | `'^chore:[[:space:]]release([[:space:]]\|$)'`                         |
+| `token_app_id`           | A GitHub App ID used to generate an access token to create a pull request.                                                                    | _required_                                                            |
 
 ## Workflow secrets
 

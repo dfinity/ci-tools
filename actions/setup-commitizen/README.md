@@ -2,6 +2,8 @@
 
 This actions sets up [Commitizen](https://commitizen-tools.github.io/commitizen/) for use in actions. It assumes [Python](https://www.python.org/) and [pip](https://pip.pypa.io/en/stable/) are already setup, see the [setup Python action](../setup-python/README.md) for a ready to use action to do this.
 
+The Commitizen version is pinned in `action.yaml`, the same way the [setup Python action](../setup-python/README.md) pins Python. The [generate changelog workflow](../../workflows/generate-changelog/README.md) treats specific Commitizen exit codes as a no-op rather than a failure, so the version it runs against should change deliberately. Bump the pin in `action.yaml` to upgrade.
+
 ## Example usage
 
 ```yaml
