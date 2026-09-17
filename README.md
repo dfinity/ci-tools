@@ -69,6 +69,17 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 ```
 
+### Referencing your own actions
+
+A reusable workflow that other repositories call must reference the actions in its own repository the same fully qualified, pinned way. A relative `./` path resolves against the caller's workspace rather than the repository the workflow lives in, so it fails there, and silently runs the caller's own file if one happens to sit at that path. Pinning keeps a single reference from a consuming repository resolving to a coherent set of workflows and actions.
+
+The cost is that those pins do not move when an action changes, which leaves a workflow running an older copy of an action than the one beside it in the tree. That failure is quiet: a newly added input handed to an action pinned from before it existed is reported as a warning, not an error, so the run stays green while the new behaviour does nothing. Pair the convention with a job that fails when a pin has fallen behind:
+
+```yaml
+- name: Check workflow self references
+  run: script/bump-self-refs
+```
+
 ## Managing Concurrency
 
 For workflows that run on pull requests, use the `concurrency` key to ensure that only one workflow runs at a time for a given pull request. This prevents multiple workflows from running simultaneously and potentially causing conflicts.

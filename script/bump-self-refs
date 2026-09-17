@@ -1,0 +1,108 @@
+#!/bin/bash
+
+# About:
+#
+# The workflows in this repository reference this repository's own actions by
+# commit SHA, the same way other repositories reference them. That is what makes
+# a single pinned reference resolve to a coherent set of workflows and actions,
+# but those pins do not move when an action changes, so a workflow can keep
+# running an older copy of an action than the one next to it in the tree.
+#
+# The failure is quiet. A workflow that passes a newly added input to an action
+# pinned from before that input existed gets a warning rather than an error, so
+# the run stays green while the new behaviour does nothing at all.
+#
+# This script reports every self reference whose action has changed since the
+# commit it points at, and exits non-zero when it finds one.
+#
+# Usage:
+#
+# script/bump-self-refs          report stale references
+# script/bump-self-refs --fix    repoint every self reference at HEAD
+
+set -euo pipefail
+
+REPO='dfinity/ci-tools'
+WORKFLOW_DIR='.github/workflows'
+REF_PATTERN="${REPO}/[A-Za-z0-9._/-]+@[0-9a-f]{40}"
+
+fix=false
+if [ "${1:-}" = '--fix' ]; then
+  fix=true
+elif [ -n "${1:-}" ]; then
+  echo "Unknown argument '$1'. Usage: script/bump-self-refs [--fix]" >&2
+  exit 2
+fi
+
+cd "$(git rev-parse --show-toplevel)"
+
+# Built with a read loop rather than mapfile, which the bash 3.2 that ships with
+# macOS does not have.
+workflows=()
+while IFS= read -r workflow; do
+  workflows+=("$workflow")
+done < <(find "$WORKFLOW_DIR" -type f \( -name '*.yaml' -o -name '*.yml' \) | sort)
+
+if [ -z "${workflows[0]:-}" ]; then
+  echo "No workflows found in $WORKFLOW_DIR" >&2
+  exit 2
+fi
+
+head_sha=$(git rev-parse HEAD)
+
+refs=$(grep -hoE "$REF_PATTERN" "${workflows[@]}" | sort -u || true)
+if [ -z "$refs" ]; then
+  echo "No $REPO self references found."
+  exit 0
+fi
+
+stale_count=0
+while IFS= read -r ref; do
+  sha="${ref##*@}"
+  path="${ref%@*}"
+  path="${path#"$REPO"/}"
+
+  if [ "$sha" = "$head_sha" ]; then
+    continue
+  fi
+
+  # A pin to a commit that cannot be resolved is a problem in its own right, and
+  # there is nothing to compare it against.
+  if ! git cat-file -e "${sha}^{commit}" 2>/dev/null; then
+    echo "  ? ${path} pinned at ${sha:0:8}, which is not a known commit"
+    stale_count=$((stale_count + 1))
+    continue
+  fi
+
+  commits=$(git rev-list --count "${sha}..HEAD" -- "$path")
+  if [ "$commits" -gt 0 ]; then
+    echo "  x ${path} pinned at ${sha:0:8}, ${commits} commit(s) behind"
+    stale_count=$((stale_count + 1))
+  fi
+done <<EOF
+$refs
+EOF
+
+if [ "$stale_count" -eq 0 ]; then
+  echo "All $REPO self references are up to date."
+  exit 0
+fi
+
+if [ "$fix" = false ]; then
+  cat >&2 <<EOF
+
+${stale_count} self reference(s) point at an action that has changed since.
+Run 'script/bump-self-refs --fix' and commit the result.
+EOF
+  exit 1
+fi
+
+# Repoint every self reference, not only the stale ones, so that one SHA
+# describes the whole tree the way a consuming repository pins it.
+REPO="$REPO" HEAD_SHA="$head_sha" perl -pi -e '
+  my $repo = quotemeta $ENV{REPO};
+  s/($repo\/[A-Za-z0-9._\/-]+\@)[0-9a-f]{40}/$1$ENV{HEAD_SHA}/g;
+' "${workflows[@]}"
+
+echo
+echo "Repointed every $REPO self reference at ${head_sha:0:8}."

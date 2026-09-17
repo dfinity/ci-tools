@@ -129,3 +129,15 @@ pnpm test
 ```
 
 Tests live next to the code they cover, as `*.test.ts`.
+
+## Workflow self references
+
+The workflows in this repository reference its own actions by commit SHA, exactly as a consuming repository does. Those pins do not move on their own, so after changing an action the workflows still run the previous copy of it until they are repointed.
+
+`Check Self References` runs on every push to `main` and fails when a pin has fallen behind the action it points at. To resolve it:
+
+```bash
+script/bump-self-refs --fix
+```
+
+Commit the result and open a pull request. The check only compares a pin against the history of the action's own directory, so repointing the workflows does not itself make them stale again.
