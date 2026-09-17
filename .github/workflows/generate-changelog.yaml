@@ -149,21 +149,21 @@ jobs:
 
       - name: Setup Python
         if: steps.release_commit.outputs.skip != 'true'
-        uses: dfinity/ci-tools/actions/setup-python@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
+        uses: dfinity/ci-tools/actions/setup-python@059c18686a7318d8b67fb361bc2d939b16b3959f # main
 
       - name: Setup Commitizen
         if: steps.release_commit.outputs.skip != 'true'
-        uses: dfinity/ci-tools/actions/setup-commitizen@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
+        uses: dfinity/ci-tools/actions/setup-commitizen@059c18686a7318d8b67fb361bc2d939b16b3959f # main
 
       - name: Generate changelog
         if: steps.release_commit.outputs.skip != 'true'
-        uses: dfinity/ci-tools/actions/generate-changelog@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
+        uses: dfinity/ci-tools/actions/generate-changelog@059c18686a7318d8b67fb361bc2d939b16b3959f # main
         with:
           file_name: ${{ inputs.file_name }}
 
       - name: Create pull request
         if: steps.release_commit.outputs.skip != 'true'
-        uses: dfinity/ci-tools/actions/create-pr@afeee4fbdc0683a88ec5a74ed7f59a2ce0e833ad # main
+        uses: dfinity/ci-tools/actions/create-pr@059c18686a7318d8b67fb361bc2d939b16b3959f # main
         with:
           branch_name: ${{ inputs.branch_name }}
           base_branch_name: ${{ inputs.base_branch_name }}

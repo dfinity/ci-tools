@@ -141,3 +141,19 @@ pnpm test
 ```
 
 Tests live next to the code they cover, as `*.test.ts`.
+
+## Workflow self references
+
+The workflows in this repository reference its own actions by commit SHA, exactly as a consuming repository does. Those pins do not move on their own, so after changing an action the workflows still run the previous copy of it until they are repointed.
+
+`Check Self References` runs on every push to `main` and fails when a pin has fallen behind the action it points at. To resolve it:
+
+```bash
+script/bump-self-refs --fix
+```
+
+Commit the result and open a pull request. The check only compares a pin against the history of the action's own directory, so repointing the workflows does not itself make them stale again, even though merging the bump moves `main` to a new commit.
+
+Keep a bump in a pull request of its own. `--fix` pins at the tip of the default branch, which is the only commit guaranteed to stay reachable once a branch is squashed or rebased, so a bump bundled with a change to an action pins to the commit before that change and the check fails again as soon as it merges. Change the action first, then bump.
+
+The check runs on pushes to `main` rather than on pull requests, because while an action is being changed there is no commit yet to pin to. It reports after a merge, not before, so do not add `check_self_refs` to the repository's required status checks: it never reports on a pull request, and a pull request waiting on it would never be mergeable.
