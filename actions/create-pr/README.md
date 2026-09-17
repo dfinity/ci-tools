@@ -14,21 +14,23 @@ packages/some-package/package.json
 
 ## Action inputs
 
-| Input                | Description                                                   | Default                                                               |
-| -------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `branch_name`        | The name of the branch to create the pull request from.       | `'patch'`                                                             |
-| `base_branch_name`   | The name of the base branch to create a pull request against. | `'main'`                                                              |
-| `pull_request_title` | The title of the pull request.                                | `'chore: automated by GitHub actions'`                                |
-| `pull_request_body`  | The body of the pull request.                                 | `'This pull request was automatically created by a GitHub Action.'`   |
-| `author_name`        | The name of the author of the pull request and commit.        | `${{ github.actor }}`                                                 |
-| `author_email`       | The email of the author of the pull request and commit.       | `${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com` |
-| `commit_message`     | The message of the commit.                                    | `'chore: automated by GitHub actions'`                                |
-| `token`              | Access token to manage the pull request.                      | `${{ GITHUB_TOKEN }}`                                                 |
+| Input                | Description                                                                                                                                                                                                         | Default                                                               |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `branch_name`        | The name of the branch to create the pull request from.                                                                                                                                                             | `'patch'`                                                             |
+| `base_branch_name`   | The name of the base branch to create a pull request against.                                                                                                                                                       | `'main'`                                                              |
+| `reuse_branch`       | Reuse `branch_name` as-is and update the pull request already open for it, instead of creating a new randomly suffixed branch on every run. When there is nothing left to propose, the open pull request is closed. | `'false'`                                                             |
+| `pull_request_title` | The title of the pull request.                                                                                                                                                                                      | `'chore: automated by GitHub actions'`                                |
+| `pull_request_body`  | The body of the pull request.                                                                                                                                                                                       | `'This pull request was automatically created by a GitHub Action.'`   |
+| `author_name`        | The name of the author of the pull request and commit.                                                                                                                                                              | `${{ github.actor }}`                                                 |
+| `author_email`       | The email of the author of the pull request and commit.                                                                                                                                                             | `${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com` |
+| `commit_message`     | The message of the commit.                                                                                                                                                                                          | `'chore: automated by GitHub actions'`                                |
+| `token`              | Access token to manage the pull request.                                                                                                                                                                            | `${{ GITHUB_TOKEN }}`                                                 |
 
 ## Action outputs
 
-- `pull_request_number`: The number of the created pull request.
+- `pull_request_number`: The number of the pull request that was created, updated or closed. Empty when there was nothing to propose and no pull request was open.
 - `pull_request_created`: A boolean indicating whether the pull request was created. This will be `false` is there are no changes to commit.
+- `pull_request_updated`: A boolean indicating whether an already open pull request was updated instead of a new one being created. Only ever `true` when `reuse_branch` is enabled.
 
 ## Example usage
 

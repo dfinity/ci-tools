@@ -46,7 +46,7 @@ inputs:
 
 outputs:
   pull_request_number:
-    description: 'The number of the created pull request.'
+    description: 'The number of the pull request that was created, updated or closed. Empty when there was nothing to propose and no pull request was open.'
   pull_request_created:
     description: 'Whether the pull request was created.'
   pull_request_updated:

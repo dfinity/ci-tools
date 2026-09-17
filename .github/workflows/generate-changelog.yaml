@@ -85,6 +85,13 @@ on:
       token_private_key:
         description: 'A GitHub App private key used to generate an access token to create a pull request.'
 
+# The changelog branch is reused and force pushed, so two runs racing on the same
+# branch would leave the pull request holding whichever finished last rather than
+# the newest state of the base branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   generate_changelog:
     runs-on: ubuntu-latest

@@ -10,12 +10,15 @@ CHANGELOG.md
 
 Release commits are skipped. A release bumps the project version without adding anything a changelog entry could be generated from, so Commitizen has nothing to do and exits non-zero. Both that and an empty changelog are treated as a no-op rather than a failure.
 
+Only one run per branch happens at a time: the changelog branch is reused and force pushed, so concurrent runs are cancelled in favour of the most recent one.
+
 ## Workflow inputs
 
 | Input                    | Description                                                                                                                                   | Default                                                               |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `branch_name`            | The name of the branch to create the pull request from.                                                                                       | `'patch'`                                                             |
 | `base_branch_name`       | The name of the base branch to create a pull request against.                                                                                 | `'main'`                                                              |
+| `reuse_branch`           | Keep a single self-updating changelog pull request instead of opening a new one on every run.                                                 | `true`                                                                |
 | `pull_request_title`     | The title of the pull request.                                                                                                                | `'chore: automated by GitHub actions'`                                |
 | `pull_request_body`      | The body of the pull request.                                                                                                                 | `'This pull request was automatically created by a GitHub Action.'`   |
 | `author_name`            | The name of the author of the pull request and commit.                                                                                        | `${{ github.actor }}`                                                 |
