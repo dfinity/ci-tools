@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        action_name: ['create-pr', 'assemble-docs', 'submit-docs']
+        action_name:
+          ['create-pr', 'assemble-docs', 'submit-docs', 'extract-version']
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
