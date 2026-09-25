@@ -30,6 +30,7 @@
 
 ### Fix
 
+- **generate-changelog**: push the changelog branch with the app token (#94)
 - **generate-changelog**: do not fail on release commits or empty changelogs (#78)
 - **assemble-docs**: sort versions.json numerically (#85)
 - **deps**: raise brace-expansion to 5.0.9 for GHSA-rgw5-rvv9-x895 (#83)
