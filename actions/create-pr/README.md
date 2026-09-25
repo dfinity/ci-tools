@@ -4,6 +4,8 @@ This action creates a pull request from a branch to a target branch.
 
 Any pull requests created as a result of actions that use the default token (`${{ github.token }}`) will not trigger any pipeline events. To ensure that any pipelines are triggered, a different token must be used.
 
+The branch is pushed with the git credentials of the checkout, so pass the same token to `actions/checkout`. This matters with `reuse_branch`: its force pushes update an open pull request, and when they come from the default token they trigger no `pull_request_target` workflows, and `pull_request` workflows wait for approval in repositories that require it for external contributors.
+
 Any files that will be changed and committed to the pull request must be listed in the `.github/repo_policies/BOT_APPROVED_FILES` file of the repository. For example:
 
 ```
@@ -55,6 +57,8 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Create pull request
         uses: dfinity/ci-tools/actions/create-pr@main

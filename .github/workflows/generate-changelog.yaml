@@ -113,6 +113,11 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
+          # create-pr pushes with these credentials. With the default token, the
+          # force pushes of reuse_branch trigger no pull_request_target workflows,
+          # and pull_request workflows wait for approval where external
+          # contributors need it.
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Check for release commit
         id: release_commit
